@@ -1,0 +1,36 @@
+---
+/**
+ * Wrapper que activa Lenis para smooth-scroll en toda la página.
+ * Respeta prefers-reduced-motion: en ese caso no se inicializa.
+ *
+ * Uso: incluir <SmoothScroll /> dentro de <body> en BaseLayout.
+ */
+---
+
+<script>
+  import Lenis from 'lenis';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion) {
+    const lenis = new Lenis({
+      duration: 1.1,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.4,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    document.documentElement.classList.add('lenis-smooth');
+
+    // Permitir desactivar smooth scroll en elementos concretos con [data-lenis-prevent]
+    // Ej.: modales con scroll interno.
+    window.addEventListener('beforeunload', () => lenis.destroy());
+  }
+</script>

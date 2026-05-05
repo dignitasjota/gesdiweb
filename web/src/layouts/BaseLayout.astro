@@ -1,16 +1,23 @@
 ---
 import '../styles/globals.css';
+import SmoothScroll from '../components/animations/SmoothScroll.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
 
 interface Props {
   title?: string;
   description?: string;
   lang?: string;
+  noindex?: boolean;
+  hideChrome?: boolean;
 }
 
 const {
   title = 'gesdiweb — diseño web y posicionamiento SEO',
   description = 'Agencia de diseño web y posicionamiento SEO. Webs rápidas, accesibles y pensadas para crecer.',
   lang = 'es',
+  noindex = false,
+  hideChrome = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
@@ -28,6 +35,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <title>{title}</title>
     <meta name="description" content={description} />
 
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -39,6 +48,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="twitter:description" content={description} />
   </head>
   <body>
-    <slot />
+    <SmoothScroll />
+
+    {!hideChrome && <Header />}
+
+    <main id="main">
+      <slot />
+    </main>
+
+    {!hideChrome && <Footer />}
   </body>
 </html>
