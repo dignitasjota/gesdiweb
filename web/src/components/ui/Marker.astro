@@ -3,6 +3,7 @@ interface Props {
   label: string;
   prefix?: string;
   variant?: 'default' | 'inverse';
+  showDot?: boolean;
   class?: string;
 }
 
@@ -10,18 +11,24 @@ const {
   label,
   prefix = '//',
   variant = 'default',
+  showDot = true,
   class: className = '',
 } = Astro.props;
 
-const colorClass = variant === 'inverse'
-  ? 'text-[--color-muted]'
-  : 'text-[--color-muted]';
+const colorClass =
+  variant === 'inverse' ? 'text-white/70' : 'text-[--color-fg-soft]';
 ---
 
 <span
   class={`inline-flex items-center gap-2 font-mono uppercase tracking-[0.18em] ${colorClass} ${className}`}
   style="font-size: var(--text-xs);"
 >
+  {showDot && (
+    <span
+      class="inline-block w-1.5 h-1.5 rounded-full bg-[--color-brand]"
+      aria-hidden="true"
+    ></span>
+  )}
   <span aria-hidden="true">{prefix}</span>
   <span>{label}</span>
 </span>

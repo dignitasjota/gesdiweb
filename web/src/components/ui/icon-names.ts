@@ -1,0 +1,31 @@
+export type IconName =
+  // Servicios
+  | 'seo'
+  | 'mobile'
+  | 'server'
+  | 'megaphone'
+  | 'wrench'
+  // Stats
+  | 'calendar'
+  | 'grid'
+  | 'repeat'
+  | 'bolt'
+  // Proceso
+  | 'compass'
+  | 'map'
+  | 'pen'
+  | 'rocket'
+  // Garantías / strip
+  | 'shield'
+  | 'leaf'
+  | 'check'
+  | 'eye'
+  // UI
+  | 'arrow-up-right'
+  | 'arrow-right'
+  | 'play'
+  | 'mail'
+  | 'phone'
+  | 'pin'
+  | 'clock'
+  | 'sparkle';
