@@ -1,0 +1,101 @@
+---
+import Marker from '../ui/Marker.astro';
+
+const year = new Date().getFullYear();
+
+const navColumns = [
+  {
+    title: 'Servicios',
+    links: [
+      { href: '/servicios/posicionamiento-web', label: 'Posicionamiento web' },
+      { href: '/servicios/apps-moviles', label: 'Apps móviles' },
+      { href: '/servicios/hosting-web', label: 'Hosting web' },
+      { href: '/servicios/marketing-online', label: 'Marketing online' },
+      { href: '/servicios/mantenimiento-informatico', label: 'Mantenimiento' },
+    ],
+  },
+  {
+    title: 'Estudio',
+    links: [
+      { href: '/portfolio', label: 'Portfolio' },
+      { href: '/blog', label: 'Blog' },
+      { href: '/contacto', label: 'Contacto' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { href: '/aviso-legal', label: 'Aviso legal' },
+      { href: '/politica-privacidad', label: 'Política de privacidad' },
+      { href: '/politica-cookies', label: 'Política de cookies' },
+    ],
+  },
+];
+---
+
+<footer class="bg-[--color-bg-inverse] text-[--color-fg-inverse]">
+  <div class="container-fluid py-20 md:py-32">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+      <div class="md:col-span-5 lg:col-span-6">
+        <Marker label="hablemos" prefix="//" />
+        <h2
+          class="mt-6 font-display font-bold tracking-tight leading-[0.95]"
+          style="font-size: var(--text-2xl);"
+        >
+          ¿Listo para que tu web<br />
+          <span class="text-[--color-brand]">posicione</span> de verdad?
+        </h2>
+        <a
+          href="/contacto"
+          class="inline-flex items-center gap-3 mt-8 text-base text-[--color-muted] hover:text-[--color-fg-inverse] transition-colors"
+        >
+          <span>hola@gesdiweb.es</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="md:col-span-7 lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-8">
+        {navColumns.map((col) => (
+          <nav aria-label={col.title}>
+            <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-5">
+              {col.title}
+            </p>
+            <ul class="space-y-3">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-sm text-[--color-fg-inverse] hover:text-[--color-brand] transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+    </div>
+
+    <hr class="border-white/10 mt-20 mb-8" />
+
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[--color-muted]">
+      <p>© {year} gesdiweb · Diseño web y posicionamiento SEO</p>
+      <p class="font-mono uppercase tracking-widest">
+        // hecho en España
+      </p>
+    </div>
+  </div>
+</footer>

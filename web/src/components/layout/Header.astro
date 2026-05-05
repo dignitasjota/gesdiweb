@@ -1,0 +1,82 @@
+---
+import Button from '../ui/Button.astro';
+
+const navLinks = [
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class="fixed top-0 left-0 right-0 z-[--z-header] bg-[--color-bg]/80 backdrop-blur-md border-b border-[--color-border-soft]"
+>
+  <div class="container-fluid flex items-center justify-between h-16 md:h-20">
+    <a
+      href="/"
+      class="flex items-center gap-2 font-display font-bold text-lg tracking-tight"
+      aria-label="gesdiweb · ir a la home"
+    >
+      <span
+        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[--color-brand] text-[--color-fg-inverse] font-bold text-sm"
+        aria-hidden="true"
+      >
+        G
+      </span>
+      <span>gesdiweb</span>
+    </a>
+
+    <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-8">
+      {navLinks.map(({ href, label }) => {
+        const isActive = currentPath === href || currentPath.startsWith(href + '/');
+        return (
+          <a
+            href={href}
+            class={`text-sm font-medium tracking-tight transition-colors ${
+              isActive
+                ? 'text-[--color-fg]'
+                : 'text-[--color-fg-soft] hover:text-[--color-fg]'
+            }`}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <Button href="/contacto" variant="primary" size="sm" class="hidden md:inline-flex">
+        Hablemos
+      </Button>
+
+      <button
+        type="button"
+        class="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        data-mobile-menu-toggle
+      >
+        <span class="sr-only">Menú</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <line x1="4" y1="8" x2="20" y2="8" />
+          <line x1="4" y1="16" x2="20" y2="16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="h-16 md:h-20" aria-hidden="true"></div>
