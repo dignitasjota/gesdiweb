@@ -1,0 +1,210 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Marker from '../components/ui/Marker.astro';
+import Button from '../components/ui/Button.astro';
+import Tag from '../components/ui/Tag.astro';
+import Badge from '../components/ui/Badge.astro';
+import StatBlock from '../components/ui/StatBlock.astro';
+
+const colors = [
+  { name: '--color-bg', hex: '#FFFFFF', use: 'Fondo principal' },
+  { name: '--color-bg-soft', hex: '#FAFAFA', use: 'Fondo secundario' },
+  { name: '--color-bg-inverse', hex: '#0A0A0A', use: 'Fondo oscuro / footer' },
+  { name: '--color-fg', hex: '#0A0A0A', use: 'Texto principal' },
+  { name: '--color-fg-soft', hex: '#525252', use: 'Texto secundario' },
+  { name: '--color-fg-inverse', hex: '#FFFFFF', use: 'Texto sobre oscuro' },
+  { name: '--color-border', hex: '#E5E5E5', use: 'Bordes' },
+  { name: '--color-brand', hex: '#77C2DA', use: 'Acento corporativo' },
+  { name: '--color-brand-hover', hex: '#5FB3CF', use: 'Hover acento' },
+  { name: '--color-muted', hex: '#A7A7A7', use: 'Gris secundario logo' },
+];
+
+const fontScale = [
+  { name: '--text-xs', size: 'clamp(0.75rem, 0.7rem + 0.2vw, 0.85rem)' },
+  { name: '--text-sm', size: 'clamp(0.875rem, 0.8rem + 0.3vw, 1rem)' },
+  { name: '--text-base', size: 'clamp(1rem, 0.95rem + 0.3vw, 1.125rem)' },
+  { name: '--text-lg', size: 'clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem)' },
+  { name: '--text-xl', size: 'clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem)' },
+  { name: '--text-2xl', size: 'clamp(2.5rem, 2rem + 2.5vw, 4rem)' },
+  { name: '--text-3xl', size: 'clamp(3.5rem, 2.5rem + 5vw, 6rem)' },
+  { name: '--text-display', size: 'clamp(4rem, 3rem + 8vw, 10rem)' },
+];
+---
+
+<BaseLayout
+  title="Styleguide · gesdiweb"
+  description="Sistema de diseño interno"
+  noindex={true}
+>
+  <div class="container-fluid section-spacing">
+    <header class="mb-20">
+      <Marker label="00.styleguide" />
+      <h1
+        class="mt-6 font-display font-bold tracking-tight leading-[0.95]"
+        style="font-size: var(--text-3xl);"
+      >
+        Sistema de diseño<span class="text-[--color-brand]">.</span>
+      </h1>
+      <p class="mt-6 text-[--color-fg-soft] max-w-2xl text-lg">
+        Página interna no indexada. Documenta tokens, tipografías y componentes UI base.
+        Esta página NO se publica en producción salvo acceso directo a la URL.
+      </p>
+    </header>
+
+    {/* ─────────────── Paleta ─────────────── */}
+    <section class="mb-32">
+      <Marker label="01. paleta" />
+      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
+        Paleta corporativa
+      </h2>
+      <div class="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+        {colors.map((c) => (
+          <div class="flex flex-col gap-3">
+            <div
+              class="aspect-square w-full rounded-lg border border-[--color-border]"
+              style={`background:${c.hex};`}
+              aria-hidden="true"
+            ></div>
+            <div>
+              <p class="font-mono text-xs text-[--color-fg]">{c.hex}</p>
+              <p class="font-mono text-[10px] text-[--color-muted]">{c.name}</p>
+              <p class="text-xs text-[--color-fg-soft] mt-1">{c.use}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* ─────────────── Tipografías ─────────────── */}
+    <section class="mb-32">
+      <Marker label="02. tipografías" />
+      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
+        Familias
+      </h2>
+      <div class="mt-10 space-y-12">
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted]">Bricolage Grotesque · display</p>
+          <p
+            class="font-display font-bold tracking-tight leading-[0.95] mt-3"
+            style="font-size: var(--text-3xl);"
+          >
+            Diseño que posiciona.
+          </p>
+        </div>
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted]">Inter · sans</p>
+          <p class="mt-3 text-[--color-fg-soft] max-w-3xl" style="font-size: var(--text-lg);">
+            Texto largo. La tipografía Inter Variable se usa para cuerpos, navegación y UI.
+            Equilibra legibilidad con personalidad y soporta toda la escala fluida del sistema.
+          </p>
+        </div>
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted]">JetBrains Mono · mono</p>
+          <p class="mt-3 font-mono uppercase tracking-widest" style="font-size: var(--text-sm);">
+            // 00.01° technical markers
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* ─────────────── Escala ─────────────── */}
+    <section class="mb-32">
+      <Marker label="03. escala" />
+      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
+        Escala fluida
+      </h2>
+      <div class="mt-10 space-y-6">
+        {fontScale.map((s) => (
+          <div class="flex items-baseline gap-6 border-t border-[--color-border] pt-4">
+            <span class="font-mono text-xs text-[--color-muted] w-32 shrink-0">{s.name}</span>
+            <span
+              class="font-display tracking-tight leading-none"
+              style={`font-size: var(${s.name});`}
+            >
+              Aa
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* ─────────────── Componentes UI ─────────────── */}
+    <section class="mb-32">
+      <Marker label="04. componentes UI" />
+      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
+        Componentes base
+      </h2>
+
+      <div class="mt-10 space-y-16">
+        {/* Marker */}
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted] mb-6">Marker</p>
+          <div class="flex flex-wrap gap-8">
+            <Marker label="00.01°" />
+            <Marker label="services" />
+            <Marker label="2026" prefix="//" />
+          </div>
+        </div>
+
+        {/* Button */}
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted] mb-6">Button</p>
+          <div class="flex flex-wrap items-center gap-4">
+            <Button variant="primary" size="md">Primario</Button>
+            <Button variant="secondary" size="md">Secundario</Button>
+            <Button variant="ghost" size="md">Ghost</Button>
+          </div>
+          <div class="flex flex-wrap items-center gap-4 mt-6">
+            <Button variant="primary" size="sm">Pequeño</Button>
+            <Button variant="primary" size="md">Medio</Button>
+            <Button variant="primary" size="lg">Grande</Button>
+          </div>
+        </div>
+
+        {/* Tag */}
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted] mb-6">Tag</p>
+          <div class="flex flex-wrap items-center gap-3">
+            <Tag label="WordPress" />
+            <Tag label="Astro" variant="brand" />
+            <Tag label="SEO" variant="inverse" />
+          </div>
+        </div>
+
+        {/* Badge */}
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted] mb-6">Badge (numeración de secciones)</p>
+          <div class="flex flex-wrap items-center gap-6">
+            <Badge number={1} />
+            <Badge number={2} />
+            <Badge number={5} />
+            <Badge number={12} />
+          </div>
+        </div>
+
+        {/* StatBlock */}
+        <div class="border-t border-[--color-border] pt-8">
+          <p class="font-mono text-xs text-[--color-muted] mb-6">StatBlock</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <StatBlock value="10" suffix="+" label="años de experiencia" />
+            <StatBlock value="120" label="proyectos entregados" />
+            <StatBlock value="98" suffix="%" label="clientes satisfechos" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ─────────────── Header & Footer ─────────────── */}
+    <section class="mb-16">
+      <Marker label="05. layout" />
+      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
+        Header y Footer
+      </h2>
+      <p class="mt-4 text-[--color-fg-soft] max-w-2xl">
+        El Header está fijo arriba y el Footer aparece al final de esta página. Ambos
+        forman parte del BaseLayout y se insertan automáticamente salvo
+        <code class="font-mono text-sm">hideChrome=true</code>.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

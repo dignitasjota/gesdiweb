@@ -17,6 +17,7 @@ export default defineConfig({
         defaultLocale: 'es',
         locales: { es: 'es-ES' },
       },
+      filter: (page) => !page.includes('/styleguide'),
     }),
   ],
   vite: {
