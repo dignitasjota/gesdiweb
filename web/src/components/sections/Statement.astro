@@ -1,0 +1,26 @@
+---
+import Marker from '../ui/Marker.astro';
+
+const verbs = ['escuchamos', 'diseñamos', 'posicionamos', 'acompañamos'];
+---
+
+<section class="container-fluid section-spacing">
+  <Marker label="00.02° método" />
+
+  <div
+    class="mt-10 font-display font-bold tracking-tight leading-[0.95] flex flex-col gap-2"
+    style="font-size: var(--text-3xl);"
+  >
+    {verbs.map((verb, i) => (
+      <p class={i === verbs.length - 1 ? 'text-[--color-brand]' : ''}>
+        / {verb}
+      </p>
+    ))}
+  </div>
+
+  <p class="mt-12 max-w-2xl text-[--color-fg-soft] text-lg leading-relaxed">
+    Un proceso ordenado, sin humo y con métricas reales. Trabajamos contigo durante
+    todo el ciclo de vida del proyecto: desde la primera reunión hasta el quinto
+    año de mantenimiento.
+  </p>
+</section>

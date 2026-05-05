@@ -1,0 +1,65 @@
+---
+import Marker from '../ui/Marker.astro';
+import Tag from '../ui/Tag.astro';
+import { getRecentPosts, formatDateLong } from '../../data/posts';
+
+const posts = getRecentPosts(3);
+---
+
+<section class="bg-[--color-bg-soft] border-t border-[--color-border-soft]">
+  <div class="container-fluid section-spacing">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+      <div>
+        <Marker label="00.08° blog" />
+        <h2
+          class="mt-4 font-display font-bold tracking-tight leading-[0.95] max-w-[20ch]"
+          style="font-size: var(--text-2xl);"
+        >
+          Lo último que estamos pensando.
+        </h2>
+      </div>
+      <a
+        href="/blog"
+        class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
+      >
+        ver todos los posts →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {posts.map((post) => (
+        <a
+          href={`/blog/${post.slug}`}
+          class="group flex flex-col gap-5"
+        >
+          <div
+            class="aspect-[4/3] bg-[--color-bg] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-xs uppercase tracking-widest group-hover:border-[--color-fg] transition-colors"
+            aria-hidden="true"
+          >
+            [PLACEHOLDER · cover]
+          </div>
+          <div class="flex items-center gap-2">
+            {post.categories.slice(0, 1).map((cat) => (
+              <Tag label={cat} variant="brand" />
+            ))}
+            <span class="font-mono text-xs text-[--color-muted]">
+              · {post.readingMinutes} min
+            </span>
+          </div>
+          <h3
+            class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
+            style="font-size: var(--text-lg);"
+          >
+            {post.title}
+          </h3>
+          <p class="text-sm text-[--color-fg-soft] line-clamp-3">
+            {post.excerpt}
+          </p>
+          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mt-auto">
+            <time datetime={post.publishedAt}>{formatDateLong(post.publishedAt)}</time>
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

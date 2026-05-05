@@ -1,0 +1,62 @@
+---
+import Marker from '../ui/Marker.astro';
+import Tag from '../ui/Tag.astro';
+import { getFeaturedProjects } from '../../data/projects';
+
+const featured = getFeaturedProjects();
+---
+
+<section class="container-fluid section-spacing">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+    <div>
+      <Marker label="00.04° trabajo reciente" />
+      <h2
+        class="mt-4 font-display font-bold tracking-tight leading-[0.95] max-w-[20ch]"
+        style="font-size: var(--text-2xl);"
+      >
+        Proyectos que han crecido con nosotros.
+      </h2>
+    </div>
+    <a
+      href="/portfolio"
+      class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
+    >
+      ver portfolio completo →
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+    {featured.map((project, i) => (
+      <a
+        href={`/portfolio/${project.slug}`}
+        class={`group flex flex-col gap-5 ${i === 0 ? 'md:col-span-2' : ''}`}
+      >
+        <div
+          class={`bg-[--color-bg-soft] border border-[--color-border] rounded-lg overflow-hidden flex items-center justify-center text-[--color-muted] font-mono text-sm uppercase tracking-widest group-hover:border-[--color-fg] transition-colors ${
+            i === 0 ? 'aspect-[16/8]' : 'aspect-[4/3]'
+          }`}
+          aria-hidden="true"
+        >
+          [PLACEHOLDER · cover {project.title}]
+        </div>
+        <div class="flex items-center justify-between gap-4">
+          <h3
+            class="font-display font-bold tracking-tight group-hover:text-[--color-brand] transition-colors"
+            style="font-size: var(--text-lg);"
+          >
+            {project.title}
+          </h3>
+          <span class="font-mono text-xs text-[--color-muted]">{project.year}</span>
+        </div>
+        <p class="text-[--color-fg-soft] text-sm md:text-base max-w-[55ch]">
+          {project.excerpt}
+        </p>
+        <div class="flex flex-wrap gap-2">
+          {project.techStack.slice(0, 3).map((tech) => (
+            <Tag label={tech} />
+          ))}
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

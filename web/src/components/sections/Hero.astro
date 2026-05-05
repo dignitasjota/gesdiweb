@@ -1,0 +1,33 @@
+---
+import Marker from '../ui/Marker.astro';
+import Button from '../ui/Button.astro';
+---
+
+<section class="container-fluid pt-12 md:pt-20 pb-20 md:pb-32">
+  <Marker label="00.01° estudio · 2026" />
+
+  <h1
+    class="mt-8 font-display font-bold tracking-tight leading-[0.92] max-w-[18ch]"
+    style="font-size: var(--text-display);"
+  >
+    Diseño web<br />
+    que <span class="text-[--color-brand]">posiciona</span>.
+  </h1>
+
+  <div class="mt-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+    <p class="md:col-span-6 lg:col-span-5 text-lg md:text-xl text-[--color-fg-soft] max-w-2xl leading-relaxed">
+      Webs rápidas, accesibles y pensadas para crecer. Diseño y SEO técnico
+      trabajando juntos desde el primer wireframe hasta el quinto año.
+    </p>
+
+    <div class="md:col-span-6 lg:col-span-5 lg:col-start-8 flex flex-col items-start gap-6">
+      <div class="flex flex-wrap items-center gap-3">
+        <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
+        <Button href="/portfolio" variant="ghost" size="lg">Ver portfolio</Button>
+      </div>
+      <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+        // disponibilidad q3 2026
+      </p>
+    </div>
+  </div>
+</section>

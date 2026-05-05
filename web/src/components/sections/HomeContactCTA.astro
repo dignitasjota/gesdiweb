@@ -1,0 +1,41 @@
+---
+import Marker from '../ui/Marker.astro';
+import Button from '../ui/Button.astro';
+---
+
+<section class="container-fluid section-spacing">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+    <div class="md:col-span-7">
+      <Marker label="00.07° contacto directo" />
+      <h2
+        class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[16ch]"
+        style="font-size: var(--text-3xl);"
+      >
+        Cuéntame tu<br />
+        <span class="text-[--color-brand]">proyecto</span>.
+      </h2>
+      <p class="mt-8 text-[--color-fg-soft] text-lg leading-relaxed max-w-xl">
+        Cuarenta minutos por videollamada. Te diré con honestidad si puedo
+        ayudarte y, si no, a quién acudir. Sin compromiso ninguno.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <Button href="/contacto" variant="primary" size="lg">Reservar llamada</Button>
+        <Button href="mailto:hola@gesdiweb.es" variant="ghost" size="lg">
+          hola@gesdiweb.es
+        </Button>
+      </div>
+    </div>
+
+    <div class="md:col-span-5">
+      <div
+        class="aspect-square w-full max-w-sm bg-[--color-bg-soft] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-xs uppercase tracking-widest"
+        aria-hidden="true"
+      >
+        [PLACEHOLDER · foto fundador]
+      </div>
+      <p class="mt-6 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+        // jota · fundador y único contacto durante todo el proyecto
+      </p>
+    </div>
+  </div>
+</section>
