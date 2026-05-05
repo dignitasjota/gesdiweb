@@ -11,7 +11,7 @@ Estado global:
 | 2 | Páginas estáticas y maquetación | ✅ Completada (2026-05-05) |
 | 3 | Content collections (MDX) | ✅ Completada (2026-05-05) |
 | 4 | Formulario de contacto + Resend | ✅ Completada (2026-05-05) |
-| 5 | Animaciones y pulido | ⏳ |
+| 5 | Animaciones y pulido | ✅ Completada (2026-05-05) |
 | 6 | SEO técnico y performance | ⏳ |
 | 7 | Despliegue en VPS Hetzner | ⏳ |
 | 8 | Migración SEO y switch DNS | ⏳ |

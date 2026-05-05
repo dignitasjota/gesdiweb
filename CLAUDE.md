@@ -12,7 +12,7 @@
 - **Sustituye:** una WordPress antigua que sigue online y rankea (poco tráfico, pero tráfico real que NO debe perderse).
 - **Estética objetivo:** suiza moderna, tipografía gigante, mucho blanco, marcadores tipográficos `// 00.01°`, marquees infinitos, scroll suave, animaciones reveal. Inspiración (no clon): [createstudio.framer.media](https://createstudio.framer.media/).
 - **Idioma de lanzamiento:** español. Arquitectura preparada para multi-idioma sin implementar inglés todavía.
-- **Estado actual:** Fases 0–4 completadas (2026-05-05). Sistema de diseño operativo, 22 páginas maquetadas, contenido en MDX con content collections, formulario de contacto operativo con Resend. Listos para iniciar Fase 5 (animaciones y pulido) cuando el dueño dé luz verde.
+- **Estado actual:** Fases 0–5 completadas (2026-05-05). Sistema de diseño operativo, 22 páginas maquetadas, contenido en MDX con content collections, formulario de contacto operativo con Resend, animaciones de scroll (reveals + parallax) y view transitions activas. Listos para iniciar Fase 6 (SEO técnico y performance) cuando el dueño dé luz verde.
 - **Dueño / único editor:** Jota (`dignitasjota@gmail.com`), perfil técnico (terminal, Docker, GitHub, Claude Code).
 
 ## 2. Reglas de oro (no negociables)
@@ -171,7 +171,7 @@ gesdiweb/
 | 2 | Páginas estáticas y maquetación | ✅ Completada (2026-05-05) | |
 | 3 | Content collections + MDX | ✅ Completada (2026-05-05) | |
 | 4 | Formulario de contacto + Resend | ✅ Completada (2026-05-05) | |
-| 5 | Animaciones y pulido | ⏳ | |
+| 5 | Animaciones y pulido | ✅ Completada (2026-05-05) | |
 | 6 | SEO técnico y performance | ⏳ | |
 | 7 | Despliegue en VPS Hetzner | ⏳ | |
 | 8 | Migración SEO y switch DNS | ⏳ | |
