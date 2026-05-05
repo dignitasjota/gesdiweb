@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Marker from '../../components/ui/Marker.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Button from '../../components/ui/Button.astro';
+import { services, getOrderedServices, type Service } from '../../data/services';
+
+export async function getStaticPaths() {
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const all = getOrderedServices();
+const idx = all.findIndex((s) => s.slug === service.slug);
+const next = all[(idx + 1) % all.length];
+---
+
+<BaseLayout
+  title={`${service.title} · gesdiweb`}
+  description={service.excerpt}
+>
+  <article>
+    <header class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
+      <div class="flex items-center gap-4">
+        <Badge number={service.order} />
+        <Marker label={`servicios · ${service.slug}`} />
+      </div>
+
+      <h1
+        class="mt-8 font-display font-bold tracking-tight leading-[0.92] max-w-[20ch]"
+        style="font-size: var(--text-display);"
+      >
+        {service.headline.split(' ').slice(0, -1).join(' ')}{' '}
+        <span class="text-[--color-brand]">
+          {service.headline.split(' ').slice(-1)}
+        </span>
+      </h1>
+
+      <p class="mt-12 max-w-2xl text-lg md:text-xl text-[--color-fg-soft] leading-relaxed">
+        {service.excerpt}
+      </p>
+    </header>
+
+    <section class="border-t border-[--color-border]">
+      <div class="container-fluid section-spacing grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div class="md:col-span-5">
+          <Marker label="qué incluye" />
+          <h2
+            class="mt-6 font-display font-bold tracking-tight leading-tight"
+            style="font-size: var(--text-xl);"
+          >
+            Lo que está dentro
+          </h2>
+        </div>
+        <ul class="md:col-span-7 divide-y divide-[--color-border]">
+          {service.features.map((feature) => (
+            <li class="flex items-start gap-4 py-4">
+              <span
+                class="mt-2 inline-block w-1.5 h-1.5 rounded-full bg-[--color-brand] shrink-0"
+                aria-hidden="true"
+              ></span>
+              <span class="text-base md:text-lg">{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
+      <div class="container-fluid section-spacing grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div class="md:col-span-5">
+          <Marker label="cómo trabajamos" />
+          <h2
+            class="mt-6 font-display font-bold tracking-tight leading-tight"
+            style="font-size: var(--text-xl);"
+          >
+            El método paso a paso
+          </h2>
+        </div>
+        <ol class="md:col-span-7 space-y-8 counter-reset-step">
+          {service.approach.map((step, i) => (
+            <li class="flex items-start gap-6">
+              <span
+                class="font-mono text-xs text-[--color-muted] mt-1 shrink-0"
+                aria-hidden="true"
+              >
+                /{String(i + 1).padStart(2, '0')}
+              </span>
+              <p class="text-base md:text-lg leading-relaxed">{step}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="container-fluid section-spacing">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+        <div class="md:col-span-7">
+          <Marker label="¿siguiente paso?" />
+          <h2
+            class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+            style="font-size: var(--text-2xl);"
+          >
+            Una llamada de 40 minutos<br />
+            sin compromiso.
+          </h2>
+        </div>
+        <div class="md:col-span-5 flex md:justify-end">
+          <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
+        </div>
+      </div>
+    </section>
+
+    <nav
+      aria-label="Servicio siguiente"
+      class="border-t border-[--color-border]"
+    >
+      <a
+        href={`/servicios/${next.slug}`}
+        class="group block container-fluid py-12 md:py-16 transition-colors"
+      >
+        <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+          siguiente servicio
+        </span>
+        <p
+          class="mt-4 font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
+          style="font-size: var(--text-2xl);"
+        >
+          {next.title} →
+        </p>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>

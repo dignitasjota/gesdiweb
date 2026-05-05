@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Marker from '../../components/ui/Marker.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Button from '../../components/ui/Button.astro';
+import { getOrderedServices } from '../../data/services';
+
+const services = getOrderedServices();
+---
+
+<BaseLayout
+  title="Servicios · gesdiweb"
+  description="SEO, apps móviles, hosting, marketing online y mantenimiento. Cinco servicios complementarios bajo un mismo equipo."
+>
+  <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
+    <Marker label="01.servicios" />
+    <h1
+      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+      style="font-size: var(--text-3xl);"
+    >
+      Cinco servicios.<br />
+      <span class="text-[--color-brand]">Un solo equipo</span>.
+    </h1>
+    <p class="mt-8 max-w-2xl text-lg text-[--color-fg-soft] leading-relaxed">
+      No subcontratamos lo crítico. Cada servicio está pensado para encajar con
+      los demás y para crecer contigo a lo largo de los años.
+    </p>
+  </section>
+
+  <section class="border-t border-[--color-border]">
+    <ul>
+      {services.map((service) => (
+        <li class="border-b border-[--color-border]">
+          <a
+            href={`/servicios/${service.slug}`}
+            class="group block container-fluid py-12 md:py-16 transition-colors"
+          >
+            <div class="flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
+              <div class="flex items-center gap-6 md:w-32 shrink-0">
+                <Badge number={service.order} />
+              </div>
+
+              <div class="flex-1">
+                <h2
+                  class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
+                  style="font-size: var(--text-2xl);"
+                >
+                  {service.title}
+                </h2>
+                <p class="mt-4 text-lg text-[--color-fg-soft] max-w-2xl">
+                  {service.headline}
+                </p>
+              </div>
+
+              <div class="md:w-72 shrink-0 flex md:justify-end">
+                <span
+                  class="font-mono text-xs uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand] transition-colors"
+                >
+                  ver detalle →
+                </span>
+              </div>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container-fluid section-spacing text-center">
+    <Marker label="hablemos" class="justify-center w-full" />
+    <h2
+      class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[16ch] mx-auto"
+      style="font-size: var(--text-2xl);"
+    >
+      ¿No estás seguro de qué necesitas?
+    </h2>
+    <p class="mt-6 max-w-xl mx-auto text-[--color-fg-soft] leading-relaxed">
+      Cuéntanos en una llamada de 40 minutos qué buscas y te diremos con
+      honestidad qué servicio (o ninguno) encaja mejor.
+    </p>
+    <div class="mt-10">
+      <Button href="/contacto" variant="primary" size="lg">Reservar llamada</Button>
+    </div>
+  </section>
+</BaseLayout>
