@@ -3,37 +3,56 @@
 # Astro corre como servidor Node standalone en el puerto 4321 (interno).
 # Nginx Proxy Manager lo expone con SSL en gesdiweb.es / www.gesdiweb.es.
 #
-# Variables de entorno (definir en .env del host o en Portainer):
-#   RESEND_API_KEY              clave de Resend
-#   RESEND_FROM_EMAIL           default hola@gesdiweb.es
-#   LEAD_NOTIFICATION_EMAIL     dónde llegan los leads
+# Variables de entorno requeridas (definir en .env junto al compose,
+# o como variables del stack en Portainer):
 #
-# Despliegue local (test del contenedor de producción):
-#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#   IMAGE_TAG                   tag de la imagen GHCR a desplegar (default: latest)
+#   RESEND_API_KEY              clave API de Resend
+#   RESEND_FROM_EMAIL           email "from" (default: hola@gesdiweb.es)
+#   LEAD_NOTIFICATION_EMAIL     email destino de leads (default: hola@gesdiweb.es)
+#
+# Despliegue:
+#   - Portainer recibe webhook → recoge la última imagen de GHCR → recreate
+#   - O manualmente:  docker compose pull && docker compose up -d
+#
+# Verificar:
+#   docker compose ps
+#   docker compose logs -f web
+#   curl -I http://localhost:4321  (desde el host)
 
 services:
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    image: ghcr.io/dignitasjota/gesdiweb-web:latest
+    image: ghcr.io/dignitasjota/gesdiweb-web:${IMAGE_TAG:-latest}
     container_name: gesdiweb_web
     restart: unless-stopped
+    pull_policy: always
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 4321
-      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_API_KEY: ${RESEND_API_KEY:?RESEND_API_KEY es obligatoria en producción}
       RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-hola@gesdiweb.es}
       LEAD_NOTIFICATION_EMAIL: ${LEAD_NOTIFICATION_EMAIL:-hola@gesdiweb.es}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4321/"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     networks:
       - proxy
     labels:
-      - "com.gesdiweb.service=web"
-      - "com.gesdiweb.role=frontend-and-api"
+      com.gesdiweb.service: "web"
+      com.gesdiweb.role: "frontend-and-api"
 
 networks:
   proxy:
-    # En el VPS Hetzner esta red la creará Nginx Proxy Manager.
+    # Red Docker compartida con Nginx Proxy Manager (creada por NPM al instalarse).
+    # Si en tu instalación se llama distinto, ajustar el `name`.
     external: true
     name: npm_default

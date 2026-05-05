@@ -1,14 +1,22 @@
 # Override para probar el contenedor de producción en local.
 # Para desarrollo iterativo se usa `cd web && npm run dev` (más rápido).
 #
-# Uso:
-#   RESEND_API_KEY=... docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Construye desde el código local en lugar de tirar de GHCR.
 #
-# El servidor Astro Node corre en el puerto 4321 del contenedor;
-# se expone como 8090 en el host para no chocar con el dev server.
+# Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml build
+#   RESEND_API_KEY=re_xxx docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# El servidor Astro corre en :4321 dentro del contenedor;
+# se expone como :8090 en el host para no chocar con el dev server.
 
 services:
   web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    image: gesdiweb-web:dev
+    pull_policy: never
     ports:
       - "8090:4321"
     networks:
@@ -18,8 +26,6 @@ services:
 networks:
   default:
     driver: bridge
-  # Sobrescribimos la red proxy del compose principal para no exigir
-  # la red externa de NPM en local.
   proxy:
     external: false
     name: gesdiweb_dev_proxy
