@@ -63,8 +63,10 @@ docker run --rm -p 8080:80 gesdiweb-web
 | [`docs/decisiones.md`](docs/decisiones.md) | ADRs (Architecture Decision Records) |
 | [`docs/convenciones.md`](docs/convenciones.md) | Commits, código, accesibilidad, SEO |
 | [`docs/docker-explicado.md`](docs/docker-explicado.md) | Docker desde cero aplicado al proyecto |
-| [`docs/runbook.md`](docs/runbook.md) | Procedimientos operativos |
-| [`docs/seo-migracion.md`](docs/seo-migracion.md) | Plan de migración SEO desde la WordPress antigua |
+| [`docs/despliegue.md`](docs/despliegue.md) | Guía completa de despliegue inicial en Hetzner (Fase 7) |
+| [`docs/runbook.md`](docs/runbook.md) | Procedimientos operativos del día a día |
+| [`docs/auditoria.md`](docs/auditoria.md) | Auditorías Lighthouse, axe, schema, OG |
+| [`docs/seo-migracion.md`](docs/seo-migracion.md) | Plan de migración SEO desde la WordPress antigua (Fase 8) |
 
 ## Editar contenido
 
@@ -72,4 +74,4 @@ Todo el contenido (posts, servicios, proyectos del portfolio) vive como archivos
 
 ## Estado del proyecto
 
-Fases 0–3 **completadas** (setup base, sistema de diseño, maquetación de 22 páginas, content collections con MDX). Esperando OK para iniciar Fase 4 (formulario de contacto + Resend). Ver [`docs/estado.md`](docs/estado.md) para el snapshot vivo.
+Fases 0–6 **completadas** (setup, diseño, maquetación, content collections, formulario + Resend, animaciones, SEO técnico). Fase 7 (despliegue Hetzner) con artefactos listos esperando ejecución por el dueño siguiendo [`docs/despliegue.md`](docs/despliegue.md). Ver [`docs/estado.md`](docs/estado.md) para el snapshot vivo.
