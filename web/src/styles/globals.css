@@ -162,6 +162,91 @@ video {
 }
 
 /* ───────────────────────────────────────────────────────────
+   Reveals — animación al entrar en viewport
+   ─────────────────────────────────────────────────────────── */
+/*
+ * Por defecto los [data-reveal] aparecen ocultos. El script de
+ * SmoothScroll observa con IntersectionObserver y añade .is-visible
+ * cuando entran en viewport, disparando la transición CSS.
+ *
+ * Si stagger está activo, el script aplica .is-visible a cada hijo
+ * con un delay incremental (CSS variable --stagger-delay).
+ *
+ * Fallback: si JS no carga, una clase .no-js en <html> mostraría
+ * todo. Para no añadir esa complejidad y dado que el sitio es Astro
+ * con HTML estático precomputado, dejamos que el efecto progrese.
+ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal][data-reveal-stagger="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal][data-reveal-stagger="true"] > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--stagger-delay, 0ms);
+}
+
+[data-reveal].is-visible,
+[data-reveal][data-reveal-stagger="true"].is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal][data-reveal-stagger="true"] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   Astro View Transitions — fade global suave
+   ─────────────────────────────────────────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: vt-fade-out;
+}
+::view-transition-new(root) {
+  animation-name: vt-fade-in;
+}
+
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.001ms !important;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
    Animación marquee infinita (CSS puro)
    ─────────────────────────────────────────────────────────── */
 @keyframes marquee-x {
