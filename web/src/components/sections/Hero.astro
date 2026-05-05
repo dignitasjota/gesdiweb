@@ -3,31 +3,81 @@ import Marker from '../ui/Marker.astro';
 import Button from '../ui/Button.astro';
 ---
 
-<section class="container-fluid pt-12 md:pt-20 pb-20 md:pb-32">
-  <Marker label="00.01° estudio · 2026" />
-
-  <h1
-    class="mt-8 font-display font-bold tracking-tight leading-[0.92] max-w-[18ch]"
-    style="font-size: var(--text-display);"
+<section class="container-fluid pt-12 md:pt-20 pb-24 md:pb-40 relative overflow-hidden">
+  {/* Asterisco decorativo gigante (sólo desktop) */}
+  <div
+    class="hidden md:block absolute right-[-3vw] top-[2vw] text-[--color-brand] select-none pointer-events-none leading-none font-display"
+    style="font-size: clamp(20rem, 36vw, 60rem); transform: rotate(12deg);"
+    aria-hidden="true"
   >
-    Diseño web<br />
-    que <span class="text-[--color-brand]">posiciona</span>.
-  </h1>
+    ✳
+  </div>
 
-  <div class="mt-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-    <p class="md:col-span-6 lg:col-span-5 text-lg md:text-xl text-[--color-fg-soft] max-w-2xl leading-relaxed">
-      Webs rápidas, accesibles y pensadas para crecer. Diseño y SEO técnico
-      trabajando juntos desde el primer wireframe hasta el quinto año.
-    </p>
+  <div class="relative">
+    <Marker label="00.01° estudio · 2026" />
 
-    <div class="md:col-span-6 lg:col-span-5 lg:col-start-8 flex flex-col items-start gap-6">
-      <div class="flex flex-wrap items-center gap-3">
-        <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
-        <Button href="/portfolio" variant="ghost" size="lg">Ver portfolio</Button>
+    <h1
+      class="mt-10 font-display font-bold tracking-[-0.03em] leading-[0.88] max-w-[16ch]"
+      style="font-size: var(--text-display);"
+    >
+      Diseño web<br />
+      que <span class="text-[--color-brand]">posiciona</span>.
+    </h1>
+
+    <div class="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+      <div class="lg:col-span-5">
+        <p class="text-[--color-fg-soft] leading-relaxed" style="font-size: var(--text-lg);">
+          Webs rápidas, accesibles y pensadas para crecer. Diseño y SEO técnico
+          trabajando juntos desde el primer wireframe hasta el quinto año.
+        </p>
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
+          <Button href="/portfolio" variant="ghost" size="lg">Ver portfolio</Button>
+        </div>
+        <p class="mt-8 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+          // disponibilidad q3 2026
+        </p>
       </div>
-      <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-        // disponibilidad q3 2026
-      </p>
+
+      {/* Bloque vídeo / imagen hero placeholder */}
+      <div class="lg:col-span-7 lg:col-start-6">
+        <div
+          class="aspect-[16/10] bg-[--color-brand] rounded-2xl relative overflow-hidden border-4 border-[--color-brand-hover]"
+        >
+          <div
+            class="absolute inset-0 flex items-center justify-center text-[--color-fg-inverse] font-mono uppercase tracking-widest"
+            style="font-size: var(--text-sm);"
+          >
+            <div class="text-center">
+              <div
+                class="w-20 h-20 rounded-full bg-[--color-fg-inverse]/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 border border-[--color-fg-inverse]/30"
+                aria-hidden="true"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <p>// [PLACEHOLDER · vídeo hero]</p>
+            </div>
+          </div>
+
+          {/* Etiqueta superior izquierda */}
+          <div
+            class="absolute top-6 left-6 font-mono text-[--color-fg-inverse] uppercase tracking-widest"
+            style="font-size: var(--text-xs);"
+          >
+            // showreel 2026
+          </div>
+
+          {/* Etiqueta inferior derecha */}
+          <div
+            class="absolute bottom-6 right-6 font-mono text-[--color-fg-inverse] uppercase tracking-widest"
+            style="font-size: var(--text-xs);"
+          >
+            00:42
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

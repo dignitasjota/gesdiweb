@@ -1,26 +1,55 @@
 ---
 import Marker from '../ui/Marker.astro';
 
-const verbs = ['escuchamos', 'diseñamos', 'posicionamos', 'acompañamos'];
+const verbs = [
+  { word: 'escuchamos', accent: false },
+  { word: 'diseñamos', accent: false },
+  { word: 'posicionamos', accent: false },
+  { word: 'acompañamos.', accent: true },
+];
 ---
 
-<section class="container-fluid section-spacing">
-  <Marker label="00.02° método" />
+<section class="section-spacing relative overflow-hidden">
+  <div class="container-fluid">
+    <Marker label="00.02° método" />
+  </div>
 
-  <div
-    class="mt-10 font-display font-bold tracking-tight leading-[0.95] flex flex-col gap-2"
-    style="font-size: var(--text-3xl);"
-  >
-    {verbs.map((verb, i) => (
-      <p class={i === verbs.length - 1 ? 'text-[--color-brand]' : ''}>
-        / {verb}
-      </p>
+  <div class="mt-12 md:mt-20">
+    {verbs.map((v, i) => (
+      <div
+        class={`border-t border-[--color-border] ${
+          i === verbs.length - 1 ? 'border-b' : ''
+        } ${v.accent ? 'bg-[--color-brand-soft]' : ''}`}
+      >
+        <div class="container-fluid py-6 md:py-10 flex items-baseline gap-6 md:gap-12">
+          <span
+            class="font-mono text-[--color-muted] shrink-0"
+            style="font-size: var(--text-xs);"
+            aria-hidden="true"
+          >
+            /{String(i + 1).padStart(2, '0')}
+          </span>
+          <p
+            class={`font-display font-bold tracking-[-0.03em] leading-[0.95] ${
+              v.accent ? 'text-[--color-brand-hover]' : 'text-[--color-fg]'
+            }`}
+            style="font-size: var(--text-3xl);"
+          >
+            / {v.word}
+          </p>
+        </div>
+      </div>
     ))}
   </div>
 
-  <p class="mt-12 max-w-2xl text-[--color-fg-soft] text-lg leading-relaxed">
-    Un proceso ordenado, sin humo y con métricas reales. Trabajamos contigo durante
-    todo el ciclo de vida del proyecto: desde la primera reunión hasta el quinto
-    año de mantenimiento.
-  </p>
+  <div class="container-fluid mt-16">
+    <p
+      class="max-w-3xl text-[--color-fg-soft] leading-relaxed"
+      style="font-size: var(--text-lg);"
+    >
+      Un proceso ordenado, sin humo y con métricas reales. Trabajamos contigo durante
+      todo el ciclo de vida del proyecto: desde la primera reunión hasta el quinto
+      año de mantenimiento.
+    </p>
+  </div>
 </section>
