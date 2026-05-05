@@ -12,7 +12,7 @@ Estado global:
 | 3 | Content collections (MDX) | ✅ Completada (2026-05-05) |
 | 4 | Formulario de contacto + Resend | ✅ Completada (2026-05-05) |
 | 5 | Animaciones y pulido | ✅ Completada (2026-05-05) |
-| 6 | SEO técnico y performance | ⏳ |
+| 6 | SEO técnico y performance | ✅ Completada (2026-05-05) |
 | 7 | Despliegue en VPS Hetzner | ⏳ |
 | 8 | Migración SEO y switch DNS | ⏳ |
 

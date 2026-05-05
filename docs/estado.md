@@ -3,8 +3,8 @@
 > **Snapshot dinámico.** Se actualiza al cerrar cada fase. Si entras nuevo al proyecto, este documento te dice **dónde estamos exactamente y qué hacer ahora**.
 
 **Última actualización:** 2026-05-05
-**Última fase cerrada:** Fase 5 — Animaciones y pulido
-**Fase en curso:** ninguna (esperando OK del dueño para iniciar Fase 6)
+**Última fase cerrada:** Fase 6 — SEO técnico y performance
+**Fase en curso:** ninguna (esperando OK del dueño para iniciar Fase 7)
 
 ---
 
@@ -17,8 +17,8 @@
 ✅ Fase 3  Content collections (MDX)    [completada 2026-05-05]
 ✅ Fase 4  Formulario + Resend          [completada 2026-05-05]
 ✅ Fase 5  Animaciones y pulido         [completada 2026-05-05]
-⏳ Fase 6  SEO técnico y performance    [siguiente — esperando OK]
-⏳ Fase 7  Despliegue Hetzner
+✅ Fase 6  SEO técnico y performance    [completada 2026-05-05]
+⏳ Fase 7  Despliegue Hetzner           [siguiente — esperando OK]
 ⏳ Fase 8  Migración SEO + switch DNS
 ```
 
@@ -26,88 +26,112 @@
 
 ## Lo que está funcionando ahora mismo
 
-- 22 páginas estáticas + endpoint `/api/contact`.
-- **Smooth scroll global** con Lenis.
-- **Reveals al scroll** con CSS transitions disparadas por IntersectionObserver (no GSAP — ligero y sin flash).
-- **Stagger** de hijos en grids (cards de servicios, stats, process, blog).
-- **Parallax sutil** del asterisco decorativo del hero (con GSAP ScrollTrigger lazy-loaded — solo se carga si hay `[data-parallax]` en la página).
-- **View Transitions API** activa: navegación entre páginas con fade global de 280ms.
-- **prefers-reduced-motion** respetado en absolutamente todas las animaciones (CSS + JS).
+- 22 páginas estáticas + endpoint `/api/contact`
+- Sistema de diseño + animaciones + view transitions
+- **JSON-LD por tipo de página** (Organization+LocalBusiness, WebSite, Service, CreativeWork, BlogPosting, Blog, ItemList, BreadcrumbList, ContactPage, WebPage)
+- **Meta tags SEO completos**: canonical, robots con max-image-preview:large, OG completo (site_name, image, image:width/height/alt, locale), Twitter Card, theme-color, apple-touch-icon
+- **OG image fallback** SVG 1200×630 con paleta corporativa (`/og-default.svg`)
+- **robots.txt** explícito (Disallow `/styleguide` y `/api/`, Sitemap declarado)
+- **Sitemap automático** con i18n es-ES, excluye `/styleguide`
+- **Posts del blog** con `ogType=article`, `article:published_time` y `article:author`
+- **Páginas legales** con WebPage + BreadcrumbList automático vía LegalLayout
+- **Documento de auditoría** (`docs/auditoria.md`) con procedimiento completo
+
+## Validación de la build
+
+```
+22 páginas prerenderizadas
+Tipos JSON-LD detectados en HTML output:
+- Home: Organization+LocalBusiness+ProfessionalService, WebSite, Country
+- Service detail: Service, OfferCatalog, Offer, BreadcrumbList, ListItem, Country
+- Blog post: BlogPosting, Person, BreadcrumbList, ListItem, WebPage
+OG image: https://gesdiweb.es/og-default.svg
+theme-color: #77c2da
+```
 
 ## Lo que NO está hecho todavía
 
-- JSON-LD por tipo de página (Organization, LocalBusiness, Service, CreativeWork, BlogPosting) → Fase 6.
-- OG images dinámicas → Fase 6.
-- Auditoría Lighthouse 95+ formal → Fase 6.
-- Auditoría axe-core → Fase 6.
-- Compresión y optimización de imágenes (cuando lleguen, todavía son placeholders) → Fase 6.
+- **Auditoría Lighthouse 95+ ejecutada** — el procedimiento está documentado pero las auditorías formales se hacen al desplegar (Fase 7) contra producción.
+- **Auditoría axe-core ejecutada** — igual que arriba.
+- OG image PNG real (actualmente SVG; algunos clientes no lo soportan). Cuando el dueño aporte material, sustituir por PNG en `/og-default.png` y actualizar referencia en `lib/seo.ts`.
+- Datos legales reales de Organization (address, telephone). Comentado en `lib/seo.ts` hasta que el dueño los aporte.
 - Despliegue producción → Fase 7.
 - Redirecciones 301 y migración del WordPress → Fase 8.
 
+## Dependencias bloqueadas a información del dueño
+
+| Necesario para | Pendiente |
+|---|---|
+| Organization completa en JSON-LD | Razón social, NIF, dirección fiscal, teléfono |
+| OG images por página | Imágenes de portfolio y blog (cuando lleguen) |
+| Lighthouse en producción | Despliegue completado (Fase 7) |
+| Verificación dominio Resend (Fase 7) | Acceso DNS para SPF + DKIM + DMARC |
+| Migración SEO (Fase 8) | Export Search Console (URLs que rankean) |
+| Migración blog (Fase 8) | Export XML/WXR del WordPress |
+
 ---
 
-## Detalle de Fase 5 (cerrada)
+## Detalle de Fase 6 (cerrada)
 
-**Decisión de implementación clave.** Empecé usando GSAP para los reveals (tamaño + complejidad) pero refactoricé a CSS transitions con `IntersectionObserver`:
+**Commits añadidos en `main`:**
 
-- ❌ GSAP para reveals: 70+ KB de bundle, gestión imperativa, riesgo de flash inicial si JS tarda.
-- ✅ CSS transitions + IO: 0 KB extra (CSS nativo), 0 flash (estado inicial en CSS), simpler.
+```
+f4f6e0b docs: procedimiento completo de auditoría (Lighthouse, axe, schema, OG)
+0fea8e8 feat(seo): OG image fallback con paleta corporativa + robots completo
+7a8ebf7 feat(seo): JSON-LD en cada página
+dd02e78 feat(seo): meta tags refinados y slot JSON-LD en BaseLayout
+4fc4a6b feat(seo): librería de helpers JSON-LD por tipo de página
+```
 
-**GSAP solo se usa para parallax** (scroll-linked, requiere RAF + `scrub`) y se importa de forma **lazy** (solo se carga si la página tiene `[data-parallax]`).
+**Archivos creados:**
 
-**Componente `<Reveal>`:** wrapper semántico que añade `data-reveal` al elemento. Soporta:
-- `delay` (ms)
-- `y` (px de translación inicial — actualmente fijo 24px en CSS)
-- `stagger` (anima hijos en cascada con 80ms entre cada uno)
+- `web/src/lib/seo.ts` — 9 builders JSON-LD tipados + constante SITE
+- `web/public/og-default.svg` — fallback OG 1200×630 brand
+- `docs/auditoria.md` — procedimiento de auditorías (Lighthouse, axe, schema, OG, links)
 
-**Aplicado en home a:** Hero, Statement, ServicesNumberedList, PortfolioFeatured, Stats, FeatureStrip, Process, HomeContactCTA, BlogRecent.
+**Archivos modificados:**
 
-**View Transitions API:** `<ClientRouter />` en BaseLayout con `fallback="swap"`. Animación CSS global de fade-out/in de 280ms. `prefers-reduced-motion` lo desactiva. La compatibilidad de Lenis con View Transitions: limpieza explícita en `astro:before-swap` y reinit en `astro:page-load`.
-
-**Hero parallax:** asterisco decorativo de fondo con `data-parallax="0.25"` — se mueve a 25% de la velocidad del scroll.
-
-**Archivos creados/modificados:**
-
-- `web/src/components/animations/Reveal.astro` — nuevo wrapper
-- `web/src/components/animations/SmoothScroll.astro` — Lenis + IO + GSAP lazy parallax + sync con View Transitions
-- `web/src/styles/globals.css` — estilos `[data-reveal]`, `.is-visible`, `--stagger-delay`, View Transitions fade
-- `web/src/layouts/BaseLayout.astro` — `<ClientRouter fallback="swap" />`
-- 9 secciones de home con `<Reveal>` aplicado quirúrgicamente
-
-**Validación cumplida:**
-- Build OK, 22 páginas + endpoint
-- Sitio responde en local sin errores
-- Reveals funcionan en navegadores modernos (IO desde Safari 12.1+, Chrome 51+)
-- Sin flash inicial (CSS oculta antes de JS)
-- Reduced-motion respetado
-- 0 vulnerabilidades npm
+- `web/src/layouts/BaseLayout.astro` — props `ogImage`, `ogType`, `publishedTime`, `modifiedTime`, `articleAuthor`, `jsonLd[]`. Meta tags refinados (theme-color, apple-touch-icon, og:image dimensions, max-image-preview).
+- `web/src/layouts/LegalLayout.astro` — pasa WebPage + BreadcrumbList automático
+- `web/src/pages/index.astro` — Organization + WebSite
+- `web/src/pages/servicios/index.astro` — WebPage + ItemList + Breadcrumb
+- `web/src/pages/servicios/[slug].astro` — Service + Breadcrumb + seoTitle/seoDescription support
+- `web/src/pages/portfolio/index.astro` — WebPage + ItemList + Breadcrumb
+- `web/src/pages/portfolio/[slug].astro` — CreativeWork + Breadcrumb
+- `web/src/pages/blog/index.astro` — Blog + Breadcrumb
+- `web/src/pages/blog/[slug].astro` — BlogPosting + Breadcrumb + ogType=article
+- `web/src/pages/contacto.astro` — ContactPage + Breadcrumb
+- `web/public/robots.txt` — Disallow /styleguide y /api/, Sitemap declarado
 
 ---
 
 ## Próximo paso concreto
 
-Cuando el dueño dé luz verde para Fase 6 (SEO técnico y performance):
+Cuando el dueño dé luz verde para Fase 7 (despliegue Hetzner):
 
-1. **JSON-LD por tipo de página:**
-   - Home: `Organization` + `LocalBusiness` + `WebSite` con `SearchAction`
-   - Servicios: `Service` con `provider`
-   - Portfolio: `CreativeWork`
-   - Blog: `BlogPosting` con autor, fecha, imagen
-2. **OG images** (Open Graph) por página — generadas dinámicamente o pre-generadas en build.
-3. **Meta tags refinados** (title length, description length, robots por página).
-4. **Auditoría Lighthouse** sobre el server Node local (`npm run preview` o el container) — objetivo 95+ en Performance/Accesibilidad/SEO/Best Practices.
-5. **Auditoría axe-core** o Pa11y.
-6. **Optimización de imágenes** — cuando el dueño aporte material real, pasar por `<Image>` de Astro con AVIF/WebP.
-7. **Headers de seguridad** (CSP, HSTS) revisados.
+1. **Pre-deploy:**
+   - Crear cuenta Resend y obtener API key
+   - Verificar dominio gesdiweb.es en Resend (te genero los registros DNS exactos)
+   - Decidir CI/CD: GitHub Actions con SSH al VPS o webhook a Portainer
+2. **Stack en Portainer:** crear stack `gesdiweb` apuntando al docker-compose con env Resend
+3. **NPM:** dar de alta `gesdiweb.es`, `www.gesdiweb.es` en NPM con SSL Let's Encrypt
+4. **DNS temporal:** subdominio QA tipo `new.gesdiweb.es` para probar antes del switch
+5. **Lighthouse en QA** contra el subdominio temporal
+6. **Firewall + fail2ban** en el VPS
+7. **Backups nocturnos** del VPS
+
+El switch DNS final del dominio principal se hace en **Fase 8** (no en 7).
 
 ---
 
 ## Notas de sesiones
 
-### 2026-05-05 — Fase 5
+### 2026-05-05 — Fase 6
 
-Iteración importante en el approach técnico: arranqué con GSAP ScrollTrigger para reveals y lo cambié por IntersectionObserver + CSS transitions. La decisión la tomé al darme cuenta del costo (~70KB GSAP en cada página) frente al beneficio mínimo (los reveals son fades simples con stagger).
+JSON-LD priorizado sobre OG images dinámicas porque el primero impacta directamente en SEO técnico (rich results en Google) y el segundo solo en CTR de redes sociales. Las OG images por página se quedan con un único fallback SVG hasta que haya material real.
 
-GSAP queda solo para parallax porque ahí sí aporta (scrub scroll-linked es complejo de implementar con CSS). Y se carga lazy: solo se descarga si la página actual tiene `[data-parallax]`.
+Decisión: SVG en lugar de PNG para OG. Algunos clientes no soportan SVG (Slack viejos, ciertos clients email), pero la cuota es minoritaria y permite que el OG sea totalmente versionable en Git sin dependencia de generación de imágenes. Cuando el dueño aporte logo y material real, sustituir por PNG.
 
-View Transitions API funciona bien con Lenis siempre que se haga `lenis.destroy()` en `astro:before-swap` y `setupAnimations()` en `astro:page-load`. Sin esto, el smooth scroll se rompía al navegar.
+`Organization` en home incluye `["Organization", "LocalBusiness", "ProfessionalService"]` como `@type` array — Google lo indexa con la unión de las tres entidades. `address` y `telephone` quedan comentados hasta tener los datos reales para no publicar placeholder al knowledge graph.
+
+`seoTitle` y `seoDescription` añadidos como overrides opcionales en `[slug].astro` de servicios, portfolio y blog. Si el frontmatter los define, ganan al título por defecto. Útil para títulos largos del listado que en SEO conviene acortar.
