@@ -1,11 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
-import Badge from '../../components/ui/Badge.astro';
 import Button from '../../components/ui/Button.astro';
 import { getOrderedServices } from '../../data/services';
 
 const services = getOrderedServices();
+
+const icons: Record<string, string> = {
+  'posicionamiento-web': '◐',
+  'apps-moviles': '▣',
+  'hosting-web': '◇',
+  'marketing-online': '✦',
+  'mantenimiento-informatico': '◈',
+};
 ---
 
 <BaseLayout
@@ -15,71 +22,123 @@ const services = getOrderedServices();
   <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
     <Marker label="01.servicios" />
     <h1
-      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+      class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
       style="font-size: var(--text-3xl);"
     >
       Cinco servicios.<br />
       <span class="text-[--color-brand]">Un solo equipo</span>.
     </h1>
-    <p class="mt-8 max-w-2xl text-lg text-[--color-fg-soft] leading-relaxed">
+    <p
+      class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
+      style="font-size: var(--text-lg);"
+    >
       No subcontratamos lo crítico. Cada servicio está pensado para encajar con
       los demás y para crecer contigo a lo largo de los años.
     </p>
   </section>
 
-  <section class="border-t border-[--color-border]">
-    <ul>
-      {services.map((service) => (
-        <li class="border-b border-[--color-border]">
-          <a
-            href={`/servicios/${service.slug}`}
-            class="group block container-fluid py-12 md:py-16 transition-colors"
+  <section class="container-fluid pb-20 md:pb-32">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+      {services.map((service, i) => (
+        <a
+          href={`/servicios/${service.slug}`}
+          class={`group rounded-2xl p-7 md:p-9 flex flex-col gap-5 transition-all hover:-translate-y-1 ${
+            i === 0
+              ? 'md:col-span-2 lg:col-span-2 bg-[--color-brand] text-[--color-fg-inverse]'
+              : 'bg-[--color-bg-soft] border border-[--color-border] hover:border-[--color-brand] hover:bg-[--color-brand-soft]'
+          }`}
+        >
+          <div class="flex items-start justify-between gap-4">
+            <span
+              class={`font-mono uppercase tracking-widest ${
+                i === 0
+                  ? 'text-white/70'
+                  : 'text-[--color-muted] group-hover:text-[--color-brand-hover]'
+              } transition-colors`}
+              style="font-size: var(--text-xs);"
+            >
+              /{String(service.order).padStart(2, '0')}
+            </span>
+            <span
+              class={`font-display font-bold leading-none select-none ${
+                i === 0 ? 'text-white/30' : 'text-[--color-brand]'
+              }`}
+              style={`font-size: clamp(${i === 0 ? '4rem' : '2.5rem'}, ${i === 0 ? '8vw' : '5vw'}, ${i === 0 ? '7rem' : '4rem'});`}
+              aria-hidden="true"
+            >
+              {icons[service.slug]}
+            </span>
+          </div>
+
+          <h2
+            class={`font-display font-bold tracking-[-0.02em] leading-tight mt-2 transition-colors ${
+              i === 0 ? '' : 'group-hover:text-[--color-brand-hover]'
+            }`}
+            style={`font-size: var(${i === 0 ? '--text-2xl' : '--text-xl'});`}
           >
-            <div class="flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
-              <div class="flex items-center gap-6 md:w-32 shrink-0">
-                <Badge number={service.order} />
-              </div>
+            {service.title}
+          </h2>
 
-              <div class="flex-1">
-                <h2
-                  class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
-                  style="font-size: var(--text-2xl);"
-                >
-                  {service.title}
-                </h2>
-                <p class="mt-4 text-lg text-[--color-fg-soft] max-w-2xl">
-                  {service.headline}
-                </p>
-              </div>
+          <p
+            class={`leading-relaxed flex-1 ${
+              i === 0 ? 'text-white/85' : 'text-[--color-fg-soft]'
+            }`}
+            style={`font-size: var(${i === 0 ? '--text-lg' : '--text-base'});`}
+          >
+            {i === 0 ? `${service.headline} ${service.excerpt}` : service.excerpt}
+          </p>
 
-              <div class="md:w-72 shrink-0 flex md:justify-end">
-                <span
-                  class="font-mono text-xs uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand] transition-colors"
-                >
-                  ver detalle →
-                </span>
-              </div>
-            </div>
-          </a>
-        </li>
+          <div
+            class={`flex items-center justify-between pt-4 border-t ${
+              i === 0 ? 'border-white/15' : 'border-[--color-border-soft]'
+            }`}
+          >
+            <span
+              class={`font-mono uppercase tracking-widest transition-colors ${
+                i === 0 ? 'text-white/70' : 'text-[--color-fg-soft] group-hover:text-[--color-brand-hover]'
+              }`}
+              style="font-size: var(--text-xs);"
+            >
+              ver detalle
+            </span>
+            <span
+              class={`inline-flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
+                i === 0
+                  ? 'bg-[--color-fg-inverse] text-[--color-brand] group-hover:scale-110'
+                  : 'bg-[--color-bg] text-[--color-fg] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse]'
+              }`}
+              aria-hidden="true"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </span>
+          </div>
+        </a>
       ))}
-    </ul>
+    </div>
   </section>
 
-  <section class="container-fluid section-spacing text-center">
-    <Marker label="hablemos" class="justify-center w-full" />
-    <h2
-      class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[16ch] mx-auto"
-      style="font-size: var(--text-2xl);"
-    >
-      ¿No estás seguro de qué necesitas?
-    </h2>
-    <p class="mt-6 max-w-xl mx-auto text-[--color-fg-soft] leading-relaxed">
-      Cuéntanos en una llamada de 40 minutos qué buscas y te diremos con
-      honestidad qué servicio (o ninguno) encaja mejor.
-    </p>
-    <div class="mt-10">
-      <Button href="/contacto" variant="primary" size="lg">Reservar llamada</Button>
+  <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
+    <div class="container-fluid section-spacing text-center">
+      <Marker label="hablemos" class="justify-center w-full" />
+      <h2
+        class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch] mx-auto"
+        style="font-size: var(--text-2xl);"
+      >
+        ¿No estás seguro de <span class="text-[--color-brand]">qué necesitas</span>?
+      </h2>
+      <p
+        class="mt-6 max-w-xl mx-auto text-[--color-fg-soft] leading-relaxed"
+        style="font-size: var(--text-base);"
+      >
+        Cuéntanos en una llamada de 40 minutos qué buscas y te diremos con
+        honestidad qué servicio (o ninguno) encaja mejor.
+      </p>
+      <div class="mt-10">
+        <Button href="/contacto" variant="primary" size="lg">Reservar llamada</Button>
+      </div>
     </div>
   </section>
 </BaseLayout>
