@@ -150,7 +150,7 @@ gesdiweb/
 | Fase | Nombre | Estado | Documento |
 |---|---|---|---|
 | 0 | Setup base | ✅ Completada (2026-05-05) | [`docs/fases.md`](docs/fases.md) |
-| 1 | Sistema de diseño | ⏳ Pendiente OK del dueño para iniciar | |
+| 1 | Sistema de diseño | ✅ Completada (2026-05-05) | |
 | 2 | Páginas estáticas y maquetación | ⏳ | |
 | 3 | Content collections + MDX | ⏳ | |
 | 4 | Formulario de contacto + Resend | ⏳ | |

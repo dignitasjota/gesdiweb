@@ -7,7 +7,7 @@ Estado global:
 | # | Fase | Estado |
 |---|---|---|
 | 0 | Setup base | ✅ Completada (2026-05-05) |
-| 1 | Sistema de diseño | ⏳ Pendiente OK |
+| 1 | Sistema de diseño | ✅ Completada (2026-05-05) |
 | 2 | Páginas estáticas y maquetación | ⏳ |
 | 3 | Content collections (MDX) | ⏳ |
 | 4 | Formulario de contacto + Resend | ⏳ |
