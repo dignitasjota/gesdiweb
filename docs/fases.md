@@ -41,134 +41,128 @@ Estado global:
 
 ---
 
-## Fase 1 — Sistema de diseño
+## Fase 1 — Sistema de diseño ✅
 
-**Objetivo:** dejar listo el sistema de diseño completo para que las páginas reales se maqueten encima sin tomar decisiones visuales adicionales.
+**Hecho:**
+- Fontsource Variable: Bricolage Grotesque (display), Inter (sans), JetBrains Mono (mono).
+- Tokens completos en `globals.css`: paleta, escala fluida `clamp()` (xs–display), espaciados (`--space-section`, `--space-block`), radios, sombras mínimas, transiciones, z-index, container fluido.
+- Componentes UI: `Marker` (con dot brand), `Button` (primary/secondary/ghost · sm/md/lg), `Tag` (default/brand/inverse), `Badge`, `StatBlock`.
+- `Header` fijo translúcido con backdrop-blur + nav móvil con hamburguesa.
+- `Footer` con strip brand superior, 3 columnas y datos legales placeholders.
+- `<SmoothScroll>` con Lenis (respeta reduced-motion).
+- Página `/styleguide` (renombrada de `_styleguide` porque Astro excluye archivos con prefix `_`). Filtrada del sitemap, marcada `noindex`.
 
-**Tareas:**
-1. Cargar tipografías Bricolage Grotesque + Inter + JetBrains Mono con Fontsource (subset latin, `font-display: swap`).
-2. Definir tokens completos en `globals.css`: escala fluida `clamp()`, espaciados, radios, sombras (mínimas), z-index.
-3. Crear componentes UI base en `web/src/components/ui/`:
-   - `Marker.astro` — etiqueta mono `// 00.01°`
-   - `Button.astro` — primario, secundario, ghost
-   - `Tag.astro` — píldora pequeña
-   - `Badge.astro`
-   - `StatBlock.astro` — número grande + descripción
-4. Crear `Header.astro` y `Footer.astro` en `components/layout/`.
-5. Configurar GSAP + Lenis con `<SmoothScroll>` wrapper en `components/animations/`.
-6. Crear página oculta `/_styleguide` que muestre todos los componentes y tokens.
-
-**Punto de validación:**
-- Revisar `/_styleguide` y aprobar dirección visual antes de tocar páginas reales.
-- Lighthouse ≥ 95 en `/_styleguide` (sin contenido pesado).
-
-**Lo que NO se hace en Fase 1:**
-- Maquetación de home, servicios, portfolio, blog, contacto. Esto es Fase 2.
-- Animaciones específicas de página (reveals, marquees con datos reales). Eso es Fase 5.
+**Iteración posterior:** Tras feedback en Fase 2, se añadió librería `Icon.astro` con 26 iconos lineales SVG inline (servicios, stats, proceso, garantías, UI). El `Marker` se actualizó con dot azul.
 
 ---
 
-## Fase 2 — Páginas estáticas y maquetación
+## Fase 2 — Páginas estáticas y maquetación ✅
 
-**Orden estricto, una página tras otra. Validar cada una antes de pasar a la siguiente.**
+**Hecho:**
+- 22 páginas: home (9 secciones), servicios (listado + 5 detalles), portfolio (listado + 5 detalles), blog (listado + 3 detalles), contacto, 3 legales, styleguide.
+- Datos en `src/data/*.ts` con tipos TypeScript estrictos (luego migrados a content collections en Fase 3).
+- 9 secciones de home: Hero, ClientsMarquee, Statement, ServicesNumberedList, PortfolioFeatured, Stats, FeatureStrip, Process, HomeContactCTA, BlogRecent.
+- `LegalLayout` reutilizable para las 3 páginas legales.
+- Formulario de contacto maquetado completo con honeypot y consentimiento RGPD obligatorio (envío real conectado en Fase 4).
 
-1. **Home** — siguiendo el guion del [briefing §6](briefing.md#6-estructura-de-la-home).
-2. **Servicios** — listado + página de detalle (5 servicios).
-3. **Portfolio** — listado + página de detalle.
-4. **Blog** — listado + página de detalle.
-5. **Contacto** — formulario incluido (la integración con Resend es Fase 4).
-6. **Páginas legales** — `/aviso-legal`, `/politica-privacidad`, `/politica-cookies`. Datos legales reales pendientes del dueño.
-
-**Cada página primero se maqueta SIN animaciones.** Las animaciones se añaden en Fase 5.
-
-**Datos:** placeholders Lorem-style mientras no haya contenido real. Marcar claramente con `[PLACEHOLDER]` cualquier dato que el dueño deba aportar (logos clientes, fotos, stats, datos legales).
-
-**Punto de validación:** revisar cada página en desktop (1440), tablet (768) y móvil (375) antes de continuar.
+**Iteraciones de diseño durante Fase 2:**
+1. Primer pase muy plano (B&W) — se inyectó color brand (asterisco gigante hero, marquee animado, statement con drama, stats sobre dark, process con accent variado).
+2. Tipografía bajada un escalón (display max 8rem en lugar de 12rem) y servicios reorganizados como grid de 5 cards uniformes (antes había una "destacada" que rompía la consistencia).
+3. Iconografía SVG reemplaza caracteres geométricos (◐ ▣ ◇ → seo / mobile / server con SVG inline). FeatureStrip nueva entre Stats y Process. BlogRecent en fondo brand-soft. Footer con strip brand superior.
 
 ---
 
-## Fase 3 — Content collections (MDX)
+## Fase 3 — Content collections (MDX) ✅
 
-**Objetivo:** mover contenido hardcoded en `.astro` a colecciones MDX tipadas con Zod.
+**Hecho:**
+- Instalado `@astrojs/mdx@5.0.4`.
+- `web/src/content.config.ts` con schemas Zod para `services`, `portfolio`, `blog`. Glob loader sobre `**/*.{md,mdx}`.
+- Migración: 5 servicios + 5 proyectos + 3 posts a MDX. Posts del blog con cuerpo Markdown real (no placeholder).
+- Helpers async drop-in en `lib/collections.ts` con la misma firma que el antiguo `src/data/*`: `getOrderedServices`, `getAllProjects`, `getFeaturedProjects`, `getRecentPosts`, etc.
+- Páginas dinámicas (`[slug].astro`) renderizan el cuerpo MDX con `<Content />`.
+- Estilos editoriales scoped (`.post-body`, `.prose-mimic`) en lugar de Tailwind Typography.
+- `src/data/*.ts` eliminado tras la migración.
 
-**Tareas:**
-1. Configurar `web/src/content/config.ts` con schemas Zod para `services`, `portfolio`, `blog`.
-2. Crear archivos MDX iniciales con datos de ejemplo (los reales llegarán en Fase 8).
-3. Páginas dinámicas con `getStaticPaths()`.
-4. Imágenes optimizadas con `<Image>` desde dentro de MDX.
-5. Generar JSON-LD por colección.
-
-**Punto de validación:** crear/editar un MDX y ver el cambio reflejado tras `npm run build`. Tipos correctos al meter datos inválidos.
-
----
-
-## Fase 4 — Formulario de contacto + Resend
-
-**Tareas:**
-1. Validación cliente con Zod en el formulario de `/contacto`.
-2. Endpoint Astro (`server: 'hybrid'` o action) que recibe POST.
-3. Honeypot anti-spam + rate limit básico (cookie/IP).
-4. Envío de email con Resend al `LEAD_NOTIFICATION_EMAIL`.
-5. Respuesta de éxito/error con UI accesible.
-
-**Variables `.env`:**
-- `RESEND_API_KEY`
-- `RESEND_FROM_EMAIL` (verificado en dominio gesdiweb.es)
-- `LEAD_NOTIFICATION_EMAIL`
-
-**DNS pendiente:** SPF + DKIM + DMARC en `gesdiweb.es` para verificar el dominio en Resend. Se hace al desplegar el formulario.
-
-**Punto de validación:** enviar formulario de prueba, recibir email.
+**Decisión:** los `id` de las entries (filename sin extensión) reemplazan al antiguo campo `slug`. URLs idénticas a antes.
 
 ---
 
-## Fase 5 — Animaciones y pulido
+## Fase 4 — Formulario de contacto + Resend ✅
 
-**Tareas:**
-1. GSAP ScrollTrigger en secciones que lo requieran (reveals, parallax suave).
-2. Marquees infinitos en logos de clientes y banda de texto.
-3. Reveals de texto y elementos al scroll.
-4. Transiciones de página con Astro View Transitions API.
-5. Cursor follower (opcional, evaluar si aporta).
-6. Estados de hover refinados.
+**Hecho:**
+- Cambio arquitectónico: Astro `output: 'static'` → `output: 'server'` con adapter `@astrojs/node` standalone. Cada página `.astro` con `export const prerender = true;`. Solo `/api/contact` corre en runtime.
+- Endpoint `src/pages/api/contact.ts` con validación Zod, honeypot (`company_url`), rate limit en memoria (5 req / 10 min / IP), envío vía Resend con plantilla HTML+texto.
+- `ContactFormClient.astro` (~110 líneas, solo se carga en `/contacto`) intercepta el submit, hace fetch al endpoint, muestra estados accesibles con `aria-live="polite"`, marca campos inválidos con `aria-invalid` + mensaje específico.
+- `lib/contact-schema.ts` con schema Zod compartido cliente/servidor.
+- Plantilla email en `lib/email/contact-template.ts` con paleta corporativa.
+- Dockerfile migrado a `node:22-alpine` ejecutando `dist/server/entry.mjs`.
+- Variables runtime: `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEAD_NOTIFICATION_EMAIL`. Sin API key: modo dev con log local.
+- Override `uuid: ^14.0.0` en `package.json` para resolver advisory transitivo.
 
-**Punto de validación:** prueba en móvil/tablet/desktop. Que las animaciones no rompan rendimiento ni accesibilidad (`prefers-reduced-motion` respetado).
-
----
-
-## Fase 6 — SEO técnico y performance
-
-**Tareas:**
-1. `@astrojs/sitemap` configurado correctamente con prioridades.
-2. `robots.txt` revisado.
-3. JSON-LD por tipo de página (Organization, LocalBusiness, Service, CreativeWork, BlogPosting).
-4. Meta tags dinámicos (title, description, OG image por página).
-5. Open Graph images dinámicas (opcional, `@vercel/og` o pre-generadas en build).
-6. Auditoría Lighthouse: 95+ en performance, accesibilidad, SEO, best practices.
-7. Auditoría con axe-core.
-8. Comprimir/optimizar imágenes self-hosted.
-
-**Punto de validación:** Lighthouse 95+ en home, servicios, portfolio, blog, contacto.
+**Verificación cumplida:** validación inválida → 400 con issues tipados; honeypot relleno → 200 sin enviar; rate limit → 429.
 
 ---
 
-## Fase 7 — Despliegue en VPS Hetzner
+## Fase 5 — Animaciones y pulido ✅
 
-**Pre-requisitos:** decidir CI/CD definitivo (GHCR + Portainer webhook vs. GitHub Actions con SSH).
+**Hecho:**
+- Componente `<Reveal>` con prop `stagger` y `delay`.
+- Reveals con **CSS transitions + IntersectionObserver** (no GSAP). 0 KB JS extra para reveals simples. CSS oculta con `opacity: 0; transform: translateY(24px)`, IO añade `.is-visible` al entrar en viewport, transición CSS dispara la animación.
+- Stagger interno con CSS variable `--stagger-delay` aplicada por JS a cada hijo.
+- **GSAP ScrollTrigger lazy-loaded** solo si la página tiene `[data-parallax]`. Hero asterisco usa `data-parallax="0.25"`.
+- View Transitions API: `<ClientRouter fallback="swap" />` con CSS fade-out/in 280ms global.
+- Lenis sincronizado con View Transitions (destroy en `astro:before-swap`, reinit en `astro:page-load`).
+- 9 secciones de home con reveals: Hero, Statement, Services, Portfolio, Stats, FeatureStrip, Process, ContactCTA, BlogRecent.
+- `prefers-reduced-motion` respetado en CSS y JS.
 
-**Tareas:**
-1. Verificar Portainer + NPM funcionando en `157.180.44.59`.
-2. Crear stack `gesdiweb` en Portainer apuntando al repo.
-3. Configurar dominios en NPM: `gesdiweb.es`, `www.gesdiweb.es` (con redirección www → apex).
-4. SSL Let's Encrypt automático en NPM.
-5. Firewall del host (UFW): solo 22, 80, 443.
-6. fail2ban.
-7. CI/CD: push a `main` → GitHub Actions construye imagen → GHCR → Portainer pull/redeploy.
-8. Backups: snapshot del VPS o tar del volumen de assets generados (mínimo, ya que el contenido vive en Git).
+**Verificación cumplida:** reveals funcionan con stagger, view transitions suaves entre páginas, reduced-motion desactiva todo.
 
-**DNS:** todavía NO se hace el switch del dominio aquí. Se despliega bajo un dominio temporal (`new.gesdiweb.es` o subdominio en NPM) para QA.
+---
 
-**Punto de validación:** el sitio responde con SSL válido en el dominio temporal con Lighthouse decente.
+## Fase 6 — SEO técnico y performance ✅
+
+**Hecho:**
+- Librería `lib/seo.ts` con 9 builders JSON-LD tipados:
+  - `organizationSchema` (array `[Organization, LocalBusiness, ProfessionalService]`)
+  - `webSiteSchema`, `webPageSchema`, `serviceSchema` (con `OfferCatalog`)
+  - `creativeWorkSchema`, `blogPostingSchema`, `blogSchema`
+  - `itemListSchema`, `breadcrumbSchema`
+- Cada entidad usa `@id` con URL canónica para knowledge graph propio.
+- BaseLayout añade props: `ogImage`, `ogType`, `publishedTime`, `modifiedTime`, `articleAuthor`, `jsonLd[]`.
+- Meta tags refinados: `theme-color`, `apple-touch-icon`, `og:image:width/height/alt`, `twitter:image`, `max-image-preview:large`.
+- JSON-LD aplicado en todas las páginas (home, /servicios listado y detalle, /portfolio listado y detalle, /blog listado y detalle, /contacto, legales).
+- OG image fallback `og-default.svg` 1200×630 con paleta corporativa (asterisco decorativo, headline, URL).
+- `robots.txt` actualizado: Disallow `/styleguide` y `/api/`.
+- Documento `docs/auditoria.md` con procedimiento Lighthouse + axe-core + Schema validator + OG validator + linkinator.
+
+**Verificación cumplida:** tipos JSON-LD detectados en HTML output, meta tags completos, sitemap excluye styleguide.
+
+**Pendiente para Fase 7+:** ejecutar auditorías Lighthouse 95+ y axe-core 0 violaciones contra producción real.
+
+---
+
+## Fase 7 — Despliegue en VPS Hetzner 🟡
+
+**Artefactos completados (en repo):**
+- `.github/workflows/deploy.yml` — workflow build + push GHCR + webhook Portainer.
+- `docker-compose.yml` ajustado: imagen GHCR con `${IMAGE_TAG:-latest}`, healthcheck, logging rotation, `RESEND_API_KEY` con `:?` (falla rápido si falta), `pull_policy: always`.
+- Bug fix crítico: `process.env` en lugar de `import.meta.env` en endpoint API (Vite reemplazaba estáticamente las vars en build).
+- `docs/despliegue.md` (~480 líneas) con procedimiento paso a paso ordenado.
+- `docs/runbook.md` reescrito con operaciones día-a-día, rollback, troubleshooting.
+
+**Pendiente de ejecución por el dueño** (siguiendo `docs/despliegue.md`):
+- Crear cuenta Resend, generar API key, verificar dominio (SPF + DKIM + DMARC).
+- Configurar permisos en GitHub Actions, ejecutar primer build, hacer pública la imagen GHCR.
+- VPS: UFW (22/80/443) + fail2ban.
+- Crear stack `gesdiweb` en Portainer como repo Git con env vars y webhook GitOps.
+- Configurar `PORTAINER_WEBHOOK_URL` como secret en GitHub.
+- NPM: proxy host con SSL Let's Encrypt para subdominio QA (`new.gesdiweb.es`).
+- Validación: Lighthouse 95+, axe-core 0 violaciones, formulario real.
+- Activar snapshots Hetzner.
+
+**DNS:** el switch del dominio principal NO se hace en Fase 7 — va en Fase 8.
+
+**Punto de validación:** checklist completo en [`despliegue.md` §12](despliegue.md#12-checklist-final-de-fase-7).
 
 ---
 

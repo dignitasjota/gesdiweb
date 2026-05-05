@@ -2,66 +2,99 @@
 
 ## 1. Visión general
 
-`gesdiweb` es un sitio web 100% estático generado por Astro y servido por nginx dentro de un contenedor Docker. No hay base de datos, no hay backend con estado, no hay sesiones. El contenido vive como **archivos MDX en el repositorio Git**, lo que convierte al control de versiones en la fuente única de verdad sobre todo lo publicado.
+`gesdiweb` es un sitio web **mayoritariamente estático con un endpoint dinámico** (formulario de contacto). Astro corre en modo `server` con el adapter Node standalone: las 22 páginas se prerenderizan en build (`prerender = true` en cada una) y el server las sirve directamente del disco; solo `/api/contact` se ejecuta en runtime para procesar envíos vía Resend.
+
+El contenido vive como **archivos MDX en el repositorio Git**, lo que convierte al control de versiones en la fuente única de verdad sobre todo lo publicado.
 
 ```
 [ Editor (Jota) ]
       │  git push origin main
       ▼
 [ GitHub repo: dignitasjota/gesdiweb ]
-      │  workflow CI (Fase 7)
+      │  GitHub Actions (paths web/, compose, workflow)
       ▼
-[ GitHub Actions ]
-      │  docker build → push imagen
-      ▼
-[ GHCR: ghcr.io/dignitasjota/gesdiweb-web:latest ]
-      │  webhook / pull
-      ▼
-[ Hetzner 157.180.44.59 — Portainer ]
+[ docker buildx → push imagen linux/amd64 ]
       │
-      ├── Stack `npm` (Nginx Proxy Manager)        ← ya existente en el VPS
-      │     - escucha 80/443
-      │     - SSL Let's Encrypt automático
-      │     - red docker `npm_default`
-      │
-      └── Stack `gesdiweb`
-            └── contenedor `web`
-                 - nginx 1.27 alpine
-                 - sirve /usr/share/nginx/html
-                 - conectado a `npm_default`
-                 - sin puertos expuestos al host
+      ▼
+[ GHCR: ghcr.io/dignitasjota/gesdiweb-web:latest + sha-<short> ]
+      │  webhook
+      ▼
+[ Portainer en Hetzner 157.180.44.59 ]
+      │  pull + recreate
+      ▼
+┌──────────────────────────────────────────────────┐
+│  Stack `gesdiweb`                                │
+│   └── contenedor `gesdiweb_web`                  │
+│        - node 22 alpine                          │
+│        - dist/server/entry.mjs                   │
+│        - escucha :4321 interno                   │
+│        - env: RESEND_API_KEY, RESEND_FROM_EMAIL,│
+│               LEAD_NOTIFICATION_EMAIL            │
+│        - red docker `npm_default`                │
+└──────────────────────────────────────────────────┘
+                  ▲
+                  │ HTTP interno
+                  │
+┌──────────────────────────────────────────────────┐
+│  Stack `npm` (Nginx Proxy Manager — pre-existente)│
+│   - escucha :80 + :443                           │
+│   - SSL Let's Encrypt automático                 │
+│   - HSTS, HTTP/2, gzip                           │
+│   - host `gesdiweb.es` → gesdiweb_web:4321       │
+└──────────────────────────────────────────────────┘
+                  ▲
+                  │ HTTPS público
+                  ▼
+              Internet
 ```
 
-NPM redirige `gesdiweb.es` → `web:80` por la red Docker interna. Todo el TLS y los certificados los gestiona NPM.
+NPM termina TLS y proxy-pasa al contenedor `gesdiweb_web` por la red Docker `npm_default`. El contenedor sirve estáticos prerenderizados directamente y solo `/api/contact` ejecuta lógica server-side.
 
 ## 2. Pipeline de build de Astro
 
 ```
 src/
-├── pages/*.astro             → rutas estáticas
-├── pages/[slug].astro        → rutas dinámicas (Fase 3, vía getStaticPaths)
-├── content/                  → MDX collections (Fase 3)
-│   ├── services/
-│   ├── portfolio/
-│   └── blog/
-├── layouts/*.astro           → templates de página
-├── components/               → islas Astro (server-only por defecto)
-├── styles/globals.css        → @import "tailwindcss" + tokens
-└── public/                   → assets servidos tal cual
+├── pages/*.astro             → rutas estáticas (todas con prerender = true)
+├── pages/[slug].astro        → rutas dinámicas vía getStaticPaths
+├── pages/api/contact.ts      → endpoint dinámico (prerender = false)
+├── content.config.ts         → schemas Zod por colección
+├── content/                  → MDX collections
+│   ├── services/             5 .mdx
+│   ├── portfolio/            5 .mdx con cuerpo de caso de estudio
+│   └── blog/                 3 .mdx con cuerpo Markdown
+├── layouts/*.astro           → BaseLayout, LegalLayout
+├── components/
+│   ├── ui/                   Marker, Button, Tag, Badge, StatBlock, Icon
+│   ├── layout/               Header, Footer
+│   ├── sections/             Hero, Statement, Services, Stats, etc.
+│   ├── animations/           Reveal, SmoothScroll
+│   └── forms/                ContactFormClient
+├── lib/
+│   ├── collections.ts        helpers async getCollection
+│   ├── seo.ts                builders JSON-LD
+│   ├── contact-schema.ts     Zod schema compartido cliente/servidor
+│   ├── rate-limit.ts         limiter en memoria
+│   └── email/                plantillas HTML+texto del email Resend
+├── styles/globals.css        → @import "tailwindcss" + tokens + reveals
+└── public/                   → assets servidos tal cual (favicon, og-default.svg, robots.txt)
 
       │
       ▼  astro build
       │
 dist/
-├── index.html
-├── servicios/
-├── portfolio/
-├── blog/
-├── _astro/                   → CSS/JS bundleado con hash inmutable
-├── images/                   → imágenes optimizadas (WebP/AVIF)
-├── sitemap-index.xml
-├── sitemap-0.xml
-└── robots.txt
+├── client/                   → estáticos prerenderizados (servidos por el server Node)
+│   ├── index.html
+│   ├── servicios/<slug>/index.html
+│   ├── portfolio/<slug>/index.html
+│   ├── blog/<slug>/index.html
+│   ├── _astro/               CSS/JS con hash inmutable
+│   ├── og-default.svg
+│   ├── sitemap-index.xml + sitemap-0.xml
+│   └── robots.txt
+└── server/
+    ├── entry.mjs             → CMD del contenedor: node ./dist/server/entry.mjs
+    ├── manifest_*.mjs
+    └── chunks/               → API endpoints + render handlers
 ```
 
 ## 3. Decisiones arquitectónicas clave
@@ -70,7 +103,7 @@ Resumen aquí; razonamiento completo en [`decisiones.md`](decisiones.md).
 
 | Decisión | Razón principal | Alternativa descartada |
 |---|---|---|
-| HTML 100% estático | SEO, rendimiento, mantenimiento mínimo | SSR / SSG híbrido / WordPress headless |
+| Astro `output: 'server'` con prerender por página | Mezcla estático + endpoint API en un solo runtime | `output: 'static'` (sin API) o sidecar Node |
 | Sin CMS visual | Editor único técnico | Directus, Strapi, Sanity, Decap |
 | MDX en repo | Versionado total, diff revisable | BD relacional |
 | Email vía Resend | Sin servidor SMTP propio | Postfix, Brevo, Postmark |
@@ -79,6 +112,10 @@ Resumen aquí; razonamiento completo en [`decisiones.md`](decisiones.md).
 | Sin Google Analytics | RGPD + ética | GA4 |
 | Astro 6 | Última estable, evita advisory XSS | Astro 5 |
 | Vite 7 forzado | Incompatibilidad rolldown-vite + tailwind 4.1 | Vite 8 |
+| Reveals con CSS+IO, parallax con GSAP lazy | 0 KB JS extra para reveals simples | GSAP en todas las páginas |
+| JSON-LD centralizado (lib/seo.ts) con `@id` cruzados | Knowledge graph propio + reusabilidad | Schemas inline ad-hoc |
+| `process.env` en endpoints | Vars inyectadas en runtime por docker-compose | `import.meta.env` (se inlinea en build) |
+| CI/CD: Actions + GHCR + webhook Portainer | Sin SSH expuesto, trazabilidad por sha | SSH directo, self-hosted runner |
 
 ## 4. Identidad visual
 
@@ -196,30 +233,116 @@ Los estilos editoriales viven scoped en cada layout dinámico:
 
 Todas las colecciones llevan `lang` (default `'es'`). Estructura preparada para inglés sin implementarlo todavía. Cuando se active: filtrar por `lang` en los helpers y añadir prefijo de ruta `/en/`.
 
-## 6. SEO
+## 6. Formulario de contacto y endpoint API
+
+Único punto dinámico del sitio. Flujo:
+
+```
+Usuario rellena /contacto en el navegador
+   │
+   │ ContactFormClient.astro intercepta submit
+   │ fetch POST /api/contact (FormData)
+   ▼
+Astro server (Node runtime)
+   │ src/pages/api/contact.ts (prerender = false)
+   │
+   ├── Parse body (JSON o FormData)
+   ├── Honeypot check (campo company_url) → si lleno, simula 200 sin enviar
+   ├── Zod schema validation (lib/contact-schema.ts)
+   ├── Rate limit por IP (lib/rate-limit.ts, 5 req / 10 min)
+   ├── Resend.send con plantilla HTML (lib/email/contact-template.ts)
+   │
+   ▼
+Respuesta JSON al cliente
+   { ok: true, accepted: true }                    // éxito
+   { ok: false, error: 'validation_failed', ... }  // 400
+   { ok: false, error: 'rate_limited', retryAfterSeconds }  // 429
+   { ok: false, error: 'email_provider_error' }    // 502 (Resend caído)
+```
+
+**Cliente JS** (`ContactFormClient.astro`, ~110 líneas):
+- Solo se carga en `/contacto`
+- Estados accesibles vía `aria-live="polite"` (loading / success / error)
+- Errores de validación se muestran por campo con `aria-invalid="true"` + mensaje
+- Reset del formulario al éxito
+
+**Variables de entorno** (en runtime, no build time):
+- `RESEND_API_KEY` (obligatoria en producción)
+- `RESEND_FROM_EMAIL` (default `hola@gesdiweb.es`)
+- `LEAD_NOTIFICATION_EMAIL` (default `hola@gesdiweb.es`)
+
+Sin API key: el endpoint loguea en consola y devuelve `devMode: true` en lugar de fallar (útil para desarrollo).
+
+## 7. Animaciones
+
+Tres capas independientes:
+
+### 7.1 — Smooth scroll (Lenis)
+
+`SmoothScroll.astro` monta Lenis al cargar la página. Sincroniza con View Transitions: en `astro:before-swap` se destruye Lenis, en `astro:page-load` se reinit. Respeta `prefers-reduced-motion` (no se inicializa).
+
+### 7.2 — Reveals (CSS + IntersectionObserver)
+
+Componente `<Reveal>` añade `data-reveal` al elemento. CSS oculta inicialmente con `opacity: 0; transform: translateY(24px)`. El controller en `SmoothScroll.astro` observa con IntersectionObserver y añade `.is-visible` cuando entra en viewport, disparando la transición CSS.
+
+`stagger=true` aplica delays incrementales a hijos directos vía CSS variable `--stagger-delay`. **0 KB de JS extra** para reveals (es nativo del navegador).
+
+### 7.3 — Parallax (GSAP ScrollTrigger lazy)
+
+`[data-parallax="0.3"]` activa parallax scroll-linked. GSAP + ScrollTrigger se importan **dinámicamente** solo si la página actual tiene al menos un `[data-parallax]`. Si no, no se descargan.
+
+### 7.4 — View Transitions
+
+`<ClientRouter fallback="swap" />` en BaseLayout activa la API nativa. CSS global aplica fade-out/in de 280ms en `::view-transition-old(root)` / `::view-transition-new(root)`. Reduced-motion lo deja en 0.001ms.
+
+## 8. SEO
 
 ### Meta tags por página
 
-`BaseLayout.astro` recibe props `title`, `description`, `lang`, opcionalmente `image`, `noindex`. Cada página pasa los suyos. Al no pasarlos, hereda los del singleton previsto en `site_settings` (Fase 3, vivirá como un MDX o JSON central).
+`BaseLayout.astro` recibe:
+- `title` (default `gesdiweb — diseño web y posicionamiento SEO`)
+- `description` (default agencia + tagline)
+- `noindex` (default false; true en `/styleguide`)
+- `ogImage` (default `og-default.svg`)
+- `ogType` (`'website'` o `'article'` para posts)
+- `publishedTime`, `modifiedTime`, `articleAuthor` (solo para posts)
+- `jsonLd` (array de schemas a inyectar)
+
+Genera: canonical absoluto, `robots` con `max-image-preview:large, max-snippet:-1`, OG completo (`og:site_name`, `og:image:width/height/alt`), Twitter Card, `theme-color`, `apple-touch-icon`.
 
 ### JSON-LD por tipo de página
 
-| Tipo | Schema |
+Builders en `web/src/lib/seo.ts`. Cada entidad lleva `@id` con URL canónica para que Google asocie las referencias en su knowledge graph.
+
+| Página | Schemas inyectados |
 |---|---|
-| Home | `Organization` + `LocalBusiness` + `WebSite` con `SearchAction` |
-| Servicio | `Service` con `provider` apuntando a la organización |
-| Proyecto | `CreativeWork` |
-| Post | `BlogPosting` con autor, fecha, imagen |
+| Home | `Organization+LocalBusiness+ProfessionalService` (array `@type`), `WebSite` |
+| `/servicios` | `WebPage`, `ItemList`, `BreadcrumbList` |
+| `/servicios/<slug>` | `Service` (con `OfferCatalog` por feature), `BreadcrumbList` |
+| `/portfolio` | `WebPage`, `ItemList`, `BreadcrumbList` |
+| `/portfolio/<slug>` | `CreativeWork`, `BreadcrumbList` |
+| `/blog` | `Blog`, `BreadcrumbList` |
+| `/blog/<slug>` | `BlogPosting` (con `Person` author + `keywords`), `BreadcrumbList`, `og:type=article` |
+| `/contacto` | `ContactPage`, `BreadcrumbList` |
+| Páginas legales | `WebPage`, `BreadcrumbList` (vía `LegalLayout`) |
+
+`Organization` tiene `address` y `telephone` **comentados** hasta que el dueño aporte los datos legales reales.
+
+### Open Graph
+
+- **OG image fallback:** `public/og-default.svg` 1200×630 con paleta corporativa (asterisco decorativo, headline gesdiweb, URL).
+- Algunos clientes legacy no soportan SVG OG (Slack viejo, ciertos email clients). Mayoría sí (FB, X, LinkedIn, iMessage, WhatsApp).
+- Cuando lleguen materiales reales (Fase 8), sustituir por PNG y opcionalmente generar dinámicas por página.
 
 ### Sitemap
 
-Generado por `@astrojs/sitemap`. Configurado con i18n España (`es-ES`).
+Generado por `@astrojs/sitemap`. Configurado con i18n España (`es-ES`). Filtro excluye `/styleguide`. URL: `https://gesdiweb.es/sitemap-index.xml` (referenciada en `robots.txt`).
 
 ### Redirecciones 301 (Fase 8)
 
-Mapa de URLs antiguas → nuevas. Implementado en NPM o como reglas `nginx` dentro del contenedor. Detalle en [`seo-migracion.md`](seo-migracion.md).
+Mapa de URLs antiguas → nuevas. Implementado en NPM. Detalle en [`seo-migracion.md`](seo-migracion.md).
 
-## 7. Rendimiento
+## 9. Rendimiento
 
 Objetivo Lighthouse: **95+ en performance, accesibilidad, SEO, best practices** en home, servicios, portfolio, blog y contacto.
 
@@ -230,7 +353,7 @@ Núcleos:
 - **Compresión.** gzip y brotli (en NPM o nginx interno).
 - **Cache.** Headers largos para `_astro/` (hash inmutable), corto para HTML.
 
-## 8. Accesibilidad
+## 10. Accesibilidad
 
 Objetivos AA mínimo:
 - Contraste texto/fondo ≥ 4.5:1 (normal) y ≥ 3:1 (grande).
@@ -241,7 +364,7 @@ Objetivos AA mínimo:
 - Heading hierarchy correcta (una `<h1>` por página).
 - Auditorías con axe-core en Fase 6.
 
-## 9. Seguridad
+## 11. Seguridad
 
 - HTTPS obligatorio (Let's Encrypt vía NPM).
 - Headers nginx: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`.
@@ -251,6 +374,6 @@ Objetivos AA mínimo:
 - Firewall del host: 22, 80, 443.
 - fail2ban en SSH (Fase 7).
 
-## 10. Operaciones
+## 12. Operaciones
 
 Ver [`docker-explicado.md`](docker-explicado.md) para Docker básico y [`runbook.md`](runbook.md) para procedimientos operativos (despliegue, rollback, backup, troubleshooting). Estos documentos se completan a partir de Fase 7.

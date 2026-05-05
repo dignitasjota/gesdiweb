@@ -139,11 +139,114 @@ Self-hosted con Fontsource desde `/fonts/`, no Google Fonts CDN (RGPD + rendimie
 
 ---
 
-## ADR-008 · CI/CD con GitHub Actions y GHCR
+## ADR-008 · Astro `output: 'server'` con prerender por página
 
 **Fecha:** 2026-05-05
-**Estado:** Pendiente de detalle (Fase 7)
+**Estado:** Aceptada
 
-**Decisión preliminar.** Push a `main` → GitHub Actions construye la imagen Docker → la sube a GHCR → Portainer la recoge mediante webhook o pull manual.
+**Contexto.** En Fase 4 había que añadir un endpoint dinámico (`/api/contact`) para procesar el formulario de contacto vía Resend. Astro tiene tres modos: `static` (todo prerenderizado, sin endpoints), `server` (todo dinámico salvo `prerender = true`), y `hybrid` (deprecado en Astro 5+).
 
-Se cerrará al diseñar la pipeline en Fase 7.
+**Decisión.** Pasar a `output: 'server'` con `@astrojs/node` standalone, y marcar `export const prerender = true;` en **todas** las páginas estáticas (home, servicios, portfolio, blog, contacto, legales, styleguide). Solo `src/pages/api/contact.ts` queda con `prerender = false`.
+
+**Consecuencias.**
+- (+) Build genera `dist/client/` (HTML prerenderizado) + `dist/server/entry.mjs` (Node server). El server sirve estáticos directos del disco + API dinámicas.
+- (+) Un único contenedor maneja todo. No hace falta separar nginx + Node.
+- (+) Si en el futuro queremos más endpoints dinámicos (búsqueda, login, etc.), solo añadir el archivo con `prerender = false`.
+- (−) Performance ligeramente menor que nginx puro sirviendo estáticos. Aceptable: <50ms de diferencia, NPM cachea por delante.
+- (−) El runtime es Node 22 alpine en lugar de nginx alpine. Imagen un poco más grande.
+
+---
+
+## ADR-009 · Variables de entorno: `process.env` en runtime, no `import.meta.env`
+
+**Fecha:** 2026-05-05
+**Estado:** Aceptada
+
+**Contexto.** Bug encontrado durante validación de Fase 7: `/api/contact.ts` leía `import.meta.env.RESEND_API_KEY`. Vite reemplaza estáticamente `import.meta.env.X` en build time, así que las vars inyectadas por docker-compose en runtime nunca llegaban al código.
+
+**Decisión.** En endpoints API y código que se ejecuta server-side en runtime, usar `process.env.X`. Reservar `import.meta.env.PUBLIC_X` solo para vars que sí queremos inlinear en el build (PUBLIC_*).
+
+**Consecuencias.**
+- (+) Las vars de Resend se leen correctamente en runtime, el formulario funciona en producción.
+- (+) Cambiar una env var (ej. cambiar destinatario de leads) no requiere rebuild — basta con recreate del contenedor.
+- (~) Hay que recordar la regla. Documentado en `convenciones.md`.
+
+---
+
+## ADR-010 · Reveals con CSS + IntersectionObserver, GSAP solo para parallax
+
+**Fecha:** 2026-05-05
+**Estado:** Aceptada
+
+**Contexto.** En Fase 5 había que animar la entrada de secciones al hacer scroll. Primer intento fue GSAP ScrollTrigger en cada `[data-reveal]` — funcional pero ~70KB de bundle en cada página.
+
+**Decisión.** Reescribir reveals con **CSS transitions** disparadas por una clase `.is-visible` que añade un **IntersectionObserver** en el cliente. GSAP queda solo para `[data-parallax]` y se importa **lazy** (solo se descarga si hay parallax en la página actual).
+
+**Consecuencias.**
+- (+) Páginas sin parallax tienen 0 KB extra de JS de animaciones.
+- (+) Sin flash inicial: el estado oculto vive en CSS, no se aplica con JS post-load.
+- (+) `prefers-reduced-motion` se respeta puramente en CSS (`@media (prefers-reduced-motion: reduce)`).
+- (−) Animaciones más limitadas que GSAP (sin keyframes complejos, sin scrub). Para reveals simples es suficiente.
+
+---
+
+## ADR-011 · JSON-LD por tipo de página con `@id` consistente
+
+**Fecha:** 2026-05-05
+**Estado:** Aceptada
+
+**Contexto.** En Fase 6 había que decidir cómo emitir Schema.org. Opciones: librería de terceros (schema-dts, etc.), generación manual ad-hoc por página, o helper centralizado.
+
+**Decisión.** Helper centralizado en `web/src/lib/seo.ts` con builders tipados por tipo (`organizationSchema`, `serviceSchema`, `blogPostingSchema`, etc.). Cada entidad usa `@id` con URL canónica (`https://gesdiweb.es/#organization`, `${url}#post`) para que Google asocie las referencias en el knowledge graph.
+
+`Organization` se publica como array `["Organization", "LocalBusiness", "ProfessionalService"]` para cubrir las tres entidades en una sola declaración.
+
+`address` y `telephone` quedan **comentados** hasta que el dueño aporte los datos legales reales. Mejor sin datos que con placeholder en el knowledge graph de Google.
+
+**Consecuencias.**
+- (+) Schemas reutilizables y consistentes entre páginas.
+- (+) Knowledge graph propio (referencias `@id` cruzadas).
+- (+) Cambiar nombre/datos de la organización es 1 archivo.
+- (−) Cuando lleguen los datos legales hay que descomentar y rebuild.
+
+---
+
+## ADR-012 · OG image fallback en SVG en lugar de PNG generado
+
+**Fecha:** 2026-05-05
+**Estado:** Aceptada (transicional)
+
+**Contexto.** Para Open Graph social cards se necesita imagen 1200×630 por página. Generar PNGs dinámicas (Satori, @vercel/og) añade complejidad y dependencia de canvas/runtime.
+
+**Decisión.** Por ahora, un único SVG estático en `public/og-default.svg` con paleta corporativa. Cuando lleguen materiales reales (Fase 8), sustituir por PNG y opcionalmente generar dinámicas por página.
+
+**Consecuencias.**
+- (+) 0 dependencias añadidas, OG funcional inmediatamente.
+- (+) SVG versionable en Git, editable.
+- (−) **Algunos clientes no soportan SVG en OG** (Slack legacy, ciertos email clients). La mayoría sí (FB, X, LinkedIn, iMessage, WhatsApp).
+- (~) En Fase 8 se debe sustituir o complementar con PNG.
+
+---
+
+## ADR-013 · CI/CD con GitHub Actions + webhook Portainer
+
+**Fecha:** 2026-05-05
+**Estado:** Aceptada
+
+**Contexto.** En Fase 7 había que automatizar el despliegue. Opciones evaluadas:
+1. GitHub Actions con SSH al VPS y `docker compose pull && up -d`.
+2. GitHub Actions construye imagen → GHCR → webhook a Portainer hace pull/recreate.
+3. Self-hosted runner en el VPS.
+
+**Decisión.** Opción 2: workflow construye y publica en GHCR, después llama al webhook de la stack en Portainer.
+
+**Razones:**
+- No expone clave SSH del VPS a GitHub.
+- Portainer es source of truth de qué hay desplegado y permite rollback con UI.
+- Si el webhook no está configurado (`PORTAINER_WEBHOOK_URL` secret vacío), el workflow no falla — solo loguea warning y continúa. Permite empezar con build-only y conectar el deploy más tarde.
+
+**Consecuencias.**
+- (+) Trazabilidad: cada imagen tiene tag `sha-<commit>` para rollback exacto.
+- (+) Cache de GitHub Actions reduce builds repetidos a ~30s.
+- (+) Push solo afecta a `web/`, `docker-compose.yml` o el workflow — los cambios docs-only no construyen.
+- (−) Dependencia de Portainer corriendo. Si Portainer cae, despliegues manuales por SSH.

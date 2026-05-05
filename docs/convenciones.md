@@ -111,8 +111,20 @@ Naming:
 - **Imágenes:** siempre `<Image>` o `<Picture>` de `astro:assets`. **Nunca** `<img>` directo (excepto inline en MDX donde no sea evitable).
 - **Enlaces internos:** `<a href="/ruta">` normal. Sin `<Link>` propio.
 - **TypeScript strict.** Sin `any` salvo último recurso justificado.
-- **Output:** `static`. Nunca cambiar a `server` salvo decisión explícita.
+- **Output:** `'server'` con adapter `@astrojs/node`. **Toda página `.astro` lleva `export const prerender = true;`** salvo los endpoints `/api/*` que son dinámicos.
 - **Trailing slash:** `never` (configurado en `astro.config.mjs`).
+
+### Variables de entorno
+
+- En **endpoints API** (`src/pages/api/*.ts`) y código que se ejecuta server-side en runtime: usar **`process.env.X`**.
+- Para vars que sí queremos inlinear en build (PUBLIC_*): usar `import.meta.env.PUBLIC_X`.
+- **Nunca** `import.meta.env.SECRET_X` — Vite lo reemplaza estáticamente en build, así que el valor que inyecte docker-compose en runtime no llega al código. Ver ADR-009.
+
+### Cuando añadas una nueva ruta
+
+- Si es **estática** (lo normal): añadir `export const prerender = true;` al inicio del frontmatter.
+- Si es **dinámica** con `getStaticPaths()`: también `prerender = true`. El render se hace en build, las rutas se enumeran con `getStaticPaths`.
+- Si es un **endpoint API o página verdaderamente dinámica**: `export const prerender = false;` y vivirá en runtime.
 
 ### Componentes
 
