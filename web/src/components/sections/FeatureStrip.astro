@@ -1,0 +1,58 @@
+---
+import Icon from '../ui/Icon.astro';
+import type { IconName } from '../ui/icon-names';
+
+const features: { icon: IconName; title: string; subtitle: string }[] = [
+  {
+    icon: 'shield',
+    title: 'Backups diarios',
+    subtitle: 'Cifrados y con retención de 30 días.',
+  },
+  {
+    icon: 'leaf',
+    title: 'Hosting europeo',
+    subtitle: 'SSD NVMe, sin trackers ni terceros.',
+  },
+  {
+    icon: 'check',
+    title: 'Sin permanencia',
+    subtitle: 'Te quedas porque quieres, no porque toca.',
+  },
+  {
+    icon: 'eye',
+    title: 'Métricas reales',
+    subtitle: 'Reporting transparente cada mes.',
+  },
+];
+---
+
+<section class="bg-[--color-brand-soft] border-y border-[--color-brand]/20">
+  <div class="container-fluid py-12 md:py-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
+      {features.map((f) => (
+        <div class="flex flex-col items-start gap-4">
+          <span
+            class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[--color-brand] text-[--color-fg-inverse]"
+            aria-hidden="true"
+          >
+            <Icon name={f.icon} size={22} />
+          </span>
+          <div>
+            <p
+              class="font-display font-bold tracking-tight"
+              style="font-size: var(--text-base);"
+            >
+              {f.title}
+            </p>
+            <p
+              class="mt-1 text-[--color-fg-soft]"
+              style="font-size: var(--text-sm);"
+            >
+              {f.subtitle}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

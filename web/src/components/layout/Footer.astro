@@ -1,5 +1,6 @@
 ---
 import Marker from '../ui/Marker.astro';
+import Icon from '../ui/Icon.astro';
 
 const year = new Date().getFullYear();
 
@@ -33,43 +34,45 @@ const navColumns = [
 ];
 ---
 
-<footer class="bg-[--color-bg-inverse] text-[--color-fg-inverse]">
-  <div class="container-fluid py-20 md:py-32">
+<footer class="bg-[--color-bg-inverse] text-[--color-fg-inverse] relative">
+  {/* Borde superior brand */}
+  <div class="h-2 bg-[--color-brand]" aria-hidden="true"></div>
+
+  <div class="container-fluid py-20 md:py-28">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
       <div class="md:col-span-5 lg:col-span-6">
-        <Marker label="hablemos" prefix="//" />
+        <Marker label="hablemos" prefix="//" variant="inverse" />
         <h2
-          class="mt-6 font-display font-bold tracking-tight leading-[0.95]"
+          class="mt-6 font-display font-bold tracking-[-0.025em] leading-[0.95]"
           style="font-size: var(--text-2xl);"
         >
           ¿Listo para que tu web<br />
           <span class="text-[--color-brand]">posicione</span> de verdad?
         </h2>
-        <a
-          href="/contacto"
-          class="inline-flex items-center gap-3 mt-8 text-base text-[--color-muted] hover:text-[--color-fg-inverse] transition-colors"
-        >
-          <span>hola@gesdiweb.es</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            aria-hidden="true"
+
+        <div class="mt-10 space-y-3 text-white/85" style="font-size: var(--text-sm);">
+          <a
+            href="mailto:hola@gesdiweb.es"
+            class="inline-flex items-center gap-3 hover:text-[--color-brand] transition-colors"
           >
-            <line x1="7" y1="17" x2="17" y2="7" />
-            <polyline points="7 7 17 7 17 17" />
-          </svg>
-        </a>
+            <Icon name="mail" size={16} class="text-[--color-brand]" />
+            hola@gesdiweb.es
+          </a>
+          <p class="flex items-center gap-3">
+            <Icon name="pin" size={16} class="text-[--color-brand]" />
+            España · Atención remota
+          </p>
+          <p class="flex items-center gap-3">
+            <Icon name="clock" size={16} class="text-[--color-brand]" />
+            Lunes a viernes · 09:00–18:00 (CET)
+          </p>
+        </div>
       </div>
 
       <div class="md:col-span-7 lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-8">
         {navColumns.map((col) => (
           <nav aria-label={col.title}>
-            <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-5">
+            <p class="font-mono text-xs uppercase tracking-widest text-[--color-brand] mb-5">
               {col.title}
             </p>
             <ul class="space-y-3">
@@ -89,12 +92,13 @@ const navColumns = [
       </div>
     </div>
 
-    <hr class="border-white/10 mt-20 mb-8" />
+    <hr class="border-white/10 mt-16 mb-8" />
 
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[--color-muted]">
       <p>© {year} gesdiweb · Diseño web y posicionamiento SEO</p>
-      <p class="font-mono uppercase tracking-widest">
-        // hecho en España
+      <p class="font-mono uppercase tracking-widest inline-flex items-center gap-2">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[--color-brand]" aria-hidden="true"></span>
+        hecho en España
       </p>
     </div>
   </div>
