@@ -1,0 +1,27 @@
+---
+interface Props {
+  label: string;
+  prefix?: string;
+  variant?: 'default' | 'inverse';
+  class?: string;
+}
+
+const {
+  label,
+  prefix = '//',
+  variant = 'default',
+  class: className = '',
+} = Astro.props;
+
+const colorClass = variant === 'inverse'
+  ? 'text-[--color-muted]'
+  : 'text-[--color-muted]';
+---
+
+<span
+  class={`inline-flex items-center gap-2 font-mono uppercase tracking-[0.18em] ${colorClass} ${className}`}
+  style="font-size: var(--text-xs);"
+>
+  <span aria-hidden="true">{prefix}</span>
+  <span>{label}</span>
+</span>
