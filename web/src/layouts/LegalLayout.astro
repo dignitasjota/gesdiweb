@@ -1,0 +1,82 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Marker from '../components/ui/Marker.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  marker: string;
+  lastUpdate?: string;
+}
+
+const { title, description, marker, lastUpdate = '2026-05-05' } = Astro.props;
+---
+
+<BaseLayout title={`${title} · gesdiweb`} description={description}>
+  <article class="container-fluid pt-12 md:pt-20 pb-20 md:pb-32">
+    <Marker label={marker} />
+
+    <h1
+      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[20ch]"
+      style="font-size: var(--text-2xl);"
+    >
+      {title}
+    </h1>
+
+    <p class="mt-6 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+      última actualización: <time datetime={lastUpdate}>{lastUpdate}</time>
+    </p>
+
+    <div class="mt-12 max-w-3xl space-y-6 text-base md:text-lg leading-relaxed text-[--color-fg]">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  article :global(h2) {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-size: var(--text-lg);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+  article :global(h3) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  article :global(p) {
+    color: var(--color-fg-soft);
+  }
+  article :global(ul),
+  article :global(ol) {
+    padding-left: 1.5rem;
+    color: var(--color-fg-soft);
+  }
+  article :global(li) {
+    margin-bottom: 0.5rem;
+  }
+  article :global(a) {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  article :global(a:hover) {
+    color: var(--color-brand);
+  }
+  article :global(strong) {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+  article :global(.placeholder) {
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+</style>
