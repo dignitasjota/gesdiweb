@@ -1,23 +1,29 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Marker from '../components/ui/Marker.astro';
+import Button from '../components/ui/Button.astro';
 ---
 
 <BaseLayout>
-  <main class="min-h-screen flex flex-col items-center justify-center px-8 py-16">
-    <p class="text-xs uppercase tracking-widest text-[--color-muted] mb-6 font-mono">
-      // 00.00° fase 0 · setup base
-    </p>
+  <section class="container-fluid section-spacing flex flex-col items-start">
+    <Marker label="00.00° fase 1 · sistema de diseño" />
 
-    <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-center max-w-4xl">
-      gesdiweb<span class="text-[--color-brand]">.</span>
+    <h1
+      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-5xl"
+      style="font-size: var(--text-display);"
+    >
+      Diseño web<br />
+      que <span class="text-[--color-brand]">posiciona</span>.
     </h1>
 
-    <p class="mt-4 text-lg text-[--color-fg-soft] text-center max-w-xl">
-      Diseño web y posicionamiento SEO.
+    <p class="mt-10 text-lg md:text-xl text-[--color-fg-soft] max-w-2xl">
+      Webs rápidas, accesibles y pensadas para crecer. Diseño y SEO técnico
+      trabajando juntos desde el primer wireframe.
     </p>
 
-    <p class="mt-12 text-sm text-[--color-muted] font-mono">
-      hola mundo · build verificado
-    </p>
-  </main>
+    <div class="mt-10 flex flex-wrap items-center gap-4">
+      <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
+      <Button href="/portfolio" variant="ghost" size="lg">Ver portfolio</Button>
+    </div>
+  </section>
 </BaseLayout>
