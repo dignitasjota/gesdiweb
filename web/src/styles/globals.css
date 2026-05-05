@@ -32,14 +32,14 @@
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
 
   /* ── Escala tipográfica fluida (clamp) ──────────────── */
-  --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.85rem);
-  --text-sm: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
-  --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
-  --text-lg: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
-  --text-xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
-  --text-2xl: clamp(2.5rem, 2rem + 2.5vw, 4rem);
-  --text-3xl: clamp(3.5rem, 2.5rem + 5vw, 6rem);
-  --text-display: clamp(4rem, 3rem + 8vw, 10rem);
+  --text-xs: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  --text-sm: clamp(0.95rem, 0.88rem + 0.3vw, 1.05rem);
+  --text-base: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+  --text-lg: clamp(1.375rem, 1.2rem + 0.6vw, 1.625rem);
+  --text-xl: clamp(2rem, 1.6rem + 1.6vw, 2.875rem);
+  --text-2xl: clamp(2.875rem, 2.3rem + 2.7vw, 4.5rem);
+  --text-3xl: clamp(4rem, 2.9rem + 5.5vw, 7rem);
+  --text-display: clamp(4.5rem, 3.2rem + 9vw, 12rem);
 
   /* ── Espaciados verticales entre secciones ─────────── */
   --space-section: clamp(6rem, 12vw, 12rem);
@@ -110,7 +110,7 @@ body {
   color: var(--color-fg);
   font-family: var(--font-sans);
   font-size: var(--text-base);
-  line-height: 1.5;
+  line-height: 1.55;
   font-synthesis: none;
   margin: 0;
   min-height: 100vh;
@@ -159,6 +159,30 @@ video {
 
 @utility section-spacing {
   padding-block: var(--space-section);
+}
+
+/* ───────────────────────────────────────────────────────────
+   Animación marquee infinita (CSS puro)
+   ─────────────────────────────────────────────────────────── */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x 40s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+  }
 }
 
 /* ───────────────────────────────────────────────────────────
