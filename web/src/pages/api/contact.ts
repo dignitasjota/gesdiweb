@@ -10,11 +10,14 @@ import {
 
 export const prerender = false;
 
-const RESEND_API_KEY = import.meta.env.RESEND_API_KEY;
+// IMPORTANTE: usamos process.env (no import.meta.env) porque las variables
+// se inyectan en runtime desde docker-compose.yml. import.meta.env se
+// reemplaza estáticamente en build y se quedaría con el valor vacío.
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL =
-  import.meta.env.RESEND_FROM_EMAIL || 'hola@gesdiweb.es';
+  process.env.RESEND_FROM_EMAIL || 'hola@gesdiweb.es';
 const LEAD_NOTIFICATION_EMAIL =
-  import.meta.env.LEAD_NOTIFICATION_EMAIL || 'hola@gesdiweb.es';
+  process.env.LEAD_NOTIFICATION_EMAIL || 'hola@gesdiweb.es';
 
 const json = (status: number, body: unknown): Response =>
   new Response(JSON.stringify(body), {
