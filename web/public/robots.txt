@@ -1,4 +1,11 @@
+# robots.txt — gesdiweb.es
+
 User-agent: *
 Allow: /
 
+# Páginas internas no indexables
+Disallow: /styleguide
+Disallow: /api/
+
+# Sitemap principal
 Sitemap: https://gesdiweb.es/sitemap-index.xml
