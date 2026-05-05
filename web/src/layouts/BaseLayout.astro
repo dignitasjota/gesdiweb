@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/globals.css';
 import SmoothScroll from '../components/animations/SmoothScroll.astro';
 import Header from '../components/layout/Header.astro';
@@ -46,6 +47,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+
+    <ClientRouter fallback="swap" />
   </head>
   <body>
     <SmoothScroll />
