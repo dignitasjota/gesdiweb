@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Marker from '../../components/ui/Marker.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Button from '../../components/ui/Button.astro';
+import { projects, getAllProjects, type Project } from '../../data/projects';
+import { getServiceBySlug } from '../../data/services';
+
+export async function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const all = getAllProjects();
+const idx = all.findIndex((p) => p.slug === project.slug);
+const next = all[(idx + 1) % all.length];
+const services = project.servicesUsed
+  .map((s) => getServiceBySlug(s))
+  .filter(Boolean);
+---
+
+<BaseLayout
+  title={`${project.title} · Portfolio · gesdiweb`}
+  description={project.excerpt}
+>
+  <article>
+    <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-20">
+      <Marker label={`portfolio · ${project.year}`} />
+
+      <h1
+        class="mt-8 font-display font-bold tracking-tight leading-[0.92] max-w-[20ch]"
+        style="font-size: var(--text-3xl);"
+      >
+        {project.title}
+      </h1>
+
+      <p class="mt-8 max-w-2xl text-lg md:text-xl text-[--color-fg-soft] leading-relaxed">
+        {project.excerpt}
+      </p>
+    </header>
+
+    <div class="container-fluid pb-16 md:pb-24">
+      <div
+        class="aspect-[16/9] bg-[--color-bg-soft] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-sm uppercase tracking-widest"
+        aria-hidden="true"
+      >
+        [PLACEHOLDER · cover hero]
+      </div>
+    </div>
+
+    <section class="border-y border-[--color-border]">
+      <div class="container-fluid py-12 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">cliente</p>
+          <p class="mt-2 text-base">{project.client}</p>
+        </div>
+        <div>
+          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">año</p>
+          <p class="mt-2 text-base">{project.year}</p>
+        </div>
+        <div class="col-span-2">
+          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">servicios</p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            {services.map((s) => s && (
+              <a href={`/servicios/${s.slug}`}>
+                <Tag label={s.title} variant="brand" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-fluid section-spacing grid grid-cols-1 md:grid-cols-12 gap-12">
+      <div class="md:col-span-4">
+        <Marker label="caso de estudio" />
+        <h2
+          class="mt-6 font-display font-bold tracking-tight leading-tight"
+          style="font-size: var(--text-xl);"
+        >
+          Cómo lo abordamos
+        </h2>
+      </div>
+      <div class="md:col-span-8 prose-mimic max-w-3xl">
+        <p class="text-base md:text-lg leading-relaxed text-[--color-fg-soft]">
+          {project.body}
+        </p>
+        <p class="mt-6 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+          // [PLACEHOLDER] caso de estudio completo en preparación
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
+      <div class="container-fluid section-spacing">
+        <Marker label="stack técnico" />
+        <h2
+          class="mt-6 font-display font-bold tracking-tight leading-tight"
+          style="font-size: var(--text-xl);"
+        >
+          Tecnologías utilizadas
+        </h2>
+        <div class="mt-10 flex flex-wrap gap-3">
+          {project.techStack.map((tech) => (
+            <Tag label={tech} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="container-fluid section-spacing">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+        <div class="md:col-span-7">
+          <Marker label="¿siguiente paso?" />
+          <h2
+            class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+            style="font-size: var(--text-2xl);"
+          >
+            ¿Tu proyecto, el próximo?
+          </h2>
+        </div>
+        <div class="md:col-span-5 flex md:justify-end">
+          <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
+        </div>
+      </div>
+    </section>
+
+    <nav aria-label="Proyecto siguiente" class="border-t border-[--color-border]">
+      <a
+        href={`/portfolio/${next.slug}`}
+        class="group block container-fluid py-12 md:py-16 transition-colors"
+      >
+        <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+          siguiente proyecto
+        </span>
+        <p
+          class="mt-4 font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
+          style="font-size: var(--text-2xl);"
+        >
+          {next.title} →
+        </p>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>

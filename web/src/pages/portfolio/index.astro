@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Marker from '../../components/ui/Marker.astro';
+import Tag from '../../components/ui/Tag.astro';
+import { getAllProjects } from '../../data/projects';
+
+const allProjects = getAllProjects();
+---
+
+<BaseLayout
+  title="Portfolio · gesdiweb"
+  description="Proyectos recientes de diseño web, apps móviles y posicionamiento SEO."
+>
+  <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
+    <Marker label="02.portfolio" />
+    <h1
+      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+      style="font-size: var(--text-3xl);"
+    >
+      Trabajo reciente.<br />
+      <span class="text-[--color-brand]">Resultados</span> reales.
+    </h1>
+    <p class="mt-8 max-w-2xl text-lg text-[--color-fg-soft] leading-relaxed">
+      Selección curada de proyectos. Cada caso de estudio incluye los retos
+      reales, las decisiones técnicas y las métricas que los acompañan.
+    </p>
+  </section>
+
+  <section class="border-t border-[--color-border]">
+    <div class="container-fluid py-16 md:py-24">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16 md:gap-y-24">
+        {allProjects.map((project, i) => (
+          <a
+            href={`/portfolio/${project.slug}`}
+            class={`group flex flex-col gap-5 ${
+              i % 3 === 0 ? 'md:col-span-2' : ''
+            }`}
+          >
+            <div
+              class={`bg-[--color-bg-soft] border border-[--color-border] rounded-lg overflow-hidden flex items-center justify-center text-[--color-muted] font-mono text-sm uppercase tracking-widest group-hover:border-[--color-fg] transition-colors ${
+                i % 3 === 0 ? 'aspect-[16/8]' : 'aspect-[4/3]'
+              }`}
+              aria-hidden="true"
+            >
+              [PLACEHOLDER · {project.title}]
+            </div>
+            <div class="flex items-baseline justify-between gap-4">
+              <h2
+                class="font-display font-bold tracking-tight group-hover:text-[--color-brand] transition-colors"
+                style="font-size: var(--text-lg);"
+              >
+                {project.title}
+              </h2>
+              <span class="font-mono text-xs text-[--color-muted]">{project.year}</span>
+            </div>
+            <p class="text-[--color-fg-soft] text-sm md:text-base max-w-[55ch]">
+              {project.excerpt}
+            </p>
+            <div class="flex flex-wrap gap-2">
+              {project.techStack.slice(0, 4).map((tech) => (
+                <Tag label={tech} />
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
