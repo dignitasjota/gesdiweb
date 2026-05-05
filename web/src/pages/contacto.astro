@@ -1,7 +1,9 @@
 ---
+export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Marker from '../components/ui/Marker.astro';
 import Button from '../components/ui/Button.astro';
+import ContactFormClient from '../components/forms/ContactFormClient.astro';
 import { getOrderedServices } from '../lib/collections';
 
 const services = await getOrderedServices();
@@ -220,10 +222,16 @@ const budgets = [
           </p>
         </div>
 
-        <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] pt-4">
-          // [PLACEHOLDER] envío real vía Resend en Fase 4
-        </p>
+        {/* Área de estado del envío (cargando, éxito, error) — accesible vía aria-live */}
+        <div
+          data-form-status
+          aria-live="polite"
+          aria-atomic="true"
+          class="text-sm font-mono uppercase tracking-widest min-h-[1.5em] data-[state=loading]:text-[--color-muted] data-[state=success]:text-[--color-brand-hover] data-[state=error]:text-red-600"
+        ></div>
       </form>
     </div>
   </section>
+
+  <ContactFormClient />
 </BaseLayout>
