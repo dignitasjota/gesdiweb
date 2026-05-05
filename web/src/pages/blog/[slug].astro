@@ -1,52 +1,63 @@
 ---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Button from '../../components/ui/Button.astro';
-import { posts, getAllPosts, formatDateLong, type Post } from '../../data/posts';
+import { formatDateLong, isoDate } from '../../lib/collections';
 
 export async function getStaticPaths() {
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
+  const posts = await getCollection('blog', (e) => e.data.status !== 'draft');
+  const ordered = posts.sort(
+    (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+  );
+  return ordered.map((post) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      related: ordered.filter((p) => p.id !== post.id).slice(0, 2),
+    },
   }));
 }
 
 interface Props {
-  post: Post;
+  post: CollectionEntry<'blog'>;
+  related: CollectionEntry<'blog'>[];
 }
 
-const { post } = Astro.props;
-const related = getAllPosts()
-  .filter((p) => p.slug !== post.slug)
-  .slice(0, 2);
+const { post, related } = Astro.props;
+const { data } = post;
+const { Content } = await render(post);
 ---
 
 <BaseLayout
-  title={`${post.title} · Blog · gesdiweb`}
-  description={post.excerpt}
+  title={`${data.title} · Blog · gesdiweb`}
+  description={data.seoDescription ?? data.excerpt}
 >
   <article>
     <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-16">
-      <Marker label={`blog · ${formatDateLong(post.publishedAt)}`} />
+      <Marker label={`blog · ${formatDateLong(data.publishedAt)}`} />
 
       <h1
-        class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[24ch]"
+        class="mt-8 font-display font-bold tracking-[-0.025em] leading-[0.95] max-w-[24ch]"
         style="font-size: var(--text-2xl);"
       >
-        {post.title}
+        {data.title}
       </h1>
 
-      <p class="mt-8 max-w-2xl text-lg md:text-xl text-[--color-fg-soft] leading-relaxed">
-        {post.excerpt}
+      <p
+        class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
+        style="font-size: var(--text-lg);"
+      >
+        {data.excerpt}
       </p>
 
       <div class="mt-10 flex flex-wrap items-center gap-3">
-        {post.categories.map((cat) => (
+        {data.categories.map((cat) => (
           <Tag label={cat} variant="brand" />
         ))}
         <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-          · {post.readingMinutes} min lectura · {post.author}
+          · {data.readingMinutes} min lectura · {data.author}
         </span>
       </div>
     </header>
@@ -61,69 +72,69 @@ const related = getAllPosts()
     </div>
 
     <div class="container-fluid pb-20 md:pb-32">
-      <div class="max-w-2xl mx-auto">
-        <p class="text-base md:text-lg leading-relaxed text-[--color-fg]">
-          {post.body}
-        </p>
-        <p class="mt-12 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-          // [PLACEHOLDER] contenido completo del post pendiente de redacción
-        </p>
+      <div class="post-body max-w-2xl mx-auto">
+        <Content />
 
         <div class="mt-16 pt-8 border-t border-[--color-border] flex flex-wrap items-center gap-2">
           <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">tags:</span>
-          {post.tags.map((tag) => (
+          {data.tags.map((tag) => (
             <Tag label={tag} />
           ))}
         </div>
       </div>
     </div>
 
-    <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
-      <div class="container-fluid section-spacing">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-          <div>
-            <Marker label="seguir leyendo" />
-            <h2
-              class="mt-4 font-display font-bold tracking-tight leading-tight"
-              style="font-size: var(--text-xl);"
+    {related.length > 0 && (
+      <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
+        <div class="container-fluid section-spacing">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+            <div>
+              <Marker label="seguir leyendo" />
+              <h2
+                class="mt-4 font-display font-bold tracking-tight leading-tight"
+                style="font-size: var(--text-xl);"
+              >
+                Artículos relacionados
+              </h2>
+            </div>
+            <a
+              href="/blog"
+              class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
             >
-              Artículos relacionados
-            </h2>
-          </div>
-          <a
-            href="/blog"
-            class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
-          >
-            ver todos →
-          </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {related.map((p) => (
-            <a href={`/blog/${p.slug}`} class="group flex flex-col gap-4">
-              <div
-                class="aspect-[4/3] bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
-                aria-hidden="true"
-              >
-                [PLACEHOLDER · cover]
-              </div>
-              <h3
-                class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
-                style="font-size: var(--text-lg);"
-              >
-                {p.title}
-              </h3>
-              <p class="text-sm text-[--color-fg-soft] line-clamp-2">{p.excerpt}</p>
+              ver todos →
             </a>
-          ))}
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {related.map((p) => (
+              <a href={`/blog/${p.id}`} class="group flex flex-col gap-4">
+                <div
+                  class="aspect-[4/3] bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
+                  aria-hidden="true"
+                >
+                  [PLACEHOLDER · cover]
+                </div>
+                <h3
+                  class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
+                  style="font-size: var(--text-lg);"
+                >
+                  {p.data.title}
+                </h3>
+                <p class="text-[--color-fg-soft] line-clamp-2">{p.data.excerpt}</p>
+                <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mt-2">
+                  <time datetime={isoDate(p.data.publishedAt)}>{formatDateLong(p.data.publishedAt)}</time>
+                </p>
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    )}
 
     <section class="container-fluid section-spacing text-center">
       <Marker label="¿necesitas ayuda?" class="justify-center w-full" />
       <h2
-        class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch] mx-auto"
+        class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch] mx-auto"
         style="font-size: var(--text-2xl);"
       >
         Si lo que has leído te suena familiar, hablemos.
@@ -134,3 +145,56 @@ const related = getAllPosts()
     </section>
   </article>
 </BaseLayout>
+
+<style is:global>
+  .post-body h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    font-size: var(--text-xl);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  .post-body h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .post-body p {
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+    font-size: var(--text-base);
+  }
+  .post-body ul,
+  .post-body ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .post-body li {
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
+  .post-body strong {
+    color: var(--color-fg);
+    font-weight: 600;
+  }
+  .post-body a {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-decoration-color: var(--color-brand);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+  .post-body a:hover {
+    color: var(--color-brand-hover);
+  }
+  .post-body code {
+    background: var(--color-bg-soft);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.95em;
+  }
+</style>

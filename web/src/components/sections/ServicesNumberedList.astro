@@ -2,9 +2,9 @@
 import Marker from '../ui/Marker.astro';
 import Icon from '../ui/Icon.astro';
 import type { IconName } from '../ui/icon-names';
-import { getOrderedServices } from '../../data/services';
+import { getOrderedServices } from '../../lib/collections';
 
-const services = getOrderedServices();
+const services = await getOrderedServices();
 
 const icons: Record<string, IconName> = {
   'posicionamiento-web': 'seo',
@@ -39,7 +39,7 @@ const icons: Record<string, IconName> = {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
       {services.map((service) => (
         <a
-          href={`/servicios/${service.slug}`}
+          href={`/servicios/${service.id}`}
           class="group bg-[--color-bg] border border-[--color-border] rounded-2xl p-7 md:p-9 flex flex-col gap-5 transition-all hover:-translate-y-1 hover:border-[--color-brand] hover:bg-[--color-brand-soft]"
         >
           <div class="flex items-start justify-between gap-4">
@@ -47,13 +47,13 @@ const icons: Record<string, IconName> = {
               class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[--color-brand-soft] text-[--color-brand-hover] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse] transition-colors"
               aria-hidden="true"
             >
-              <Icon name={icons[service.slug]} size={22} />
+              <Icon name={icons[service.id]} size={22} />
             </span>
             <span
               class="font-mono uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand-hover] transition-colors"
               style="font-size: var(--text-xs);"
             >
-              /{String(service.order).padStart(2, '0')}
+              /{String(service.data.order).padStart(2, '0')}
             </span>
           </div>
 
@@ -61,11 +61,11 @@ const icons: Record<string, IconName> = {
             class="font-display font-bold tracking-[-0.02em] leading-tight mt-2 group-hover:text-[--color-brand-hover] transition-colors"
             style="font-size: var(--text-xl);"
           >
-            {service.title}
+            {service.data.title}
           </h3>
 
           <p class="text-[--color-fg-soft] leading-relaxed flex-1">
-            {service.excerpt}
+            {service.data.excerpt}
           </p>
 
           <div class="flex items-center justify-between pt-4 border-t border-[--color-border-soft]">

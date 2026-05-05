@@ -2,9 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
-import { getAllProjects } from '../../data/projects';
+import { getAllProjects } from '../../lib/collections';
 
-const allProjects = getAllProjects();
+const allProjects = await getAllProjects();
 ---
 
 <BaseLayout
@@ -14,13 +14,16 @@ const allProjects = getAllProjects();
   <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
     <Marker label="02.portfolio" />
     <h1
-      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+      class="mt-8 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
       style="font-size: var(--text-3xl);"
     >
       Trabajo reciente.<br />
       <span class="text-[--color-brand]">Resultados</span> reales.
     </h1>
-    <p class="mt-8 max-w-2xl text-lg text-[--color-fg-soft] leading-relaxed">
+    <p
+      class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
+      style="font-size: var(--text-lg);"
+    >
       Selección curada de proyectos. Cada caso de estudio incluye los retos
       reales, las decisiones técnicas y las métricas que los acompañan.
     </p>
@@ -31,7 +34,7 @@ const allProjects = getAllProjects();
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16 md:gap-y-24">
         {allProjects.map((project, i) => (
           <a
-            href={`/portfolio/${project.slug}`}
+            href={`/portfolio/${project.id}`}
             class={`group flex flex-col gap-5 ${
               i % 3 === 0 ? 'md:col-span-2' : ''
             }`}
@@ -43,24 +46,24 @@ const allProjects = getAllProjects();
               aria-hidden="true"
               style="font-size: var(--text-xs);"
             >
-              <span class="absolute top-6 left-6">/{String(project.order).padStart(2, '0')}</span>
-              <span class="absolute top-6 right-6">{project.year}</span>
-              [PLACEHOLDER · {project.title}]
+              <span class="absolute top-6 left-6">/{String(project.data.order).padStart(2, '0')}</span>
+              <span class="absolute top-6 right-6">{project.data.year}</span>
+              [PLACEHOLDER · {project.data.title}]
             </div>
             <div class="flex items-baseline justify-between gap-4">
               <h2
                 class="font-display font-bold tracking-tight group-hover:text-[--color-brand] transition-colors"
                 style="font-size: var(--text-lg);"
               >
-                {project.title}
+                {project.data.title}
               </h2>
-              <span class="font-mono text-xs text-[--color-muted]">{project.year}</span>
+              <span class="font-mono text-xs text-[--color-muted]">{project.data.year}</span>
             </div>
-            <p class="text-[--color-fg-soft] text-sm md:text-base max-w-[55ch]">
-              {project.excerpt}
+            <p class="text-[--color-fg-soft] max-w-[55ch]">
+              {project.data.excerpt}
             </p>
             <div class="flex flex-wrap gap-2">
-              {project.techStack.slice(0, 4).map((tech) => (
+              {project.data.techStack.slice(0, 4).map((tech) => (
                 <Tag label={tech} />
               ))}
             </div>

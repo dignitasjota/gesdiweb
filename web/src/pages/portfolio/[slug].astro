@@ -1,48 +1,55 @@
 ---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Button from '../../components/ui/Button.astro';
-import { projects, getAllProjects, type Project } from '../../data/projects';
-import { getServiceBySlug } from '../../data/services';
+import { getServiceById } from '../../lib/collections';
 
 export async function getStaticPaths() {
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project },
+  const projects = await getCollection('portfolio', (e) => e.data.status !== 'draft');
+  const ordered = projects.sort((a, b) => a.data.order - b.data.order);
+  return ordered.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: ordered[(i + 1) % ordered.length] },
   }));
 }
 
 interface Props {
-  project: Project;
+  project: CollectionEntry<'portfolio'>;
+  next: CollectionEntry<'portfolio'>;
 }
 
-const { project } = Astro.props;
-const all = getAllProjects();
-const idx = all.findIndex((p) => p.slug === project.slug);
-const next = all[(idx + 1) % all.length];
-const services = project.servicesUsed
-  .map((s) => getServiceBySlug(s))
-  .filter(Boolean);
+const { project, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+
+const services = await Promise.all(
+  data.servicesUsed.map((id) => getServiceById(id)),
+);
+const validServices = services.filter((s): s is NonNullable<typeof s> => Boolean(s));
 ---
 
 <BaseLayout
-  title={`${project.title} · Portfolio · gesdiweb`}
-  description={project.excerpt}
+  title={`${data.title} · Portfolio · gesdiweb`}
+  description={data.seoDescription ?? data.excerpt}
 >
   <article>
     <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-20">
-      <Marker label={`portfolio · ${project.year}`} />
+      <Marker label={`portfolio · ${data.year}`} />
 
       <h1
-        class="mt-8 font-display font-bold tracking-tight leading-[0.92] max-w-[20ch]"
+        class="mt-8 font-display font-bold tracking-[-0.025em] leading-[0.95] max-w-[20ch]"
         style="font-size: var(--text-3xl);"
       >
-        {project.title}
+        {data.title}
       </h1>
 
-      <p class="mt-8 max-w-2xl text-lg md:text-xl text-[--color-fg-soft] leading-relaxed">
-        {project.excerpt}
+      <p
+        class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
+        style="font-size: var(--text-lg);"
+      >
+        {data.excerpt}
       </p>
     </header>
 
@@ -59,18 +66,18 @@ const services = project.servicesUsed
       <div class="container-fluid py-12 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div>
           <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">cliente</p>
-          <p class="mt-2 text-base">{project.client}</p>
+          <p class="mt-2 text-base">{data.client}</p>
         </div>
         <div>
           <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">año</p>
-          <p class="mt-2 text-base">{project.year}</p>
+          <p class="mt-2 text-base">{data.year}</p>
         </div>
         <div class="col-span-2">
           <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">servicios</p>
           <div class="mt-2 flex flex-wrap gap-2">
-            {services.map((s) => s && (
-              <a href={`/servicios/${s.slug}`}>
-                <Tag label={s.title} variant="brand" />
+            {validServices.map((s) => (
+              <a href={`/servicios/${s.id}`}>
+                <Tag label={s.data.title} variant="brand" />
               </a>
             ))}
           </div>
@@ -89,12 +96,7 @@ const services = project.servicesUsed
         </h2>
       </div>
       <div class="md:col-span-8 prose-mimic max-w-3xl">
-        <p class="text-base md:text-lg leading-relaxed text-[--color-fg-soft]">
-          {project.body}
-        </p>
-        <p class="mt-6 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-          // [PLACEHOLDER] caso de estudio completo en preparación
-        </p>
+        <Content />
       </div>
     </section>
 
@@ -108,7 +110,7 @@ const services = project.servicesUsed
           Tecnologías utilizadas
         </h2>
         <div class="mt-10 flex flex-wrap gap-3">
-          {project.techStack.map((tech) => (
+          {data.techStack.map((tech) => (
             <Tag label={tech} />
           ))}
         </div>
@@ -120,7 +122,7 @@ const services = project.servicesUsed
         <div class="md:col-span-7">
           <Marker label="¿siguiente paso?" />
           <h2
-            class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+            class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
             style="font-size: var(--text-2xl);"
           >
             ¿Tu proyecto, el próximo?
@@ -134,7 +136,7 @@ const services = project.servicesUsed
 
     <nav aria-label="Proyecto siguiente" class="border-t border-[--color-border]">
       <a
-        href={`/portfolio/${next.slug}`}
+        href={`/portfolio/${next.id}`}
         class="group block container-fluid py-12 md:py-16 transition-colors"
       >
         <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
@@ -144,9 +146,51 @@ const services = project.servicesUsed
           class="mt-4 font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
           style="font-size: var(--text-2xl);"
         >
-          {next.title} →
+          {next.data.title} →
         </p>
       </a>
     </nav>
   </article>
 </BaseLayout>
+
+<style is:global>
+  .prose-mimic h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-size: var(--text-lg);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  .prose-mimic h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-mimic p {
+    color: var(--color-fg-soft);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .prose-mimic ul,
+  .prose-mimic ol {
+    padding-left: 1.5rem;
+    color: var(--color-fg-soft);
+    margin-bottom: 1rem;
+  }
+  .prose-mimic li {
+    margin-bottom: 0.5rem;
+  }
+  .prose-mimic strong {
+    color: var(--color-fg);
+  }
+  .prose-mimic a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-mimic a:hover {
+    color: var(--color-brand);
+  }
+</style>

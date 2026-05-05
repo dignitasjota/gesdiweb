@@ -1,9 +1,9 @@
 ---
 import Marker from '../ui/Marker.astro';
 import Tag from '../ui/Tag.astro';
-import { getFeaturedProjects } from '../../data/projects';
+import { getFeaturedProjects } from '../../lib/collections';
 
-const featured = getFeaturedProjects();
+const featured = await getFeaturedProjects();
 ---
 
 <section class="container-fluid section-spacing">
@@ -28,7 +28,7 @@ const featured = getFeaturedProjects();
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
     {featured.map((project, i) => (
       <a
-        href={`/portfolio/${project.slug}`}
+        href={`/portfolio/${project.id}`}
         class={`group flex flex-col gap-5 ${i === 0 ? 'md:col-span-2' : ''}`}
       >
         <div
@@ -46,19 +46,19 @@ const featured = getFeaturedProjects();
                 <polyline points="7 7 17 7 17 17" />
               </svg>
             </div>
-            <p style="font-size: var(--text-sm);">[PLACEHOLDER · {project.title}]</p>
+            <p style="font-size: var(--text-sm);">[PLACEHOLDER · {project.data.title}]</p>
           </div>
           <span
             class="absolute top-6 left-6 font-mono text-[--color-brand-hover]"
             style="font-size: var(--text-xs);"
           >
-            /{String(project.order).padStart(2, '0')}
+            /{String(project.data.order).padStart(2, '0')}
           </span>
           <span
             class="absolute top-6 right-6 font-mono text-[--color-brand-hover]"
             style="font-size: var(--text-xs);"
           >
-            {project.year}
+            {project.data.year}
           </span>
         </div>
         <div class="flex items-baseline justify-between gap-4">
@@ -66,14 +66,14 @@ const featured = getFeaturedProjects();
             class="font-display font-bold tracking-[-0.02em] group-hover:text-[--color-brand-hover] transition-colors"
             style="font-size: var(--text-xl);"
           >
-            {project.title}
+            {project.data.title}
           </h3>
         </div>
         <p class="text-[--color-fg-soft] max-w-[55ch]">
-          {project.excerpt}
+          {project.data.excerpt}
         </p>
         <div class="flex flex-wrap gap-2">
-          {project.techStack.slice(0, 3).map((tech) => (
+          {project.data.techStack.slice(0, 3).map((tech) => (
             <Tag label={tech} />
           ))}
         </div>

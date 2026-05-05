@@ -2,9 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Marker from '../components/ui/Marker.astro';
 import Button from '../components/ui/Button.astro';
-import { getOrderedServices } from '../data/services';
+import { getOrderedServices } from '../lib/collections';
 
-const services = getOrderedServices();
+const services = await getOrderedServices();
 
 const budgets = [
   { value: '<3k', label: 'Menos de 3.000 €' },
@@ -153,7 +153,7 @@ const budgets = [
           >
             <option value="">Selecciona uno</option>
             {services.map((s) => (
-              <option value={s.slug}>{s.title}</option>
+              <option value={s.id}>{s.data.title}</option>
             ))}
             <option value="other">Otra cosa / no estoy seguro</option>
           </select>

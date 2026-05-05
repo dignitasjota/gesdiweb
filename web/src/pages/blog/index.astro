@@ -2,9 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
-import { getAllPosts, formatDateLong } from '../../data/posts';
+import { getAllPosts, formatDateLong, isoDate } from '../../lib/collections';
 
-const allPosts = getAllPosts();
+const allPosts = await getAllPosts();
 const [featuredPost, ...rest] = allPosts;
 ---
 
@@ -15,13 +15,16 @@ const [featuredPost, ...rest] = allPosts;
   <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
     <Marker label="03.blog" />
     <h1
-      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[16ch]"
+      class="mt-8 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[16ch]"
       style="font-size: var(--text-3xl);"
     >
       Pensamiento<br />
       <span class="text-[--color-brand]">aplicado</span>.
     </h1>
-    <p class="mt-8 max-w-2xl text-lg text-[--color-fg-soft] leading-relaxed">
+    <p
+      class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
+      style="font-size: var(--text-lg);"
+    >
       Artículos breves sobre lo que vamos aprendiendo: SEO técnico, rendimiento,
       diseño y operación de proyectos digitales.
     </p>
@@ -30,7 +33,7 @@ const [featuredPost, ...rest] = allPosts;
   {featuredPost && (
     <section class="border-t border-[--color-border]">
       <a
-        href={`/blog/${featuredPost.slug}`}
+        href={`/blog/${featuredPost.id}`}
         class="group block container-fluid py-16 md:py-24"
       >
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
@@ -42,25 +45,25 @@ const [featuredPost, ...rest] = allPosts;
           </div>
           <div class="md:col-span-5 flex flex-col gap-5">
             <div class="flex items-center gap-3 flex-wrap">
-              {featuredPost.categories.map((cat) => (
+              {featuredPost.data.categories.map((cat) => (
                 <Tag label={cat} variant="brand" />
               ))}
               <span class="font-mono text-xs text-[--color-muted]">
-                · {featuredPost.readingMinutes} min lectura
+                · {featuredPost.data.readingMinutes} min lectura
               </span>
             </div>
             <h2
               class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
               style="font-size: var(--text-2xl);"
             >
-              {featuredPost.title}
+              {featuredPost.data.title}
             </h2>
-            <p class="text-[--color-fg-soft] text-base md:text-lg max-w-prose">
-              {featuredPost.excerpt}
+            <p class="text-[--color-fg-soft] max-w-prose">
+              {featuredPost.data.excerpt}
             </p>
             <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mt-auto">
-              <time datetime={featuredPost.publishedAt}>
-                {formatDateLong(featuredPost.publishedAt)}
+              <time datetime={isoDate(featuredPost.data.publishedAt)}>
+                {formatDateLong(featuredPost.data.publishedAt)}
               </time>
             </p>
           </div>
@@ -74,7 +77,7 @@ const [featuredPost, ...rest] = allPosts;
       <div class="container-fluid py-16 md:py-24">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
           {rest.map((post) => (
-            <a href={`/blog/${post.slug}`} class="group flex flex-col gap-5">
+            <a href={`/blog/${post.id}`} class="group flex flex-col gap-5">
               <div
                 class="aspect-[4/3] bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
                 aria-hidden="true"
@@ -82,24 +85,24 @@ const [featuredPost, ...rest] = allPosts;
                 [PLACEHOLDER · cover]
               </div>
               <div class="flex items-center gap-3 flex-wrap">
-                {post.categories.slice(0, 1).map((cat) => (
+                {post.data.categories.slice(0, 1).map((cat) => (
                   <Tag label={cat} variant="brand" />
                 ))}
                 <span class="font-mono text-xs text-[--color-muted]">
-                  · {post.readingMinutes} min
+                  · {post.data.readingMinutes} min
                 </span>
               </div>
               <h2
                 class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
                 style="font-size: var(--text-lg);"
               >
-                {post.title}
+                {post.data.title}
               </h2>
-              <p class="text-sm text-[--color-fg-soft] line-clamp-3">
-                {post.excerpt}
+              <p class="text-[--color-fg-soft] line-clamp-3">
+                {post.data.excerpt}
               </p>
               <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mt-auto">
-                <time datetime={post.publishedAt}>{formatDateLong(post.publishedAt)}</time>
+                <time datetime={isoDate(post.data.publishedAt)}>{formatDateLong(post.data.publishedAt)}</time>
               </p>
             </a>
           ))}
