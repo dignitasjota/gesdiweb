@@ -3,8 +3,8 @@
 > **Snapshot dinámico.** Se actualiza al cerrar cada fase. Si entras nuevo al proyecto, este documento te dice **dónde estamos exactamente y qué hacer ahora**.
 
 **Última actualización:** 2026-05-05
-**Última fase cerrada:** Fase 3 — Content collections + MDX
-**Fase en curso:** ninguna (esperando OK del dueño para iniciar Fase 4)
+**Última fase cerrada:** Fase 4 — Formulario de contacto + Resend
+**Fase en curso:** ninguna (esperando OK del dueño para iniciar Fase 5)
 
 ---
 
@@ -15,8 +15,8 @@
 ✅ Fase 1  Sistema de diseño            [completada 2026-05-05]
 ✅ Fase 2  Páginas estáticas            [completada 2026-05-05]
 ✅ Fase 3  Content collections (MDX)    [completada 2026-05-05]
-⏳ Fase 4  Formulario + Resend          [siguiente — esperando OK]
-⏳ Fase 5  Animaciones y pulido
+✅ Fase 4  Formulario + Resend          [completada 2026-05-05]
+⏳ Fase 5  Animaciones y pulido         [siguiente — esperando OK]
 ⏳ Fase 6  SEO técnico y performance
 ⏳ Fase 7  Despliegue Hetzner
 ⏳ Fase 8  Migración SEO + switch DNS
@@ -24,122 +24,112 @@
 
 ---
 
+## Cambio importante de arquitectura en Fase 4
+
+El sitio era 100% estático (nginx). Ahora es **mayoritariamente estático con un endpoint dinámico** (`/api/contact`):
+
+- Astro pasa de `output: 'static'` a `output: 'server'` con adapter `@astrojs/node` (modo standalone).
+- Cada página `.astro` lleva `export const prerender = true` → se prerenderiza en build (HTML estático servido directo desde el server Node).
+- Solo `src/pages/api/contact.ts` corre dinámicamente en runtime (`prerender = false`).
+- El contenedor Docker pasa de **nginx 1.27 alpine** a **node 22 alpine** ejecutando `dist/server/entry.mjs`.
+- Nginx Proxy Manager sigue por delante haciendo SSL y compresión.
+
+**Consecuencia:** un único contenedor sirve estáticos + API. Sin sidecars ni servicios separados.
+
+---
+
 ## Lo que está funcionando ahora mismo
 
-- Repo `github.com/dignitasjota/gesdiweb` con `main` pusheada.
-- `npm run build` produce **22 páginas estáticas** en ~1s.
-- Todo el contenido vive ahora en **MDX dentro de `src/content/`**:
-  - `services/*.mdx` (5 archivos)
-  - `portfolio/*.mdx` (5 archivos, con cuerpo MDX para caso de estudio)
-  - `blog/*.mdx` (3 archivos, con cuerpo Markdown real)
-- Schemas Zod en `src/content.config.ts` — un MDX con frontmatter inválido rompe el build.
-- Helpers async en `src/lib/collections.ts` con la misma API que los antiguos `src/data/*` (drop-in replacement).
-- Sistema de diseño completo, iconografía SVG, smooth scroll, formulario maquetado.
-
-## Cómo editar contenido ahora
-
-```bash
-# Crear/editar un post
-edit src/content/blog/mi-nuevo-post.mdx
-
-# Frontmatter mínimo:
----
-title: "Mi título"
-excerpt: "Resumen 1-2 frases"
-publishedAt: 2026-06-01
-readingMinutes: 5
-categories: ["SEO técnico"]
-tags: ["rendimiento"]
----
-
-Aquí va el contenido en Markdown/MDX.
-
-## Subtítulos
-
-Texto con **negrita**, [enlaces](https://...), listas, etc.
-```
-
-Con el dev server corriendo (`npm run dev`), el cambio se ve al instante.
-
-Lo mismo para `services/` (sin body, solo frontmatter) y `portfolio/` (frontmatter + cuerpo del caso de estudio).
+- Build limpio: `dist/client` (22 HTMLs prerenderizados + assets) y `dist/server` (entry Node + chunks de la API).
+- En local con `node ./dist/server/entry.mjs`, todas las páginas responden 200 y `/api/contact` valida correctamente:
+  - Datos válidos sin `RESEND_API_KEY` → `{ ok: true, accepted: true, devMode: true }` y log local
+  - Datos inválidos → 400 con array `issues[]` tipado por Zod
+  - Honeypot relleno → 200 simulando éxito sin enviar nada
+  - 5 envíos en 10 minutos desde la misma IP → 429 con `retry-after`
+- Formulario en `/contacto` con cliente JS (fetch a `/api/contact`, estados accesibles `aria-live`, errores por campo).
+- `.env.example` actualizado con `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEAD_NOTIFICATION_EMAIL`.
+- `docker-compose.yml` con variables Resend pasadas al contenedor.
 
 ## Lo que NO está hecho todavía
 
-- Imágenes reales en covers de portfolio/blog → covers siguen marcados `[PLACEHOLDER]`.
-- Foto del fundador, logos de clientes, datos legales → pendiente de aportar por dueño.
-- Envío real del formulario de contacto vía Resend → Fase 4.
-- Animaciones reveal/parallax/transiciones de página → Fase 5.
+- Animaciones (reveals, marquees con scroll-linked, parallax, transiciones de página) → Fase 5.
 - JSON-LD por tipo de página, OG images dinámicas → Fase 6.
 - Lighthouse 95+ verificado → Fase 6.
-- Despliegue producción → Fase 7.
+- Despliegue producción + verificación dominio en Resend (SPF + DKIM + DMARC) → Fase 7.
 - Redirecciones 301 y migración del WordPress → Fase 8.
 
-## Dependencias bloqueadas a información del dueño
+## Variables de entorno requeridas en producción
 
-Mismas que en Fase 2. Ver tabla en `docs/estado.md` previo si hace falta. Lo más urgente para Fase 4: **acceso DNS para SPF + DKIM + DMARC** y verificación del dominio en Resend.
+```
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
+RESEND_FROM_EMAIL=hola@gesdiweb.es
+LEAD_NOTIFICATION_EMAIL=hola@gesdiweb.es
+```
+
+Sin `RESEND_API_KEY` el endpoint sigue funcionando pero no envía email (loguea en consola y devuelve `devMode: true`). Útil en QA/preview, **no aceptable en producción**.
 
 ---
 
-## Detalle de Fase 3 (cerrada)
+## Detalle de Fase 4 (cerrada)
 
-**Commits añadidos en `main`:**
+**Commits añadidos en `main`:** (pendientes de hacer en este push)
 
 ```
-(pendientes de hacer en este push)
-chore(web): instalar @astrojs/mdx 5.0.4 y registrar integración
-feat(web): content collections con Zod (services, portfolio, blog)
-feat(web): migrar 5 services + 5 projects + 3 posts a MDX
-feat(web): helpers src/lib/collections.ts (async wrappers sobre getCollection)
-refactor(web): consumidores usan getCollection — eliminado src/data/
+chore(web): instalar @astrojs/node, resend y zod (override uuid 14)
+feat(web): output server con prerender=true en todas las páginas estáticas
+feat(api): endpoint /api/contact con Zod + honeypot + rate limit + Resend
+feat(web): cliente JS del formulario con estados accesibles
+chore(infra): Dockerfile con node standalone, compose con env Resend
+docs: actualizar estado tras cierre de Fase 4
 ```
 
 **Archivos creados:**
 
-- `web/src/content.config.ts` — schemas Zod por colección
-- `web/src/content/services/*.mdx` — 5 servicios
-- `web/src/content/portfolio/*.mdx` — 5 proyectos con cuerpo de caso de estudio
-- `web/src/content/blog/*.mdx` — 3 posts con cuerpo Markdown real
-- `web/src/lib/collections.ts` — `getOrderedServices()`, `getAllProjects()`, `getFeaturedProjects()`, `getProjectById()`, `getServiceById()`, `getAllPosts()`, `getRecentPosts()`, `getPostById()`, `formatDateLong()`, `isoDate()`
-
-**Archivos eliminados:**
-
-- `web/src/data/services.ts`, `projects.ts`, `posts.ts` (sustituidos por MDX)
+- `web/src/pages/api/contact.ts` — endpoint POST
+- `web/src/lib/contact-schema.ts` — schema Zod compartido cliente/servidor
+- `web/src/lib/rate-limit.ts` — rate limiter en memoria (5 req / 10 min / IP)
+- `web/src/lib/email/contact-template.ts` — plantilla HTML + text del email
+- `web/src/components/forms/ContactFormClient.astro` — script cliente
 
 **Archivos modificados:**
 
-- `web/astro.config.mjs` — añade `mdx()` integration
-- `web/src/components/sections/ServicesNumberedList.astro`
-- `web/src/components/sections/PortfolioFeatured.astro`
-- `web/src/components/sections/BlogRecent.astro`
-- `web/src/pages/servicios/index.astro` y `[slug].astro`
-- `web/src/pages/portfolio/index.astro` y `[slug].astro`
-- `web/src/pages/blog/index.astro` y `[slug].astro` (con prosa MDX renderizada vía `<Content />` y estilos `.post-body`)
-- `web/src/pages/contacto.astro` (select de servicios)
+- `web/astro.config.mjs` — `output: 'server'`, adapter Node standalone
+- `web/Dockerfile` — runtime ahora es `node:22-alpine` corriendo `entry.mjs`
+- `docker-compose.yml` — pasa env Resend al contenedor
+- `docker-compose.dev.yml` — port mapping `8090:4321` (antes era 8090:80)
+- `.env.example` — variables Resend documentadas
+- Todas las páginas `.astro` — añadido `export const prerender = true;`
+- `web/src/pages/contacto.astro` — incluye `<ContactFormClient />` y área `data-form-status`
+- `web/package.json` — override `uuid: ^14.0.0` (resolver advisory transitivo)
 
 **Validación cumplida:**
-- 22 páginas, mismas URLs que antes.
-- Sitemap inalterado.
-- Posts del blog ahora con contenido MDX real (no placeholder).
+
+- Build OK: 22 páginas prerenderizadas + bundle servidor
+- Endpoint en local: validación, honeypot, rate limit y modo dev funcionan
+- Sin vulnerabilidades de npm (`npm audit` 0)
+- Form client con `aria-live` + errores por campo + estados visibles
 
 ---
 
 ## Próximo paso concreto
 
-Cuando el dueño dé luz verde para Fase 4:
+Cuando el dueño dé luz verde para Fase 5:
 
-1. Crear endpoint `src/pages/api/contact.ts` que reciba POST y envíe email vía Resend.
-2. Validar payload con Zod (mismo schema del formulario).
-3. Honeypot anti-spam + rate limit (cookie/IP simple).
-4. Conectar el formulario `<form data-contact-form>` al endpoint con JS mínimo (`client:idle`).
-5. Estados UI: enviando, éxito, error con `aria-live`.
-6. Verificar dominio gesdiweb.es en Resend (SPF/DKIM/DMARC).
-7. Variables `.env`: `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEAD_NOTIFICATION_EMAIL`.
+1. Configurar GSAP + ScrollTrigger en `<SmoothScroll>` (ya existe wrapper Lenis).
+2. Crear componente `<Reveal>` para fade-up en scroll (con `prefers-reduced-motion`).
+3. Aplicar reveals a secciones clave de la home: Statement, Services, Stats.
+4. Marquees con scroll-linked velocidad variable (Lenis hook).
+5. Transiciones de página con Astro View Transitions API.
+6. Estados de hover refinados y micro-interacciones.
 
 ---
 
 ## Notas de sesiones
 
-### 2026-05-05 — Fase 3
-Migración a content collections. Para no reescribir cada consumer, creé helpers async (`src/lib/collections.ts`) con misma firma que los antiguos `src/data/*`. Los `id` de las entries equivalen al antiguo `slug` (filename sin extensión). Posts del blog ya tienen contenido Markdown real (no placeholder) — bueno para validar el rendering MDX y los estilos de prosa.
+### 2026-05-05 — Fase 4
 
-Decisión menor: estilos de prosa en `<style is:global>` por página (post detail y portfolio detail) en lugar de Tailwind Typography. Razón: control fino de la jerarquía editorial sin añadir 70KB de plugin Typography.
+Migración a `output: 'server'` con Node adapter. Considerada alternativa "dos contenedores" (web nginx + api node) pero descartada por simplicidad: un único contenedor Astro Node sirve estáticos prerenderizados + API. Pérdida de rendimiento mínima respecto a nginx (Astro Node entrega HTML precomputado del disco).
+
+Vulnerabilidad transitiva resuelta: Resend → svix → uuid <14 tenía advisory moderado. Override `uuid: ^14.0.0` en `package.json` lo limpia. Sin vulnerabilidades en `npm audit`.
+
+Cliente JS del formulario: ~110 líneas, no añade librería de validación en cliente (reutiliza el schema Zod del servidor pasando los issues). Solo se carga JS en `/contacto`, las demás páginas siguen con 0 KB.
