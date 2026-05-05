@@ -8,7 +8,7 @@ Estado global:
 |---|---|---|
 | 0 | Setup base | ✅ Completada (2026-05-05) |
 | 1 | Sistema de diseño | ✅ Completada (2026-05-05) |
-| 2 | Páginas estáticas y maquetación | ⏳ |
+| 2 | Páginas estáticas y maquetación | ✅ Completada (2026-05-05) |
 | 3 | Content collections (MDX) | ⏳ |
 | 4 | Formulario de contacto + Resend | ⏳ |
 | 5 | Animaciones y pulido | ⏳ |

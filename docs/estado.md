@@ -1,10 +1,10 @@
 # Estado del proyecto
 
-> **Snapshot dinámico.** Se actualiza al cerrar cada fase o al final de cualquier sesión de trabajo significativa. Si entras nuevo al proyecto, este documento te dice **dónde estamos exactamente y qué hacer ahora**.
+> **Snapshot dinámico.** Se actualiza al cerrar cada fase. Si entras nuevo al proyecto, este documento te dice **dónde estamos exactamente y qué hacer ahora**.
 
 **Última actualización:** 2026-05-05
-**Última fase cerrada:** Fase 1 — Sistema de diseño
-**Fase en curso:** ninguna (esperando OK del dueño para iniciar Fase 2)
+**Última fase cerrada:** Fase 2 — Páginas estáticas y maquetación
+**Fase en curso:** ninguna (esperando OK del dueño para iniciar Fase 3)
 
 ---
 
@@ -13,8 +13,8 @@
 ```
 ✅ Fase 0  Setup base                   [completada 2026-05-05]
 ✅ Fase 1  Sistema de diseño            [completada 2026-05-05]
-⏳ Fase 2  Páginas estáticas            [siguiente — esperando OK]
-⏳ Fase 3  Content collections (MDX)
+✅ Fase 2  Páginas estáticas            [completada 2026-05-05]
+⏳ Fase 3  Content collections (MDX)    [siguiente — esperando OK]
 ⏳ Fase 4  Formulario + Resend
 ⏳ Fase 5  Animaciones y pulido
 ⏳ Fase 6  SEO técnico y performance
@@ -27,130 +27,146 @@
 ## Lo que está funcionando ahora mismo
 
 - Repo en `github.com/dignitasjota/gesdiweb` con `main` pusheada.
-- `cd web && npm install` instala 285 paquetes sin vulnerabilidades.
-- `cd web && npm run dev` arranca Astro en `http://localhost:4321` con hot reload.
-- `cd web && npm run build` produce 2 páginas estáticas: `/` y `/styleguide`.
-- Sistema de diseño completo activo: tipografías cargadas, tokens, escala fluida, componentes UI base, Header fijo + Footer y SmoothScroll con Lenis.
-- Página `/styleguide` muestra todos los tokens y componentes (excluida del sitemap, marcada `noindex`).
-- `docker build` y `docker run` siguen funcionando (Dockerfile no cambió en Fase 1).
+- `npm run build` produce **22 páginas estáticas** con sitemap correcto (21 URLs, `/styleguide` filtrada).
+- Todas las rutas previstas están maquetadas:
+  - `/` (home con 9 secciones)
+  - `/servicios` listado + 5 detalles dinámicos
+  - `/portfolio` listado + 5 detalles dinámicos
+  - `/blog` listado + 3 detalles dinámicos
+  - `/contacto` con formulario
+  - `/aviso-legal`, `/politica-privacidad`, `/politica-cookies`
+  - `/styleguide` (interna)
+- Header fijo y Footer presentes en todas las páginas (salvo `hideChrome`).
+- Sin animaciones JS (Lenis está activo pero la maquetación no depende de él).
+- Datos en `src/data/services.ts`, `projects.ts`, `posts.ts` — tipados, listos para migrar a content collections.
 
 ## Lo que NO está hecho todavía
 
-- Páginas reales de servicios, portfolio, blog, contacto → Fase 2.
-- Cualquier sección de la home más allá del hero placeholder → Fase 2.
-- Marquees, parallax y reveals al scroll → Fase 5.
-- GSAP ya instalado pero **sin uso** todavía → Fase 5.
-- Lenis activo pero solo para smooth scroll global, sin scroll-linked animations → Fase 5.
-- Content collections + MDX → Fase 3.
-- Formulario de contacto operativo → Fase 4.
+- Migrar `src/data/*` a content collections con MDX → Fase 3.
+- Imágenes reales (todas marcadas `[PLACEHOLDER · ...]`) → Fases 3 y 8.
+- Datos legales reales (razón social, NIF, dirección, teléfono) → Fase 3.
+- Logos de clientes reales para el marquee → cuando los aporte el dueño.
+- Foto del fundador para CTA final → cuando la aporte el dueño.
+- Stats con cifras reales → cuando las confirme el dueño.
+- Envío real del formulario de contacto vía Resend → Fase 4.
+- Animaciones (reveals, marquee infinito, parallax, transiciones de página) → Fase 5.
+- JSON-LD por tipo de página, OG images dinámicas → Fase 6.
 - Lighthouse 95+ verificado → Fase 6.
 - Despliegue a producción → Fase 7.
-- Redirecciones 301 y migración del blog → Fase 8.
+- Redirecciones 301 y migración del blog WordPress → Fase 8.
 
 ## Dependencias bloqueadas a información del dueño
 
-| Necesario para | Pendiente de aportar |
+| Necesario para | Pendiente |
 |---|---|
-| Páginas legales (Fase 2) | Razón social, NIF, dirección fiscal, email contacto, teléfono |
-| Marquee de logos (Fase 2) | Lista + SVGs de clientes |
-| Hero de la home (Fase 2) | Vídeo o imagen propios |
-| Stats de la home (Fase 2) | Cifras reales (años, proyectos, clientes) |
-| CTA final home (Fase 2) | Foto/firma del fundador |
-| Portfolio inicial (Fase 3) | Imágenes y descripciones de proyectos |
+| Páginas legales finales (Fase 3) | Razón social, NIF, dirección fiscal, teléfono |
+| Marquee de logos | Lista + SVGs de clientes |
+| Hero de la home | Vídeo o imagen propios |
+| Stats de la home | Cifras reales (años, proyectos, clientes) |
+| CTA final home | Foto/firma del fundador |
+| Portfolio inicial | Imágenes y descripciones de proyectos reales |
+| Blog inicial | Posts redactados (o migración del WordPress) |
 | Verificación Resend (Fase 4) | Acceso DNS para SPF + DKIM + DMARC |
 | Migración SEO (Fase 8) | Export Search Console (URLs que rankean) |
 | Migración blog (Fase 8) | Export XML/WXR del WordPress |
 | Analítica | Decisión Plausible/Umami self-hosted vs. servicio externo |
-| Banner cookies | Decisión: banner propio (recomendado) vs. servicio |
+| Banner cookies | Confirmación: banner propio (recomendado) vs. servicio |
 
 ---
 
-## Detalle de Fase 1 (cerrada)
+## Detalle de Fase 2 (cerrada)
 
 **Commits añadidos en `main`:**
 
 ```
-29144f5 feat(web): home placeholder usa nuevo sistema de diseño y BaseLayout completo
-b5b7cf5 feat(web): página /styleguide con paleta, tipografías, escala y componentes
-e06ffc8 feat(web): SmoothScroll wrapper con Lenis (respeta prefers-reduced-motion)
-dd3a8d2 feat(web): Header fijo con nav y CTA + Footer con datos legales placeholders
-63f2b04 feat(web): componentes UI base (Marker, Button, Tag, Badge, StatBlock)
-d9a2c33 feat(web): tokens completos del sistema de diseño en globals.css
-291a511 chore(web): añadir Fontsource (Bricolage/Inter/JetBrains Mono), GSAP y Lenis
+eb01ba7 feat(web): páginas legales (aviso, privacidad, cookies) con LegalLayout
+d403ce5 feat(web): /contacto con formulario completo (sin envío)
+8757db8 feat(web): /blog listado (1 destacado + grid) y /blog/[slug] post
+ee9b68c feat(web): /portfolio listado y /portfolio/[slug] caso de estudio
+2358716 feat(web): /servicios listado y /servicios/[slug] detalle (5 servicios)
+9fe8e52 feat(web): home completa con 9 secciones (sin animaciones)
+5f83ee9 feat(web): datos placeholder de servicios, proyectos y posts
 ```
 
-**Dependencias añadidas:**
+**Archivos creados:**
 
-| Paquete | Versión | Uso |
-|---|---|---|
-| `@fontsource-variable/bricolage-grotesque` | ^5.2.10 | Display |
-| `@fontsource-variable/inter` | ^5.2.8 | Texto / UI |
-| `@fontsource-variable/jetbrains-mono` | ^5.2.8 | Mono / marcadores |
-| `gsap` | ^3.15.0 | Animaciones (sin usar todavía, Fase 5) |
-| `lenis` | ^1.3.23 | Smooth scroll global |
+- `web/src/data/`:
+  - `services.ts` — 5 servicios con headline, excerpt, features, approach
+  - `projects.ts` — 5 proyectos placeholder (3 featured)
+  - `posts.ts` — 3 posts placeholder con `formatDateLong()` helper
 
-**Archivos creados / modificados:**
+- `web/src/components/sections/` (9 componentes):
+  - `Hero.astro` — hero gigante con CTAs
+  - `ClientsMarquee.astro` — banda placeholder
+  - `Statement.astro` — verbos clave
+  - `ServicesNumberedList.astro` — lista numerada con divisores
+  - `PortfolioFeatured.astro` — 3 destacados (1 grande + 2)
+  - `Stats.astro` — 4 StatBlocks
+  - `Process.astro` — 4 pasos en negativo
+  - `HomeContactCTA.astro` — CTA con foto fundador placeholder
+  - `BlogRecent.astro` — últimos 3 posts
 
-- `web/src/styles/globals.css` — sistema de tokens completo, escala fluida, utilidades.
-- `web/src/components/ui/`:
-  - `Marker.astro` — etiqueta mono con prefijo `//`
-  - `Button.astro` — primary/secondary/ghost, sm/md/lg, soporta `href` (anchor) o `type` (button)
-  - `Tag.astro` — píldora pequeña (default/brand/inverse)
-  - `Badge.astro` — numeración estilo `/01`, `/12`
-  - `StatBlock.astro` — número grande + label
-- `web/src/components/layout/`:
-  - `Header.astro` — fijo arriba, blur translúcido, nav semántica con `aria-current`, móvil con hamburguesa (sin abrir todavía — Fase 2)
-  - `Footer.astro` — fondo oscuro, 3 columnas legal/estudio/servicios, CTA con email
-- `web/src/components/animations/`:
-  - `SmoothScroll.astro` — Lenis montado en cliente, respeta `prefers-reduced-motion`
-- `web/src/layouts/BaseLayout.astro` — ahora monta `<Header />`, `<Footer />` y `<SmoothScroll />` automáticamente. Prop nueva `hideChrome` y `noindex`.
-- `web/src/pages/styleguide.astro` — página de referencia interna.
-- `web/src/pages/index.astro` — home placeholder usa el nuevo sistema.
-- `web/astro.config.mjs` — sitemap excluye `/styleguide`.
+- `web/src/pages/`:
+  - `index.astro` — home compuesta
+  - `servicios/index.astro` — listado
+  - `servicios/[slug].astro` — detalle dinámico (5 rutas)
+  - `portfolio/index.astro` — grid asimétrico
+  - `portfolio/[slug].astro` — caso de estudio (5 rutas)
+  - `blog/index.astro` — destacado + grid
+  - `blog/[slug].astro` — post + relacionados (3 rutas)
+  - `contacto.astro` — formulario completo
+  - `aviso-legal.astro`, `politica-privacidad.astro`, `politica-cookies.astro`
+
+- `web/src/layouts/LegalLayout.astro` — layout para páginas legales con tipografía editorial.
 
 **Validación cumplida:**
-- `npm run build` produce 2 páginas, sin errores.
-- Sitemap solo contiene `/` (styleguide filtrado).
-- Foco accesible visible globalmente.
-- `prefers-reduced-motion` respetado (CSS + Lenis).
-- Tipografías self-hosted, sin requests a CDN externos.
+- `npm run build` → 22 páginas, 0 errores.
+- Sitemap correcto con 21 URLs (excluida `/styleguide`).
+- Todas las rutas del briefing presentes.
+- Cero JS innecesario en cliente (solo Lenis para smooth scroll).
+- Accesibilidad: foco visible, jerarquía heading, ARIA en navegaciones, formulario con labels asociados, honeypot anti-spam.
 
 **Para revisar visualmente:**
 
 ```bash
-cd web
-npm run dev
-# Abrir:
-#   http://localhost:4321              → home placeholder
-#   http://localhost:4321/styleguide   → sistema de diseño completo
+cd web && npm run dev
 ```
+
+URLs principales a recorrer en desktop, tablet y móvil:
+- `/`
+- `/servicios` y `/servicios/posicionamiento-web`
+- `/portfolio` y `/portfolio/tienda-aceite-ecologico`
+- `/blog` y `/blog/como-mejorar-core-web-vitals`
+- `/contacto`
+- `/aviso-legal`, `/politica-privacidad`, `/politica-cookies`
+- `/styleguide` (referencia interna)
 
 ---
 
 ## Próximo paso concreto
 
-Cuando el dueño dé luz verde para Fase 2:
+Cuando el dueño dé luz verde para Fase 3:
 
-1. Maquetar **home** completa según [briefing §6](briefing.md#6-estructura-de-la-home): hero, marquee logos (placeholders), statement, servicios numerados, portfolio destacado, stats, proceso, CTA final, blog reciente.
-2. Maquetar **/servicios** (listado) y **/servicios/[slug]** (detalle, 5 servicios estáticos).
-3. Maquetar **/portfolio** (listado) y **/portfolio/[slug]** (detalle).
-4. Maquetar **/blog** (listado) y **/blog/[slug]** (detalle).
-5. Maquetar **/contacto** con formulario (sin integración Resend todavía → Fase 4).
-6. Maquetar páginas legales con placeholders (`[PENDIENTE: razón social]`, etc.).
-7. Validar cada página en 375 / 768 / 1440 antes de pasar a la siguiente.
-8. **Sin animaciones** — solo maquetación. Reveals/marquees animados se añaden en Fase 5.
+1. Crear `web/src/content/config.ts` con schemas Zod para `services`, `projects`, `posts`.
+2. Migrar contenido de `src/data/*` a archivos MDX en `src/content/{services,portfolio,blog}/`.
+3. Reescribir las páginas dinámicas para consumir `getCollection()` en lugar de los `src/data/*`.
+4. Habilitar imágenes optimizadas con `<Image>` desde MDX.
+5. Eliminar `src/data/*.ts` cuando la migración esté completa.
+6. Verificar que el build sigue produciendo las mismas 22 páginas.
 
 ---
 
 ## Notas de sesiones
 
-### 2026-05-05 — Sesión inicial (Fase 0)
-
-Se cerró el alcance, se descartó Directus, se eligió NPM + Resend, se completó Fase 0.
-Generación completa de documentación: `CLAUDE.md` + `docs/`.
+### 2026-05-05 — Fase 0
+Setup base, decisiones cerradas, documentación completa para LLMs.
 
 ### 2026-05-05 — Fase 1
+Sistema de diseño operativo: Fontsource Variable, tokens, escala fluida, 5 componentes UI, Header/Footer, SmoothScroll Lenis, página `/styleguide`.
 
-Sistema de diseño operativo. Se eligió Fontsource Variable (no estática) para las 3 familias por mejor cobertura de pesos sin requests adicionales. Se renombró `/_styleguide` a `/styleguide` porque Astro excluye archivos con prefijo `_` del build; se filtró del sitemap y se marcó `noindex` para mantenerla "oculta" de buscadores sin perder accesibilidad para nosotros.
+### 2026-05-05 — Fase 2
+Maquetación completa de las 22 páginas previstas. Datos en `src/data/*` con tipado TypeScript estricto y placeholders marcados claramente. Layout `LegalLayout` reutilizable para las 3 páginas legales.
 
-Cambio menor: la home pasó de un placeholder centrado a uno alineado a la izquierda con la nueva escala `--text-display`, para que ya empiece a verse el carácter editorial de la web.
+Decisión menor: el formulario de contacto incluye honeypot y campo de privacidad obligatorio ya en Fase 2, aunque el envío real se conecta en Fase 4. La razón: maquetar la UI completa para validar el diseño antes de añadir lógica.
+
+Pequeño bug encontrado y arreglado durante el build: `<` se interpretaba como inicio de Fragment en JSX. Cambiado a "menos de" en `/contacto`.
