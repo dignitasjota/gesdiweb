@@ -50,10 +50,21 @@ docker run --rm -p 8080:80 gesdiweb-web
 
 ## Documentación
 
-- [`docs/docker-explicado.md`](docs/docker-explicado.md) — Docker desde cero aplicado a este proyecto
-- [`docs/decisiones.md`](docs/decisiones.md) — Decisiones técnicas (ADRs)
-- [`docs/runbook.md`](docs/runbook.md) — Runbook de operaciones (despliegue, backups, troubleshooting)
+> **Para LLMs / agentes IA:** empezar por [`CLAUDE.md`](CLAUDE.md) en la raíz. Es el punto de entrada canónico.
+
+| Documento | Para qué sirve |
+|---|---|
+| [`CLAUDE.md`](CLAUDE.md) | Punto de entrada para cualquier LLM. Resumen ejecutivo + reglas + estado |
+| [`docs/briefing.md`](docs/briefing.md) | Briefing original del dueño (alcance, marca, SEO, sistema de diseño) |
+| [`docs/fases.md`](docs/fases.md) | Plan de 9 fases con estado y validaciones |
+| [`docs/estado.md`](docs/estado.md) | Snapshot del estado actual (qué está hecho y qué toca) |
+| [`docs/arquitectura.md`](docs/arquitectura.md) | Arquitectura, identidad visual, modelo de contenido |
+| [`docs/decisiones.md`](docs/decisiones.md) | ADRs (Architecture Decision Records) |
+| [`docs/convenciones.md`](docs/convenciones.md) | Commits, código, accesibilidad, SEO |
+| [`docs/docker-explicado.md`](docs/docker-explicado.md) | Docker desde cero aplicado al proyecto |
+| [`docs/runbook.md`](docs/runbook.md) | Procedimientos operativos |
+| [`docs/seo-migracion.md`](docs/seo-migracion.md) | Plan de migración SEO desde la WordPress antigua |
 
 ## Estado del proyecto
 
-Fase 0 (setup base) — en curso. Ver el briefing del proyecto para el plan de fases completo.
+Fase 0 (setup base) **completada**. Ver [`docs/estado.md`](docs/estado.md) para el snapshot vivo.
