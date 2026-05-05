@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Marker from '../../components/ui/Marker.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Button from '../../components/ui/Button.astro';
+import { posts, getAllPosts, formatDateLong, type Post } from '../../data/posts';
+
+export async function getStaticPaths() {
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const related = getAllPosts()
+  .filter((p) => p.slug !== post.slug)
+  .slice(0, 2);
+---
+
+<BaseLayout
+  title={`${post.title} · Blog · gesdiweb`}
+  description={post.excerpt}
+>
+  <article>
+    <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-16">
+      <Marker label={`blog · ${formatDateLong(post.publishedAt)}`} />
+
+      <h1
+        class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[24ch]"
+        style="font-size: var(--text-2xl);"
+      >
+        {post.title}
+      </h1>
+
+      <p class="mt-8 max-w-2xl text-lg md:text-xl text-[--color-fg-soft] leading-relaxed">
+        {post.excerpt}
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-3">
+        {post.categories.map((cat) => (
+          <Tag label={cat} variant="brand" />
+        ))}
+        <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+          · {post.readingMinutes} min lectura · {post.author}
+        </span>
+      </div>
+    </header>
+
+    <div class="container-fluid pb-12 md:pb-16">
+      <div
+        class="aspect-[16/9] bg-[--color-bg-soft] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-sm uppercase tracking-widest"
+        aria-hidden="true"
+      >
+        [PLACEHOLDER · cover]
+      </div>
+    </div>
+
+    <div class="container-fluid pb-20 md:pb-32">
+      <div class="max-w-2xl mx-auto">
+        <p class="text-base md:text-lg leading-relaxed text-[--color-fg]">
+          {post.body}
+        </p>
+        <p class="mt-12 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+          // [PLACEHOLDER] contenido completo del post pendiente de redacción
+        </p>
+
+        <div class="mt-16 pt-8 border-t border-[--color-border] flex flex-wrap items-center gap-2">
+          <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">tags:</span>
+          {post.tags.map((tag) => (
+            <Tag label={tag} />
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
+      <div class="container-fluid section-spacing">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+          <div>
+            <Marker label="seguir leyendo" />
+            <h2
+              class="mt-4 font-display font-bold tracking-tight leading-tight"
+              style="font-size: var(--text-xl);"
+            >
+              Artículos relacionados
+            </h2>
+          </div>
+          <a
+            href="/blog"
+            class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
+          >
+            ver todos →
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {related.map((p) => (
+            <a href={`/blog/${p.slug}`} class="group flex flex-col gap-4">
+              <div
+                class="aspect-[4/3] bg-[--color-bg] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-xs uppercase tracking-widest group-hover:border-[--color-fg] transition-colors"
+                aria-hidden="true"
+              >
+                [PLACEHOLDER · cover]
+              </div>
+              <h3
+                class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
+                style="font-size: var(--text-lg);"
+              >
+                {p.title}
+              </h3>
+              <p class="text-sm text-[--color-fg-soft] line-clamp-2">{p.excerpt}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="container-fluid section-spacing text-center">
+      <Marker label="¿necesitas ayuda?" class="justify-center w-full" />
+      <h2
+        class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch] mx-auto"
+        style="font-size: var(--text-2xl);"
+      >
+        Si lo que has leído te suena familiar, hablemos.
+      </h2>
+      <div class="mt-10">
+        <Button href="/contacto" variant="primary" size="lg">Reservar llamada</Button>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
