@@ -1,6 +1,5 @@
 ---
 import Marker from '../ui/Marker.astro';
-import Badge from '../ui/Badge.astro';
 import { getOrderedServices } from '../../data/services';
 
 const services = getOrderedServices();
@@ -12,10 +11,12 @@ const services = getOrderedServices();
       <div>
         <Marker label="00.03° servicios" />
         <h2
-          class="mt-4 font-display font-bold tracking-tight leading-[0.95] max-w-[18ch]"
+          class="mt-6 font-display font-bold tracking-[-0.03em] leading-[0.95] max-w-[18ch]"
           style="font-size: var(--text-2xl);"
         >
-          Cinco maneras de hacer crecer tu proyecto.
+          Cinco maneras<br />
+          de hacer<br />
+          <span class="text-[--color-brand]">crecer tu proyecto</span>.
         </h2>
       </div>
       <a
@@ -25,33 +26,41 @@ const services = getOrderedServices();
         ver todos los servicios →
       </a>
     </div>
+  </div>
 
-    <ul class="divide-y divide-[--color-border]">
-      {services.map((service) => (
-        <li>
-          <a
-            href={`/servicios/${service.slug}`}
-            class="group flex flex-col md:flex-row md:items-center gap-4 md:gap-12 py-8 md:py-10 transition-colors"
-          >
-            <Badge number={service.order} class="md:w-16 shrink-0" />
+  <ul class="border-t border-[--color-border]">
+    {services.map((service) => (
+      <li class="border-b border-[--color-border]">
+        <a
+          href={`/servicios/${service.slug}`}
+          class="group block transition-colors duration-300 hover:bg-[--color-brand-soft]"
+        >
+          <div class="container-fluid flex flex-col md:flex-row md:items-center gap-4 md:gap-12 py-10 md:py-14">
+            <span
+              class="font-mono text-[--color-muted] group-hover:text-[--color-brand-hover] transition-colors shrink-0 md:w-16"
+              style="font-size: var(--text-sm);"
+            >
+              /{String(service.order).padStart(2, '0')}
+            </span>
             <h3
-              class="font-display font-bold tracking-tight leading-tight flex-1 group-hover:text-[--color-brand] transition-colors"
-              style="font-size: var(--text-xl);"
+              class="font-display font-bold tracking-[-0.03em] leading-tight flex-1 group-hover:text-[--color-brand-hover] transition-colors"
+              style="font-size: var(--text-2xl);"
             >
               {service.title}
             </h3>
-            <p class="text-[--color-fg-soft] md:max-w-md md:text-right text-sm md:text-base">
+            <p class="text-[--color-fg-soft] md:max-w-md md:text-right group-hover:text-[--color-fg] transition-colors">
               {service.excerpt}
             </p>
             <span
-              class="font-mono text-xs uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand] transition-colors"
+              class="font-mono uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand-hover] group-hover:translate-x-2 transition-all shrink-0"
+              style="font-size: var(--text-xs);"
               aria-hidden="true"
             >
               →
             </span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
 </section>

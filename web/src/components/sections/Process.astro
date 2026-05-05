@@ -1,6 +1,5 @@
 ---
 import Marker from '../ui/Marker.astro';
-import Badge from '../ui/Badge.astro';
 
 const steps = [
   {
@@ -26,34 +25,47 @@ const steps = [
 ];
 ---
 
-<section class="bg-[--color-bg-inverse] text-[--color-fg-inverse]">
+<section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
   <div class="container-fluid section-spacing">
-    <Marker label="00.06° proceso" variant="inverse" />
+    <Marker label="00.06° proceso" />
 
     <h2
-      class="mt-6 font-display font-bold tracking-tight leading-[0.95] max-w-[20ch]"
+      class="mt-6 font-display font-bold tracking-[-0.03em] leading-[0.95] max-w-[18ch]"
       style="font-size: var(--text-2xl);"
     >
-      Cuatro pasos. Cero atajos.
+      Cuatro pasos.<br />
+      <span class="text-[--color-brand]">Cero atajos</span>.
     </h2>
 
-    <ol class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+    <ol class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
       {steps.map((step, i) => (
-        <li class="flex flex-col gap-5">
-          <div class="flex items-center justify-between">
-            <Badge number={i + 1} />
+        <li
+          class="bg-[--color-bg] border border-[--color-border] rounded-2xl p-8 md:p-10 flex flex-col gap-6 transition-colors hover:border-[--color-brand]"
+        >
+          <div class="flex items-baseline justify-between">
             <span
-              class="h-px flex-1 ml-6 bg-white/15"
-              aria-hidden="true"
-            ></span>
+              class="font-display font-bold tracking-[-0.04em] leading-none text-[--color-brand]"
+              style="font-size: var(--text-3xl);"
+            >
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span
+              class="font-mono uppercase tracking-widest text-[--color-muted]"
+              style="font-size: var(--text-xs);"
+            >
+              paso {i + 1} / {steps.length}
+            </span>
           </div>
+
+          <div class="h-px bg-[--color-border]" aria-hidden="true"></div>
+
           <h3
             class="font-display font-bold tracking-tight leading-tight"
             style="font-size: var(--text-xl);"
           >
             {step.title}
           </h3>
-          <p class="text-[--color-muted] leading-relaxed max-w-[45ch]">
+          <p class="text-[--color-fg-soft] leading-relaxed max-w-[45ch]">
             {step.description}
           </p>
         </li>

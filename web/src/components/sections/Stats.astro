@@ -1,19 +1,38 @@
 ---
 import Marker from '../ui/Marker.astro';
-import StatBlock from '../ui/StatBlock.astro';
+
+const stats = [
+  { value: '10', suffix: '+', label: 'años acompañando proyectos' },
+  { value: '120', suffix: '', label: 'webs y apps entregadas' },
+  { value: '98', suffix: '%', label: 'clientes que repiten' },
+  { value: '24', suffix: 'h', label: 'tiempo medio de respuesta' },
+];
 ---
 
-<section class="container-fluid section-spacing">
-  <Marker label="00.05° en cifras" />
+<section class="bg-[--color-bg-inverse] text-[--color-fg-inverse]">
+  <div class="container-fluid section-spacing">
+    <Marker label="00.05° en cifras" variant="inverse" />
 
-  <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-16">
-    <StatBlock value="10" suffix="+" label="años acompañando proyectos" />
-    <StatBlock value="120" label="webs y apps entregadas" />
-    <StatBlock value="98" suffix="%" label="clientes que repiten" />
-    <StatBlock value="100%" label="español, atención humana" />
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-white/10">
+      {stats.map((s, i) => (
+        <div
+          class={`flex flex-col gap-4 p-8 md:p-10 ${
+            i === 0 ? 'md:pl-0 border-l-0' : ''
+          } ${i % 2 === 0 ? 'border-l-0 md:border-l' : ''}`}
+        >
+          <p
+            class="font-display font-bold tracking-[-0.03em] leading-none text-[--color-brand]"
+            style="font-size: var(--text-3xl);"
+          >
+            {s.value}<span class="text-[--color-fg-inverse]">{s.suffix}</span>
+          </p>
+          <p class="text-sm text-[--color-muted] max-w-[20ch] mt-2">{s.label}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-16 max-w-2xl text-sm text-[--color-muted] font-mono uppercase tracking-widest">
+      // [PLACEHOLDER] cifras provisionales · pendientes de confirmación con datos reales
+    </p>
   </div>
-
-  <p class="mt-12 max-w-2xl text-sm text-[--color-muted] font-mono">
-    // [PLACEHOLDER] cifras provisionales · pendientes de confirmación con datos reales
-  </p>
 </section>
