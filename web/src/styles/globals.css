@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta corporativa gesdiweb */
+  --color-bg: #ffffff;
+  --color-bg-soft: #fafafa;
+  --color-fg: #0a0a0a;
+  --color-fg-soft: #525252;
+  --color-border: #e5e5e5;
+
+  --color-brand: #77c2da;          /* azul corporativo */
+  --color-brand-hover: #5fb3cf;
+  --color-muted: #a7a7a7;            /* gris secundario del logo */
+
+  /* Tipografías (se cargan en Fase 2 con Fontsource) */
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Reset suave */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+}
