@@ -1,32 +1,176 @@
 @import "tailwindcss";
 
+/* ───────────────────────────────────────────────────────────
+   Tipografías self-hosted con Fontsource (subset latin)
+   ─────────────────────────────────────────────────────────── */
+@import "@fontsource-variable/bricolage-grotesque/wdth.css";
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
+
+/* ───────────────────────────────────────────────────────────
+   Sistema de diseño · gesdiweb
+   ─────────────────────────────────────────────────────────── */
 @theme {
-  /* Paleta corporativa gesdiweb */
+  /* ── Paleta corporativa ─────────────────────────────── */
   --color-bg: #ffffff;
   --color-bg-soft: #fafafa;
+  --color-bg-inverse: #0a0a0a;
   --color-fg: #0a0a0a;
   --color-fg-soft: #525252;
+  --color-fg-inverse: #ffffff;
   --color-border: #e5e5e5;
+  --color-border-soft: #f0f0f0;
 
-  --color-brand: #77c2da;          /* azul corporativo */
+  --color-brand: #77c2da;
   --color-brand-hover: #5fb3cf;
-  --color-muted: #a7a7a7;            /* gris secundario del logo */
+  --color-brand-soft: #e9f4f8;
+  --color-muted: #a7a7a7;
 
-  /* Tipografías (se cargan en Fase 2 con Fontsource) */
-  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* ── Familias tipográficas ──────────────────────────── */
+  --font-display: "Bricolage Grotesque Variable", system-ui, sans-serif;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  /* ── Escala tipográfica fluida (clamp) ──────────────── */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.85rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-lg: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --text-xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  --text-2xl: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+  --text-3xl: clamp(3.5rem, 2.5rem + 5vw, 6rem);
+  --text-display: clamp(4rem, 3rem + 8vw, 10rem);
+
+  /* ── Espaciados verticales entre secciones ─────────── */
+  --space-section: clamp(6rem, 12vw, 12rem);
+  --space-block: clamp(3rem, 6vw, 6rem);
+  --space-item: clamp(1.5rem, 3vw, 3rem);
+
+  /* ── Container ──────────────────────────────────────── */
+  --container-max: 1440px;
+  --container-padding: clamp(1.5rem, 5vw, 4rem);
+
+  /* ── Radios ─────────────────────────────────────────── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-pill: 9999px;
+
+  /* ── Sombras (mínimas — estilo suizo es plano) ──────── */
+  --shadow-sm: 0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-md: 0 4px 12px rgba(10, 10, 10, 0.06);
+
+  /* ── Transiciones ───────────────────────────────────── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 600ms;
+
+  /* ── Z-index ────────────────────────────────────────── */
+  --z-base: 0;
+  --z-content: 10;
+  --z-header: 50;
+  --z-overlay: 80;
+  --z-modal: 100;
+  --z-cursor: 200;
 }
 
-/* Reset suave */
+/* ───────────────────────────────────────────────────────────
+   Reset y bases
+   ─────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+/* Cuando Lenis está activo, evita conflictos con el scroll nativo */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+html.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+html.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  font-synthesis: none;
+  margin: 0;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings con la familia display por defecto */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* Foco accesible global */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--color-brand);
+  color: var(--color-fg-inverse);
+}
+
+/* Imágenes responsive por defecto */
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ───────────────────────────────────────────────────────────
+   Utilidades semánticas custom
+   ─────────────────────────────────────────────────────────── */
+@utility container-fluid {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+@utility section-spacing {
+  padding-block: var(--space-section);
+}
+
+/* ───────────────────────────────────────────────────────────
+   Accesibilidad: respeto a prefers-reduced-motion
+   ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
