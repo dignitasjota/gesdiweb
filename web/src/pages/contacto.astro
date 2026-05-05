@@ -1,0 +1,229 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Marker from '../components/ui/Marker.astro';
+import Button from '../components/ui/Button.astro';
+import { getOrderedServices } from '../data/services';
+
+const services = getOrderedServices();
+
+const budgets = [
+  { value: '<3k', label: 'Menos de 3.000 €' },
+  { value: '3-10k', label: '3.000 € — 10.000 €' },
+  { value: '10-25k', label: '10.000 € — 25.000 €' },
+  { value: '>25k', label: 'Más de 25.000 €' },
+  { value: 'tbd', label: 'A definir juntos' },
+];
+---
+
+<BaseLayout
+  title="Contacto · gesdiweb"
+  description="Cuéntanos tu proyecto y te respondemos en menos de 24 horas laborables."
+>
+  <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
+    <Marker label="04.contacto" />
+    <h1
+      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[16ch]"
+      style="font-size: var(--text-3xl);"
+    >
+      Cuéntame tu<br />
+      <span class="text-[--color-brand]">proyecto</span>.
+    </h1>
+    <p class="mt-8 max-w-2xl text-lg text-[--color-fg-soft] leading-relaxed">
+      Respondo en menos de 24 horas laborables. Si tu proyecto encaja, agendamos
+      una llamada de 40 minutos sin compromiso.
+    </p>
+  </section>
+
+  <section class="border-t border-[--color-border]">
+    <div class="container-fluid section-spacing grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+      {/* Información de contacto */}
+      <aside class="lg:col-span-4 space-y-12">
+        <div>
+          <Marker label="contacto directo" />
+          <p class="mt-6">
+            <a
+              href="mailto:hola@gesdiweb.es"
+              class="font-display font-bold tracking-tight hover:text-[--color-brand] transition-colors block"
+              style="font-size: var(--text-lg);"
+            >
+              hola@gesdiweb.es
+            </a>
+          </p>
+          <p class="mt-2 text-sm text-[--color-fg-soft]">
+            Para presupuestos y nuevos proyectos.
+          </p>
+        </div>
+
+        <div>
+          <Marker label="ubicación" />
+          <p class="mt-6 text-base text-[--color-fg]">España · Atención remota</p>
+          <p class="mt-2 text-sm text-[--color-fg-soft]">
+            Reuniones presenciales a confirmar según ubicación.
+          </p>
+        </div>
+
+        <div>
+          <Marker label="horario" />
+          <p class="mt-6 text-base text-[--color-fg]">Lunes a viernes · 09:00–18:00 (CET)</p>
+          <p class="mt-2 text-sm text-[--color-fg-soft]">
+            Email se responde en menos de 24 h laborables.
+          </p>
+        </div>
+      </aside>
+
+      {/* Formulario */}
+      <form
+        method="POST"
+        action="/contacto"
+        class="lg:col-span-8 space-y-8"
+        aria-label="Formulario de contacto"
+        data-contact-form
+      >
+        {/* Honeypot anti-spam (oculto a humanos, visible a bots) */}
+        <div class="absolute -left-[9999px] top-auto w-px h-px overflow-hidden" aria-hidden="true">
+          <label>No rellenar
+            <input type="text" name="company_url" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="name" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
+              Nombre *
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              autocomplete="name"
+              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label for="email" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
+              Email *
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="phone" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
+              Teléfono
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label for="company" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
+              Empresa
+            </label>
+            <input
+              id="company"
+              name="company"
+              type="text"
+              autocomplete="organization"
+              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="service" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
+            Servicio que te interesa
+          </label>
+          <select
+            id="service"
+            name="service"
+            class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
+          >
+            <option value="">Selecciona uno</option>
+            {services.map((s) => (
+              <option value={s.slug}>{s.title}</option>
+            ))}
+            <option value="other">Otra cosa / no estoy seguro</option>
+          </select>
+        </div>
+
+        <fieldset>
+          <legend class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-3">
+            Presupuesto orientativo
+          </legend>
+          <div class="flex flex-wrap gap-3">
+            {budgets.map((b) => (
+              <label class="cursor-pointer">
+                <input
+                  type="radio"
+                  name="budget"
+                  value={b.value}
+                  class="peer sr-only"
+                />
+                <span
+                  class="inline-flex items-center px-4 py-2 rounded-full text-sm border border-[--color-border] text-[--color-fg-soft] peer-checked:bg-[--color-fg] peer-checked:text-[--color-fg-inverse] peer-checked:border-[--color-fg] hover:border-[--color-fg] transition-colors"
+                >
+                  {b.label}
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <div>
+          <label for="message" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
+            Cuéntanos *
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="6"
+            required
+            class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors resize-y"
+            placeholder="Brevemente: qué necesitas, plazos, lo que sea relevante."
+          ></textarea>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="privacy"
+            name="privacy"
+            required
+            class="mt-1.5 accent-[--color-brand]"
+          />
+          <label for="privacy" class="text-sm text-[--color-fg-soft] leading-relaxed">
+            He leído y acepto la
+            <a href="/politica-privacidad" class="underline hover:text-[--color-fg]">
+              política de privacidad
+            </a>
+            y autorizo el tratamiento de mis datos para responder a esta consulta. *
+          </label>
+        </div>
+
+        <div class="pt-4 flex flex-col sm:flex-row sm:items-center gap-4">
+          <Button type="submit" variant="primary" size="lg">Enviar mensaje</Button>
+          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+            // respuesta en menos de 24h laborables
+          </p>
+        </div>
+
+        <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] pt-4">
+          // [PLACEHOLDER] envío real vía Resend en Fase 4
+        </p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
