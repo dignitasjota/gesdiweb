@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Marker from '../components/ui/Marker.astro';
+import { webPageSchema, breadcrumbSchema, SITE } from '../lib/seo';
 
 interface Props {
   title: string;
@@ -10,9 +11,22 @@ interface Props {
 }
 
 const { title, description, marker, lastUpdate = '2026-05-05' } = Astro.props;
+const fullUrl = new URL(Astro.url.pathname, SITE.url).toString();
+
+const jsonLd = [
+  webPageSchema({
+    url: fullUrl,
+    name: `${title} · gesdiweb`,
+    description,
+  }),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: title, url: fullUrl },
+  ]),
+];
 ---
 
-<BaseLayout title={`${title} · gesdiweb`} description={description}>
+<BaseLayout title={`${title} · gesdiweb`} description={description} jsonLd={jsonLd}>
   <article class="container-fluid pt-12 md:pt-20 pb-20 md:pb-32">
     <Marker label={marker} />
 
