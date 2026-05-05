@@ -7,29 +7,37 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Instalar dependencias (capa cacheable)
+# Dependencias (capa cacheable)
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copiar el código y construir
+# Código y build (genera dist/client + dist/server)
 COPY . .
 RUN npm run build
 
 # ───────────────────────────────────────────────────────────────
-# Etapa 2 — Runtime con nginx ultraligero
+# Etapa 2 — Runtime: solo dependencias de producción + dist
 # ───────────────────────────────────────────────────────────────
-FROM nginx:1.27-alpine
+FROM node:22-alpine AS runtime
 
-# Configuración nginx custom (gzip, headers de cache, etc.)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-# Copiar el sitio estático generado
-COPY --from=builder /app/dist /usr/share/nginx/html
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=4321
 
-# Healthcheck básico
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget -qO- http://localhost/ || exit 1
+# Solo dependencias de producción
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 
-EXPOSE 80
+# Copiar el output de build (cliente estático + server entrypoint)
+COPY --from=builder /app/dist ./dist
 
-CMD ["nginx", "-g", "daemon off;"]
+# Healthcheck contra el server de Astro
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget -qO- http://localhost:4321/ > /dev/null || exit 1
+
+EXPOSE 4321
+
+# Servidor Astro Node standalone. Sirve estáticos + API.
+CMD ["node", "./dist/server/entry.mjs"]

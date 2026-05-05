@@ -1,15 +1,15 @@
 # Stack de producción para gesdiweb (Hetzner)
-# Astro estático servido por nginx, expuesto a través de Nginx Proxy Manager.
 #
-# Requisito previo en el host:
-#   - Nginx Proxy Manager funcionando con su red Docker.
-#   - Esa red debe llamarse `npm_default` o ajustar el nombre abajo.
+# Astro corre como servidor Node standalone en el puerto 4321 (interno).
+# Nginx Proxy Manager lo expone con SSL en gesdiweb.es / www.gesdiweb.es.
 #
-# Despliegue local (test de la imagen de producción):
-#   docker compose -f docker-compose.yml build
-#   docker compose -f docker-compose.yml up -d
+# Variables de entorno (definir en .env del host o en Portainer):
+#   RESEND_API_KEY              clave de Resend
+#   RESEND_FROM_EMAIL           default hola@gesdiweb.es
+#   LEAD_NOTIFICATION_EMAIL     dónde llegan los leads
 #
-# En producción usaremos imágenes precompiladas en GHCR (Fase 8).
+# Despliegue local (test del contenedor de producción):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 services:
   web:
@@ -19,15 +19,21 @@ services:
     image: ghcr.io/dignitasjota/gesdiweb-web:latest
     container_name: gesdiweb_web
     restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 4321
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-hola@gesdiweb.es}
+      LEAD_NOTIFICATION_EMAIL: ${LEAD_NOTIFICATION_EMAIL:-hola@gesdiweb.es}
     networks:
       - proxy
     labels:
       - "com.gesdiweb.service=web"
-      - "com.gesdiweb.role=frontend"
+      - "com.gesdiweb.role=frontend-and-api"
 
 networks:
   proxy:
     # En el VPS Hetzner esta red la creará Nginx Proxy Manager.
-    # Ajustar el nombre `external_name` según el nombre real de la red de NPM.
     external: true
     name: npm_default

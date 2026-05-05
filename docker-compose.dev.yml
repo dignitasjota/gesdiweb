@@ -1,18 +1,16 @@
-# Override de desarrollo local.
-# Para Fase 0 NO se usa: el dev habitual es `cd web && npm run dev`.
-# Este archivo queda preparado para fases que requieran simular el contenedor.
+# Override para probar el contenedor de producción en local.
+# Para desarrollo iterativo se usa `cd web && npm run dev` (más rápido).
 #
-# Uso (cuando aplique):
-#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Uso:
+#   RESEND_API_KEY=... docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 #
-# Diferencias respecto a producción:
-#   - Expone el puerto 8080 al host para acceder en local sin NPM.
-#   - No se requiere la red externa de NPM.
+# El servidor Astro Node corre en el puerto 4321 del contenedor;
+# se expone como 8090 en el host para no chocar con el dev server.
 
 services:
   web:
     ports:
-      - "8080:80"
+      - "8090:4321"
     networks:
       - default
     restart: "no"
@@ -20,8 +18,8 @@ services:
 networks:
   default:
     driver: bridge
-  # Sobrescribimos la red proxy del compose principal para que en dev no exija
-  # la red externa de Nginx Proxy Manager.
+  # Sobrescribimos la red proxy del compose principal para no exigir
+  # la red externa de NPM en local.
   proxy:
     external: false
     name: gesdiweb_dev_proxy
