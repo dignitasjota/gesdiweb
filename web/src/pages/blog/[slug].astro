@@ -53,7 +53,7 @@ const related = getAllPosts()
 
     <div class="container-fluid pb-12 md:pb-16">
       <div
-        class="aspect-[16/9] bg-[--color-bg-soft] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-sm uppercase tracking-widest"
+        class="aspect-[16/9] bg-[--color-brand-soft] rounded-2xl border-2 border-[--color-brand] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest"
         aria-hidden="true"
       >
         [PLACEHOLDER · cover]
@@ -102,7 +102,7 @@ const related = getAllPosts()
           {related.map((p) => (
             <a href={`/blog/${p.slug}`} class="group flex flex-col gap-4">
               <div
-                class="aspect-[4/3] bg-[--color-bg] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-xs uppercase tracking-widest group-hover:border-[--color-fg] transition-colors"
+                class="aspect-[4/3] bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
                 aria-hidden="true"
               >
                 [PLACEHOLDER · cover]

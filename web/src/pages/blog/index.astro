@@ -35,7 +35,7 @@ const [featuredPost, ...rest] = allPosts;
       >
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
           <div
-            class="md:col-span-7 aspect-[16/9] bg-[--color-bg-soft] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-sm uppercase tracking-widest group-hover:border-[--color-fg] transition-colors"
+            class="md:col-span-7 aspect-[16/9] bg-[--color-brand] rounded-2xl flex items-center justify-center text-[--color-fg-inverse] font-mono uppercase tracking-widest border-4 border-[--color-brand-hover] group-hover:scale-[1.01] transition-transform"
             aria-hidden="true"
           >
             [PLACEHOLDER · cover destacado]
@@ -76,7 +76,7 @@ const [featuredPost, ...rest] = allPosts;
           {rest.map((post) => (
             <a href={`/blog/${post.slug}`} class="group flex flex-col gap-5">
               <div
-                class="aspect-[4/3] bg-[--color-bg-soft] border border-[--color-border] rounded-lg flex items-center justify-center text-[--color-muted] font-mono text-xs uppercase tracking-widest group-hover:border-[--color-fg] transition-colors"
+                class="aspect-[4/3] bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
                 aria-hidden="true"
               >
                 [PLACEHOLDER · cover]
