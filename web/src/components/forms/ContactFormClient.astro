@@ -1,0 +1,116 @@
+---
+/**
+ * Script cliente del formulario de contacto.
+ * Se incluye una vez en /contacto (junto al formulario data-contact-form).
+ * Hace fetch al endpoint /api/contact, muestra estados accesibles
+ * (cargando, éxito, error) y deshabilita el botón mientras se envía.
+ */
+---
+
+<script>
+  type ApiResponse =
+    | { ok: true; accepted: true; devMode?: boolean }
+    | {
+        ok: false;
+        error:
+          | 'invalid_body'
+          | 'validation_failed'
+          | 'rate_limited'
+          | 'email_provider_error'
+          | 'internal_error';
+        issues?: { path: string; message: string }[];
+        retryAfterSeconds?: number;
+      };
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    const setState = (
+      kind: 'idle' | 'loading' | 'success' | 'error',
+      text?: string,
+    ) => {
+      if (!status) return;
+      status.dataset.state = kind;
+      status.textContent = text ?? '';
+    };
+
+    const clearFieldErrors = () => {
+      form.querySelectorAll('[data-field-error]').forEach((el) => el.remove());
+      form.querySelectorAll('[aria-invalid="true"]').forEach((el) =>
+        el.removeAttribute('aria-invalid'),
+      );
+    };
+
+    const showFieldError = (path: string, message: string) => {
+      const field = form.querySelector<HTMLElement>(`[name="${path}"]`);
+      if (!field) return;
+      field.setAttribute('aria-invalid', 'true');
+      const errorEl = document.createElement('p');
+      errorEl.dataset.fieldError = path;
+      errorEl.className =
+        'mt-1 text-xs text-red-600 font-mono uppercase tracking-widest';
+      errorEl.textContent = message;
+      field.parentElement?.appendChild(errorEl);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearFieldErrors();
+      setState('loading', 'Enviando…');
+      if (submitBtn) submitBtn.disabled = true;
+
+      const formData = new FormData(form);
+      // Convertir checkbox 'privacy' a true/false explícito
+      if (!formData.has('privacy')) formData.set('privacy', 'false');
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { accept: 'application/json' },
+          body: formData,
+        });
+        const json = (await res.json()) as ApiResponse;
+
+        if (json.ok) {
+          form.reset();
+          setState(
+            'success',
+            '¡Recibido! Te respondo en menos de 24 h laborables.',
+          );
+        } else {
+          if (json.error === 'validation_failed' && json.issues) {
+            json.issues.forEach((i) => showFieldError(i.path, i.message));
+            setState(
+              'error',
+              'Hay algún campo por revisar. Mira los marcados en rojo.',
+            );
+          } else if (json.error === 'rate_limited') {
+            setState(
+              'error',
+              `Has enviado varios mensajes seguidos. Inténtalo de nuevo en ${
+                json.retryAfterSeconds
+                  ? Math.ceil(json.retryAfterSeconds / 60)
+                  : 10
+              } minutos.`,
+            );
+          } else {
+            setState(
+              'error',
+              'No pude enviar el mensaje. Prueba en unos minutos o escríbeme a hola@gesdiweb.es',
+            );
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        setState(
+          'error',
+          'No pude enviar el mensaje. Prueba en unos minutos o escríbeme a hola@gesdiweb.es',
+        );
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  }
+</script>
