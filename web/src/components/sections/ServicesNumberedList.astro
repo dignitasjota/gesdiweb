@@ -1,6 +1,7 @@
 ---
 import Marker from '../ui/Marker.astro';
 import Icon from '../ui/Icon.astro';
+import Reveal from '../animations/Reveal.astro';
 import type { IconName } from '../ui/icon-names';
 import { getOrderedServices } from '../../lib/collections';
 
@@ -17,7 +18,7 @@ const icons: Record<string, IconName> = {
 
 <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
   <div class="container-fluid section-spacing">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
+    <Reveal class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
       <div>
         <Marker label="00.03° servicios" />
         <h2
@@ -34,9 +35,9 @@ const icons: Record<string, IconName> = {
         ver todos los servicios
         <Icon name="arrow-up-right" size={14} />
       </a>
-    </div>
+    </Reveal>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+    <Reveal class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" stagger>
       {services.map((service) => (
         <a
           href={`/servicios/${service.id}`}
@@ -84,6 +85,6 @@ const icons: Record<string, IconName> = {
           </div>
         </a>
       ))}
-    </div>
+    </Reveal>
   </div>
 </section>

@@ -1,19 +1,21 @@
 ---
 import Marker from '../ui/Marker.astro';
 import Button from '../ui/Button.astro';
+import Reveal from '../animations/Reveal.astro';
 ---
 
 <section class="container-fluid pt-10 md:pt-16 pb-20 md:pb-32 relative overflow-hidden">
-  {/* Asterisco decorativo de fondo */}
+  {/* Asterisco decorativo de fondo con parallax sutil */}
   <div
     class="hidden md:block absolute right-[-2vw] top-[8vw] text-[--color-brand-soft] select-none pointer-events-none leading-none font-display"
     style="font-size: clamp(18rem, 32vw, 48rem); transform: rotate(15deg);"
     aria-hidden="true"
+    data-parallax="0.25"
   >
     ✳
   </div>
 
-  <div class="relative">
+  <Reveal class="relative">
     <Marker label="00.01° estudio · 2026" />
 
     <h1
@@ -89,5 +91,5 @@ import Button from '../ui/Button.astro';
         </div>
       </div>
     </div>
-  </div>
+  </Reveal>
 </section>

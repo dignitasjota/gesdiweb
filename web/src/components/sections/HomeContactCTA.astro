@@ -2,10 +2,11 @@
 import Marker from '../ui/Marker.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
+import Reveal from '../animations/Reveal.astro';
 ---
 
 <section class="container-fluid section-spacing">
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+  <Reveal class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
     <div class="md:col-span-7">
       <Marker label="00.07° contacto directo" />
       <h2
@@ -81,5 +82,5 @@ import Icon from '../ui/Icon.astro';
         // único contacto durante todo el proyecto
       </p>
     </div>
-  </div>
+  </Reveal>
 </section>

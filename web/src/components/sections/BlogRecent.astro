@@ -2,6 +2,7 @@
 import Marker from '../ui/Marker.astro';
 import Tag from '../ui/Tag.astro';
 import Icon from '../ui/Icon.astro';
+import Reveal from '../animations/Reveal.astro';
 import { getRecentPosts, formatDateLong, isoDate } from '../../lib/collections';
 
 const posts = await getRecentPosts(3);
@@ -28,7 +29,7 @@ const posts = await getRecentPosts(3);
       </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+    <Reveal class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8" stagger>
       {posts.map((post, i) => (
         <a
           href={`/blog/${post.id}`}
@@ -75,6 +76,6 @@ const posts = await getRecentPosts(3);
           </p>
         </a>
       ))}
-    </div>
+    </Reveal>
   </div>
 </section>

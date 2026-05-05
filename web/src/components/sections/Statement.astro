@@ -1,5 +1,6 @@
 ---
 import Marker from '../ui/Marker.astro';
+import Reveal from '../animations/Reveal.astro';
 
 const verbs = [
   { word: 'Escuchamos', detail: 'Antes de proponer una sola línea.' },
@@ -11,17 +12,19 @@ const verbs = [
 
 <section class="section-spacing">
   <div class="container-fluid">
-    <Marker label="00.02° método" />
+    <Reveal>
+      <Marker label="00.02° método" />
 
-    <h2
-      class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[20ch]"
-      style="font-size: var(--text-2xl);"
-    >
-      Cuatro verbos.<br />
-      <span class="text-[--color-brand]">Sin medias tintas</span>.
-    </h2>
+      <h2
+        class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[20ch]"
+        style="font-size: var(--text-2xl);"
+      >
+        Cuatro verbos.<br />
+        <span class="text-[--color-brand]">Sin medias tintas</span>.
+      </h2>
+    </Reveal>
 
-    <div class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+    <Reveal class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" stagger>
       {verbs.map((v, i) => (
         <div
           class={`rounded-2xl p-7 md:p-9 flex flex-col gap-3 transition-colors ${
@@ -52,6 +55,6 @@ const verbs = [
           </p>
         </div>
       ))}
-    </div>
+    </Reveal>
   </div>
 </section>

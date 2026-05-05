@@ -1,13 +1,14 @@
 ---
 import Marker from '../ui/Marker.astro';
 import Tag from '../ui/Tag.astro';
+import Reveal from '../animations/Reveal.astro';
 import { getFeaturedProjects } from '../../lib/collections';
 
 const featured = await getFeaturedProjects();
 ---
 
 <section class="container-fluid section-spacing">
-  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+  <Reveal class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
     <div>
       <Marker label="00.04° trabajo reciente" />
       <h2
@@ -23,9 +24,9 @@ const featured = await getFeaturedProjects();
     >
       ver portfolio completo →
     </a>
-  </div>
+  </Reveal>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+  <Reveal class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12" stagger>
     {featured.map((project, i) => (
       <a
         href={`/portfolio/${project.id}`}
@@ -79,5 +80,5 @@ const featured = await getFeaturedProjects();
         </div>
       </a>
     ))}
-  </div>
+  </Reveal>
 </section>

@@ -1,6 +1,7 @@
 ---
 import Marker from '../ui/Marker.astro';
 import Icon from '../ui/Icon.astro';
+import Reveal from '../animations/Reveal.astro';
 import type { IconName } from '../ui/icon-names';
 
 interface Step {
@@ -66,7 +67,7 @@ const iconBgStyles: Record<string, string> = {
       <span class="text-[--color-brand]">Cero atajos</span>.
     </h2>
 
-    <ol class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+    <Reveal as="ol" class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6" stagger>
       {steps.map((step, i) => (
         <li
           class={`rounded-2xl p-7 md:p-10 flex flex-col gap-5 ${accentStyles[step.accent]}`}
@@ -111,6 +112,6 @@ const iconBgStyles: Record<string, string> = {
           </p>
         </li>
       ))}
-    </ol>
+    </Reveal>
   </div>
 </section>
