@@ -11,28 +11,41 @@ const stats = [
 
 <section class="bg-[--color-bg-inverse] text-[--color-fg-inverse]">
   <div class="container-fluid section-spacing">
-    <Marker label="00.05° en cifras" variant="inverse" />
-
-    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-white/10">
-      {stats.map((s, i) => (
-        <div
-          class={`flex flex-col gap-4 p-8 md:p-10 ${
-            i === 0 ? 'md:pl-0 border-l-0' : ''
-          } ${i % 2 === 0 ? 'border-l-0 md:border-l' : ''}`}
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
+      <div>
+        <Marker label="00.05° en cifras" variant="inverse" />
+        <h2
+          class="mt-5 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[20ch]"
+          style="font-size: var(--text-2xl);"
         >
+          Diez años. <span class="text-[--color-brand]">Cero humo</span>.
+        </h2>
+      </div>
+      <p
+        class="font-mono uppercase tracking-widest text-white/50"
+        style="font-size: var(--text-xs);"
+      >
+        // [PLACEHOLDER] cifras provisionales
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 rounded-2xl overflow-hidden">
+      {stats.map((s) => (
+        <div class="bg-[--color-bg-inverse] p-7 md:p-10 flex flex-col gap-3">
           <p
             class="font-display font-bold tracking-[-0.03em] leading-none text-[--color-brand]"
             style="font-size: var(--text-3xl);"
           >
             {s.value}<span class="text-[--color-fg-inverse]">{s.suffix}</span>
           </p>
-          <p class="text-sm text-[--color-muted] max-w-[20ch] mt-2">{s.label}</p>
+          <p
+            class="text-white/70 max-w-[20ch] mt-2"
+            style="font-size: var(--text-sm);"
+          >
+            {s.label}
+          </p>
         </div>
       ))}
     </div>
-
-    <p class="mt-16 max-w-2xl text-sm text-[--color-muted] font-mono uppercase tracking-widest">
-      // [PLACEHOLDER] cifras provisionales · pendientes de confirmación con datos reales
-    </p>
   </div>
 </section>

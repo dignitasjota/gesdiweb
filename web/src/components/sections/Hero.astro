@@ -3,11 +3,11 @@ import Marker from '../ui/Marker.astro';
 import Button from '../ui/Button.astro';
 ---
 
-<section class="container-fluid pt-12 md:pt-20 pb-24 md:pb-40 relative overflow-hidden">
-  {/* Asterisco decorativo gigante (sólo desktop) */}
+<section class="container-fluid pt-10 md:pt-16 pb-20 md:pb-32 relative overflow-hidden">
+  {/* Asterisco decorativo de fondo */}
   <div
-    class="hidden md:block absolute right-[-3vw] top-[2vw] text-[--color-brand] select-none pointer-events-none leading-none font-display"
-    style="font-size: clamp(20rem, 36vw, 60rem); transform: rotate(12deg);"
+    class="hidden md:block absolute right-[-2vw] top-[8vw] text-[--color-brand-soft] select-none pointer-events-none leading-none font-display"
+    style="font-size: clamp(18rem, 32vw, 48rem); transform: rotate(15deg);"
     aria-hidden="true"
   >
     ✳
@@ -17,20 +17,23 @@ import Button from '../ui/Button.astro';
     <Marker label="00.01° estudio · 2026" />
 
     <h1
-      class="mt-10 font-display font-bold tracking-[-0.03em] leading-[0.88] max-w-[16ch]"
+      class="mt-8 font-display font-bold tracking-[-0.03em] leading-[0.92] max-w-[18ch]"
       style="font-size: var(--text-display);"
     >
       Diseño web<br />
       que <span class="text-[--color-brand]">posiciona</span>.
     </h1>
 
-    <div class="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+    <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
       <div class="lg:col-span-5">
-        <p class="text-[--color-fg-soft] leading-relaxed" style="font-size: var(--text-lg);">
+        <p
+          class="text-[--color-fg-soft] leading-relaxed"
+          style="font-size: var(--text-lg);"
+        >
           Webs rápidas, accesibles y pensadas para crecer. Diseño y SEO técnico
           trabajando juntos desde el primer wireframe hasta el quinto año.
         </p>
-        <div class="mt-10 flex flex-wrap items-center gap-4">
+        <div class="mt-8 flex flex-wrap items-center gap-3">
           <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
           <Button href="/portfolio" variant="ghost" size="lg">Ver portfolio</Button>
         </div>
@@ -39,39 +42,46 @@ import Button from '../ui/Button.astro';
         </p>
       </div>
 
-      {/* Bloque vídeo / imagen hero placeholder */}
+      {/* Bloque vídeo placeholder */}
       <div class="lg:col-span-7 lg:col-start-6">
         <div
-          class="aspect-[16/10] bg-[--color-brand] rounded-2xl relative overflow-hidden border-4 border-[--color-brand-hover]"
+          class="aspect-[16/10] bg-[--color-brand] rounded-2xl relative overflow-hidden border-4 border-[--color-brand-hover] shadow-xl"
         >
+          {/* Patrón decorativo de fondo */}
           <div
-            class="absolute inset-0 flex items-center justify-center text-[--color-fg-inverse] font-mono uppercase tracking-widest"
-            style="font-size: var(--text-sm);"
-          >
-            <div class="text-center">
+            class="absolute inset-0 opacity-20"
+            style="background-image: radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 70%, white 1px, transparent 1px); background-size: 60px 60px;"
+            aria-hidden="true"
+          ></div>
+
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center text-[--color-fg-inverse]">
               <div
-                class="w-20 h-20 rounded-full bg-[--color-fg-inverse]/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 border border-[--color-fg-inverse]/30"
+                class="w-20 h-20 rounded-full bg-[--color-fg-inverse]/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-5 border border-[--color-fg-inverse]/30"
                 aria-hidden="true"
               >
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
-              <p>// [PLACEHOLDER · vídeo hero]</p>
+              <p
+                class="font-mono uppercase tracking-widest"
+                style="font-size: var(--text-xs);"
+              >
+                // [PLACEHOLDER · vídeo hero]
+              </p>
             </div>
           </div>
 
-          {/* Etiqueta superior izquierda */}
           <div
-            class="absolute top-6 left-6 font-mono text-[--color-fg-inverse] uppercase tracking-widest"
+            class="absolute top-5 left-5 font-mono text-[--color-fg-inverse] uppercase tracking-widest"
             style="font-size: var(--text-xs);"
           >
             // showreel 2026
           </div>
 
-          {/* Etiqueta inferior derecha */}
           <div
-            class="absolute bottom-6 right-6 font-mono text-[--color-fg-inverse] uppercase tracking-widest"
+            class="absolute bottom-5 right-5 font-mono text-[--color-fg-inverse] uppercase tracking-widest"
             style="font-size: var(--text-xs);"
           >
             00:42

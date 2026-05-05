@@ -2,54 +2,56 @@
 import Marker from '../ui/Marker.astro';
 
 const verbs = [
-  { word: 'escuchamos', accent: false },
-  { word: 'diseñamos', accent: false },
-  { word: 'posicionamos', accent: false },
-  { word: 'acompañamos.', accent: true },
+  { word: 'Escuchamos', detail: 'Antes de proponer una sola línea.' },
+  { word: 'Diseñamos', detail: 'Pensando en quién lo va a usar.' },
+  { word: 'Posicionamos', detail: 'SEO técnico desde el día 1.' },
+  { word: 'Acompañamos', detail: 'Durante años, no solo al lanzar.' },
 ];
 ---
 
-<section class="section-spacing relative overflow-hidden">
+<section class="section-spacing">
   <div class="container-fluid">
     <Marker label="00.02° método" />
-  </div>
 
-  <div class="mt-12 md:mt-20">
-    {verbs.map((v, i) => (
-      <div
-        class={`border-t border-[--color-border] ${
-          i === verbs.length - 1 ? 'border-b' : ''
-        } ${v.accent ? 'bg-[--color-brand-soft]' : ''}`}
-      >
-        <div class="container-fluid py-6 md:py-10 flex items-baseline gap-6 md:gap-12">
+    <h2
+      class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[20ch]"
+      style="font-size: var(--text-2xl);"
+    >
+      Cuatro verbos.<br />
+      <span class="text-[--color-brand]">Sin medias tintas</span>.
+    </h2>
+
+    <div class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+      {verbs.map((v, i) => (
+        <div
+          class={`rounded-2xl p-7 md:p-9 flex flex-col gap-3 transition-colors ${
+            i % 2 === 0
+              ? 'bg-[--color-brand] text-[--color-fg-inverse]'
+              : 'bg-[--color-bg-soft] border border-[--color-border]'
+          }`}
+        >
           <span
-            class="font-mono text-[--color-muted] shrink-0"
+            class={`font-mono uppercase tracking-widest ${
+              i % 2 === 0 ? 'text-white/70' : 'text-[--color-muted]'
+            }`}
             style="font-size: var(--text-xs);"
-            aria-hidden="true"
           >
             /{String(i + 1).padStart(2, '0')}
           </span>
           <p
-            class={`font-display font-bold tracking-[-0.03em] leading-[0.95] ${
-              v.accent ? 'text-[--color-brand-hover]' : 'text-[--color-fg]'
-            }`}
-            style="font-size: var(--text-3xl);"
+            class="font-display font-bold tracking-[-0.025em] leading-[1]"
+            style="font-size: var(--text-2xl);"
           >
-            / {v.word}
+            {v.word}.
+          </p>
+          <p
+            class={`mt-1 ${i % 2 === 0 ? 'text-white/85' : 'text-[--color-fg-soft]'}`}
+            style="font-size: var(--text-base);"
+          >
+            {v.detail}
           </p>
         </div>
-      </div>
-    ))}
-  </div>
-
-  <div class="container-fluid mt-16">
-    <p
-      class="max-w-3xl text-[--color-fg-soft] leading-relaxed"
-      style="font-size: var(--text-lg);"
-    >
-      Un proceso ordenado, sin humo y con métricas reales. Trabajamos contigo durante
-      todo el ciclo de vida del proyecto: desde la primera reunión hasta el quinto
-      año de mantenimiento.
-    </p>
+      ))}
+    </div>
   </div>
 </section>
