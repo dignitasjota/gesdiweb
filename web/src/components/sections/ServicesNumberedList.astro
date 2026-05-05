@@ -1,17 +1,18 @@
 ---
 import Marker from '../ui/Marker.astro';
+import Icon from '../ui/Icon.astro';
+import type { IconName } from '../ui/icon-names';
 import { getOrderedServices } from '../../data/services';
 
 const services = getOrderedServices();
 const [primary, ...rest] = services;
 
-// Iconos sintéticos por slug (placeholder hasta tener SVG reales)
-const icons: Record<string, string> = {
-  'posicionamiento-web': '◐',
-  'apps-moviles': '▣',
-  'hosting-web': '◇',
-  'marketing-online': '✦',
-  'mantenimiento-informatico': '◈',
+const icons: Record<string, IconName> = {
+  'posicionamiento-web': 'seo',
+  'apps-moviles': 'mobile',
+  'hosting-web': 'server',
+  'marketing-online': 'megaphone',
+  'mantenimiento-informatico': 'wrench',
 };
 ---
 
@@ -29,20 +30,35 @@ const icons: Record<string, string> = {
       </div>
       <a
         href="/servicios"
-        class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
+        class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto inline-flex items-center gap-2"
       >
-        ver todos los servicios →
+        ver todos los servicios
+        <Icon name="arrow-up-right" size={14} />
       </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-      {/* Card destacada · ocupa toda la fila */}
+      {/* Card destacada */}
       <a
         href={`/servicios/${primary.slug}`}
-        class="group md:col-span-2 bg-[--color-brand] text-[--color-fg-inverse] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row md:items-end gap-8 md:gap-16 transition-transform hover:-translate-y-1"
+        class="group md:col-span-2 bg-[--color-brand] text-[--color-fg-inverse] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row md:items-end gap-8 md:gap-16 transition-transform hover:-translate-y-1 relative overflow-hidden"
       >
-        <div class="flex-1">
-          <div class="flex items-center gap-4 mb-6">
+        {/* Icono decorativo gigante de fondo */}
+        <div
+          class="absolute -right-8 -bottom-8 text-white/10 pointer-events-none"
+          aria-hidden="true"
+        >
+          <Icon name={icons[primary.slug]} size={280} strokeWidth={1} />
+        </div>
+
+        <div class="flex-1 relative">
+          <div class="flex items-center gap-3 mb-6">
+            <span
+              class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/15 border border-white/20"
+              aria-hidden="true"
+            >
+              <Icon name={icons[primary.slug]} size={18} />
+            </span>
             <span
               class="font-mono uppercase tracking-widest text-white/70"
               style="font-size: var(--text-xs);"
@@ -63,27 +79,17 @@ const icons: Record<string, string> = {
             {primary.headline} {primary.excerpt}
           </p>
         </div>
-        <div class="flex items-center justify-between md:justify-end gap-8 md:gap-12">
-          <span
-            class="font-display font-bold leading-none select-none"
-            style="font-size: clamp(4rem, 10vw, 8rem); color: rgba(255,255,255,0.25);"
-            aria-hidden="true"
-          >
-            {icons[primary.slug]}
-          </span>
+        <div class="flex items-center justify-end gap-6 relative">
           <span
             class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[--color-fg-inverse] text-[--color-brand] group-hover:scale-110 transition-transform shrink-0"
             aria-hidden="true"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="7" y1="17" x2="17" y2="7" />
-              <polyline points="7 7 17 7 17 17" />
-            </svg>
+            <Icon name="arrow-up-right" size={20} strokeWidth={2.5} />
           </span>
         </div>
       </a>
 
-      {/* 4 cards restantes en 2x2 */}
+      {/* 4 cards en 2x2 */}
       {rest.map((service) => (
         <a
           href={`/servicios/${service.slug}`}
@@ -91,17 +97,16 @@ const icons: Record<string, string> = {
         >
           <div class="flex items-start justify-between gap-4">
             <span
+              class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[--color-brand-soft] text-[--color-brand-hover] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse] transition-colors"
+              aria-hidden="true"
+            >
+              <Icon name={icons[service.slug]} size={22} />
+            </span>
+            <span
               class="font-mono uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand-hover] transition-colors"
               style="font-size: var(--text-xs);"
             >
               /{String(service.order).padStart(2, '0')}
-            </span>
-            <span
-              class="font-display font-bold leading-none text-[--color-brand] select-none"
-              style="font-size: clamp(2.5rem, 5vw, 4rem);"
-              aria-hidden="true"
-            >
-              {icons[service.slug]}
             </span>
           </div>
 
@@ -127,10 +132,7 @@ const icons: Record<string, string> = {
               class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[--color-bg-soft] text-[--color-fg] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse] transition-colors"
               aria-hidden="true"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
+              <Icon name="arrow-up-right" size={14} strokeWidth={2.5} />
             </span>
           </div>
         </a>

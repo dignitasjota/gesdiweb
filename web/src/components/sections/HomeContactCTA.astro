@@ -1,6 +1,7 @@
 ---
 import Marker from '../ui/Marker.astro';
 import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
 ---
 
 <section class="container-fluid section-spacing">
@@ -14,38 +15,67 @@ import Button from '../ui/Button.astro';
         Cuéntame tu <span class="text-[--color-brand]">proyecto</span>.
       </h2>
       <p
-        class="mt-10 text-[--color-fg-soft] leading-relaxed max-w-xl"
+        class="mt-8 text-[--color-fg-soft] leading-relaxed max-w-xl"
         style="font-size: var(--text-lg);"
       >
         Cuarenta minutos por videollamada. Te diré con honestidad si puedo
         ayudarte y, si no, a quién acudir. Sin compromiso ninguno.
       </p>
-      <div class="mt-10 flex flex-wrap gap-4">
+      <div class="mt-8 flex flex-wrap gap-3">
         <Button href="/contacto" variant="primary" size="lg">Reservar llamada</Button>
         <Button href="mailto:hola@gesdiweb.es" variant="ghost" size="lg">
           hola@gesdiweb.es
         </Button>
       </div>
+
+      <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-[--color-fg-soft]" style="font-size: var(--text-sm);">
+        <span class="inline-flex items-center gap-2">
+          <Icon name="clock" size={14} class="text-[--color-brand]" />
+          Respuesta en 24h
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <Icon name="check" size={14} class="text-[--color-brand]" />
+          Sin compromiso
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <Icon name="phone" size={14} class="text-[--color-brand]" />
+          Videollamada
+        </span>
+      </div>
     </div>
 
     <div class="md:col-span-5">
       <div
-        class="aspect-square w-full max-w-md bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest border-2 border-[--color-brand] relative overflow-hidden"
+        class="aspect-square w-full max-w-md bg-[--color-brand] rounded-2xl flex items-center justify-center font-mono uppercase tracking-widest border-4 border-[--color-brand-hover] relative overflow-hidden text-[--color-fg-inverse]"
         aria-hidden="true"
       >
+        {/* Patrón decorativo */}
+        <div
+          class="absolute inset-0 opacity-15"
+          style="background-image: radial-gradient(circle at 20% 30%, white 1.5px, transparent 1.5px), radial-gradient(circle at 80% 70%, white 1.5px, transparent 1.5px); background-size: 50px 50px;"
+        ></div>
+
         <span
-          class="absolute top-6 left-6 font-mono text-[--color-brand-hover]"
+          class="absolute top-5 left-5 font-mono text-white/80"
           style="font-size: var(--text-xs);"
         >
           // jota
         </span>
         <span
-          class="absolute bottom-6 right-6 font-mono text-[--color-brand-hover]"
+          class="absolute bottom-5 right-5 font-mono text-white/80"
           style="font-size: var(--text-xs);"
         >
           fundador
         </span>
-        <p style="font-size: var(--text-sm);">[PLACEHOLDER · foto]</p>
+
+        <div class="text-center relative">
+          <div
+            class="w-20 h-20 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center mx-auto mb-4 border border-white/30"
+          >
+            <Icon name="sparkle" size={28} />
+          </div>
+          <p style="font-size: var(--text-xs);">[PLACEHOLDER · foto]</p>
+        </div>
       </div>
       <p class="mt-6 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
         // único contacto durante todo el proyecto
