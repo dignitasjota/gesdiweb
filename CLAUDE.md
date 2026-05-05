@@ -12,7 +12,7 @@
 - **Sustituye:** una WordPress antigua que sigue online y rankea (poco tráfico, pero tráfico real que NO debe perderse).
 - **Estética objetivo:** suiza moderna, tipografía gigante, mucho blanco, marcadores tipográficos `// 00.01°`, marquees infinitos, scroll suave, animaciones reveal. Inspiración (no clon): [createstudio.framer.media](https://createstudio.framer.media/).
 - **Idioma de lanzamiento:** español. Arquitectura preparada para multi-idioma sin implementar inglés todavía.
-- **Estado actual:** Fase 0 completada (2026-05-05). Listos para iniciar Fase 1 cuando el dueño dé luz verde.
+- **Estado actual:** Fases 0–3 completadas (2026-05-05). Sistema de diseño operativo, 22 páginas maquetadas, contenido en MDX con content collections. Listos para iniciar Fase 4 (formulario + Resend) cuando el dueño dé luz verde.
 - **Dueño / único editor:** Jota (`dignitasjota@gmail.com`), perfil técnico (terminal, Docker, GitHub, Claude Code).
 
 ## 2. Reglas de oro (no negociables)
@@ -36,12 +36,14 @@
 | Framework | **Astro** | 6.2.2 | Static-site generator con HTML 100% estático, ideal SEO |
 | CSS | **Tailwind CSS** | 4.1.x | Velocidad de prototipado, tokens custom |
 | Bundler interno | Vite | 7.3.2 (forzado) | Vite 8 (rolldown-vite) incompatible con `@tailwindcss/vite` 4.1, ver `package.json#overrides` |
-| Sitemap | `@astrojs/sitemap` | 3.7.x | Generación automática |
-| Contenido | **MDX en `web/src/content/`** | — | Sin CMS — el dueño es técnico y el flujo Markdown+Git es más rápido que cualquier panel |
-| Animaciones | GSAP + ScrollTrigger | (Fase 2+) | Estándar profesional |
-| Smooth scroll | Lenis | (Fase 2+) | Scroll suave estilo Createstudio |
-| Tipografías | Bricolage Grotesque + Inter + JetBrains Mono, vía Fontsource self-hosted | (Fase 2+) | Privacidad RGPD, rendimiento, sin CDN externo |
-| Email transaccional | **Resend** | (Fase 5+) | Plan free 3.000 emails/mes, API moderna, dominio verificado con SPF+DKIM+DMARC |
+| Sitemap | `@astrojs/sitemap` | 3.7.x | Generación automática, excluye `/styleguide` |
+| MDX | `@astrojs/mdx` | 5.0.x | Renderizado del cuerpo de posts y casos de estudio |
+| Contenido | **Content Collections + MDX en `web/src/content/`** | — | Sin CMS — el dueño es técnico y el flujo Markdown+Git es más rápido que cualquier panel. Schemas Zod validan el frontmatter |
+| Tipografías | Bricolage Grotesque + Inter + JetBrains Mono Variable, Fontsource self-hosted | 5.2.x | Privacidad RGPD, rendimiento, sin CDN externo |
+| Animaciones | GSAP + ScrollTrigger | 3.15.x (instalado, sin uso hasta Fase 5) | Estándar profesional |
+| Smooth scroll | Lenis | 1.3.x (activo) | Scroll suave estilo Createstudio, respeta `prefers-reduced-motion` |
+| Iconografía | SVG inline custom (`web/src/components/ui/Icon.astro`) | — | 26 iconos lineales propios, hereda `currentColor` |
+| Email transaccional | **Resend** | (Fase 4+) | Plan free 3.000 emails/mes, API moderna, dominio verificado con SPF+DKIM+DMARC |
 | Reverse proxy + SSL | **Nginx Proxy Manager** existente en el VPS | — | Ya desplegado en Hetzner. SSL Let's Encrypt automático |
 | Runtime contenedor | **nginx 1.27 alpine** | — | Sirve los archivos estáticos generados por Astro |
 | Base de imagen build | **node 22 alpine** | — | Multi-stage Dockerfile |
@@ -118,7 +120,7 @@ gesdiweb/
 └── web/                            Aplicación Astro
     ├── package.json                Override de vite forzado a ^7.3.2
     ├── tsconfig.json               Strict, alias @/* → src/*
-    ├── astro.config.mjs            site, sitemap, tailwind via @tailwindcss/vite
+    ├── astro.config.mjs            site, sitemap (excluye /styleguide), mdx, tailwind
     ├── Dockerfile                  Multi-stage: node 22 build → nginx 1.27 alpine
     ├── nginx.conf                  gzip, headers cache, headers seguridad
     ├── .dockerignore
@@ -126,23 +128,38 @@ gesdiweb/
     │   ├── favicon.svg             Provisional (azul corporativo + G blanca)
     │   └── robots.txt              Apunta a /sitemap-index.xml
     └── src/
-        ├── pages/                  Rutas Astro
-        │   └── index.astro         Hola mundo placeholder Fase 0
+        ├── content.config.ts       ← Schemas Zod para services / portfolio / blog
+        ├── content/                ← Fuente única de contenido (MDX)
+        │   ├── services/           5 servicios (.mdx con solo frontmatter)
+        │   ├── portfolio/          5 proyectos (.mdx con cuerpo de caso de estudio)
+        │   └── blog/               3 posts (.mdx con cuerpo Markdown real)
+        ├── pages/
+        │   ├── index.astro                  Home (9 secciones)
+        │   ├── servicios/index.astro        Listado de servicios
+        │   ├── servicios/[slug].astro       Detalle dinámico (consume content collections)
+        │   ├── portfolio/index.astro        Listado portfolio
+        │   ├── portfolio/[slug].astro       Caso de estudio (renderiza MDX con <Content />)
+        │   ├── blog/index.astro             Listado de posts
+        │   ├── blog/[slug].astro            Post individual (renderiza MDX)
+        │   ├── contacto.astro               Formulario maquetado (envío Fase 4)
+        │   ├── styleguide.astro             Página interna (noindex, fuera del sitemap)
+        │   ├── aviso-legal.astro
+        │   ├── politica-privacidad.astro
+        │   └── politica-cookies.astro
         ├── layouts/
-        │   └── BaseLayout.astro    Meta SEO base, OG, Twitter, canonical
-        ├── components/             (vacío hasta Fase 1)
-        │   ├── ui/                 Marker, Button, Tag, Badge, etc.
-        │   ├── layout/             Header, Footer
-        │   ├── sections/           Hero, ServicesGrid, etc.
-        │   └── animations/         SmoothScroll, Reveal, Marquee
-        ├── content/                MDX collections (configuradas en Fase 4)
-        │   ├── config.ts
-        │   ├── services/
-        │   ├── portfolio/
-        │   └── blog/
-        ├── lib/                    (vacío) helpers SEO, utils
+        │   ├── BaseLayout.astro    Meta SEO + Header + Footer + SmoothScroll
+        │   └── LegalLayout.astro   Layout específico de páginas legales
+        ├── components/
+        │   ├── ui/                 Marker, Button, Tag, Badge, StatBlock, Icon (+ icon-names.ts)
+        │   ├── layout/             Header (fijo, hamburguesa móvil), Footer (con strip brand)
+        │   ├── sections/           Hero, ClientsMarquee, Statement, ServicesNumberedList,
+        │   │                       PortfolioFeatured, Stats, FeatureStrip, Process,
+        │   │                       HomeContactCTA, BlogRecent
+        │   └── animations/         SmoothScroll (Lenis)
+        ├── lib/
+        │   └── collections.ts      ← Helpers async sobre getCollection (drop-in API)
         └── styles/
-            └── globals.css         Tailwind import + tokens corporativos
+            └── globals.css         Tailwind import + tokens corporativos + escala fluida
 ```
 
 ## 5. Estado del proyecto
@@ -153,7 +170,7 @@ gesdiweb/
 | 1 | Sistema de diseño | ✅ Completada (2026-05-05) | |
 | 2 | Páginas estáticas y maquetación | ✅ Completada (2026-05-05) | |
 | 3 | Content collections + MDX | ✅ Completada (2026-05-05) | |
-| 4 | Formulario de contacto + Resend | ⏳ | |
+| 4 | Formulario de contacto + Resend | ⏳ Pendiente OK del dueño | |
 | 5 | Animaciones y pulido | ⏳ | |
 | 6 | SEO técnico y performance | ⏳ | |
 | 7 | Despliegue en VPS Hetzner | ⏳ | |
@@ -178,7 +195,19 @@ Estos son blockers o pendientes activos que el dueño aún no ha resuelto. **No 
 - **Analítica:** Plausible/Umami autohospedado o servicio externo. Pendiente.
 - **Solución cookies/RGPD:** banner propio minimalista vs. servicio externo. Recomendación dada (banner propio si no metemos cookies no esenciales). Pendiente confirmación.
 
-## 7. Cómo continuar el desarrollo (LLM checklist)
+## 7. Cómo editar contenido (sin tocar código)
+
+Todo el contenido editorial vive como **archivos `.mdx` en `web/src/content/`**. Crear o editar contenido es un cambio de archivo + commit, sin tocar páginas Astro:
+
+- **Posts del blog:** `web/src/content/blog/<slug>.mdx`
+- **Servicios:** `web/src/content/services/<slug>.mdx`
+- **Proyectos del portfolio:** `web/src/content/portfolio/<slug>.mdx`
+
+Cada colección tiene un schema Zod en `web/src/content.config.ts`. Si el frontmatter no cumple, el build rompe (deseado — evita publicar contenido roto).
+
+**Para crear contenido nuevo o adaptar texto bruto al formato MDX correcto, lee la guía completa:** [`docs/contenido.md`](docs/contenido.md). Incluye plantillas listas para copiar, schemas detallados, voz/estilo de redacción y ejemplo de conversión de texto bruto → MDX.
+
+## 8. Cómo continuar el desarrollo (LLM checklist)
 
 Si te incorporas al proyecto, en este orden:
 
@@ -192,7 +221,9 @@ Si te incorporas al proyecto, en este orden:
 8. **Comprueba `git log`** para entender el último estado real del repo.
 9. **Saluda al dueño con un resumen de qué entendiste y cuál es el siguiente paso propuesto.** Espera su OK.
 
-## 8. Cosas críticas que un LLM nuevo suele intentar hacer mal
+> Si la tarea es **editar/crear contenido** (no código): saltarse los puntos 5–8 y leer directamente [`docs/contenido.md`](docs/contenido.md).
+
+## 9. Cosas críticas que un LLM nuevo suele intentar hacer mal
 
 - ❌ Proponer un CMS porque "facilitaría la edición". Ya está descartado y razonado en ADR-001.
 - ❌ Añadir Caddy / Traefik / un proxy nuevo. Hay NPM en el VPS.
@@ -203,7 +234,7 @@ Si te incorporas al proyecto, en este orden:
 - ❌ Cambiar URLs de páginas que ya rankean en la web actual sin plan de redirecciones.
 - ❌ Inventar datos legales, logos de clientes o stats. Si faltan, marcarlos como `[PENDIENTE]` y preguntar.
 
-## 9. Contacto y ubicación de fuentes
+## 10. Contacto y ubicación de fuentes
 
 - **Repo:** https://github.com/dignitasjota/gesdiweb
 - **Dominio:** https://gesdiweb.es (aún apuntando a la WordPress antigua hasta Fase 8)
@@ -213,5 +244,5 @@ Si te incorporas al proyecto, en este orden:
 
 ---
 
-**Última actualización de este archivo:** 2026-05-05 (cierre de Fase 0).
-**Mantenedor:** se actualiza al cerrar cada fase. Si tras tu sesión ha cambiado algo de los puntos 3, 5, 6, 7 u 8, **edítalo** antes de cerrar.
+**Última actualización de este archivo:** 2026-05-05 (cierre de Fase 3).
+**Mantenedor:** se actualiza al cerrar cada fase. Si tras tu sesión ha cambiado algo de los puntos 3, 5, 6, 7, 8 o 9, **edítalo** antes de cerrar.

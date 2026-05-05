@@ -123,7 +123,9 @@ Naming:
 
 ### Frontmatter en MDX
 
-Todo MDX debe pasar el schema Zod definido en `src/content/config.ts`. Si Astro rompe el build con un error de schema, **arreglar el contenido**, no aflojar el schema.
+Todo MDX debe pasar el schema Zod definido en `web/src/content.config.ts`. Si Astro rompe el build con un error de schema, **arreglar el contenido**, no aflojar el schema.
+
+**Para crear/editar contenido:** ver [`contenido.md`](contenido.md). Reglas de slug (kebab-case, sin acentos), plantillas y voz/estilo están allí.
 
 ---
 

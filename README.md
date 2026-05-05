@@ -55,6 +55,7 @@ docker run --rm -p 8080:80 gesdiweb-web
 | Documento | Para qué sirve |
 |---|---|
 | [`CLAUDE.md`](CLAUDE.md) | Punto de entrada para cualquier LLM. Resumen ejecutivo + reglas + estado |
+| **[`docs/contenido.md`](docs/contenido.md)** | **Cómo crear/editar posts, servicios y proyectos. Plantillas listas para copiar** |
 | [`docs/briefing.md`](docs/briefing.md) | Briefing original del dueño (alcance, marca, SEO, sistema de diseño) |
 | [`docs/fases.md`](docs/fases.md) | Plan de 9 fases con estado y validaciones |
 | [`docs/estado.md`](docs/estado.md) | Snapshot del estado actual (qué está hecho y qué toca) |
@@ -65,6 +66,10 @@ docker run --rm -p 8080:80 gesdiweb-web
 | [`docs/runbook.md`](docs/runbook.md) | Procedimientos operativos |
 | [`docs/seo-migracion.md`](docs/seo-migracion.md) | Plan de migración SEO desde la WordPress antigua |
 
+## Editar contenido
+
+Todo el contenido (posts, servicios, proyectos del portfolio) vive como archivos `.mdx` en `web/src/content/`. Para añadir un post nuevo, modificar uno existente o crear un servicio: leer [`docs/contenido.md`](docs/contenido.md). Tiene plantillas copy-paste y un ejemplo completo de cómo convertir texto bruto al formato MDX correcto.
+
 ## Estado del proyecto
 
-Fase 0 (setup base) **completada**. Ver [`docs/estado.md`](docs/estado.md) para el snapshot vivo.
+Fases 0–3 **completadas** (setup base, sistema de diseño, maquetación de 22 páginas, content collections con MDX). Esperando OK para iniciar Fase 4 (formulario de contacto + Resend). Ver [`docs/estado.md`](docs/estado.md) para el snapshot vivo.

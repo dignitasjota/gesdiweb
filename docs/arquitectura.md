@@ -125,81 +125,76 @@ Fluida con `clamp()` para escalar entre 375px y 1920px sin breakpoints duros. Ve
 - Container max 1440px, padding fluido `clamp(1.5rem, 5vw, 4rem)`.
 - Vertical entre secciones: `clamp(6rem, 12vw, 12rem)`.
 
-## 5. Modelo de contenido (Fase 3)
+## 5. Modelo de contenido (Fase 3 — implementado)
 
-### Colecciones MDX previstas
+> **Para cualquier tarea editorial** (crear post, añadir servicio, modificar proyecto), la guía operativa está en [`contenido.md`](contenido.md). Esta sección documenta solo la arquitectura.
 
-#### `services` — Servicios
+### Estructura
 
-```ts
-{
-  slug: string,           // único, indexado: "posicionamiento-web"
-  title: string,
-  headline: string,       // titular grande hero del servicio
-  excerpt: string,
-  cover: ImageMetadata,
-  features: string[],
-  seoTitle?: string,
-  seoDescription?: string,
-  order: number,
-  status: 'draft' | 'published',
-  lang: 'es',
-}
+Todo el contenido editorial vive como **archivos `.mdx`** en `web/src/content/`, organizado en tres colecciones:
+
+```
+web/src/
+├── content.config.ts           ← Schemas Zod (services, portfolio, blog)
+└── content/
+    ├── services/<slug>.mdx     5 servicios
+    ├── portfolio/<slug>.mdx    5 proyectos (cuerpo MDX = caso de estudio)
+    └── blog/<slug>.mdx         3 posts (cuerpo MDX = artículo)
 ```
 
-URLs: `/servicios/[slug]`.
+El **slug** es el filename sin extensión. El **frontmatter** lleva los metadatos. El **cuerpo Markdown/MDX** se renderiza vía `<Content />` solo en portfolio y blog (los services no usan cuerpo todavía).
 
-#### `portfolio` — Proyectos
+### Validación
 
-```ts
-{
-  slug: string,
-  title: string,
-  client: string,
-  year: number,
-  excerpt: string,
-  cover: ImageMetadata,
-  gallery?: ImageMetadata[],
-  services: string[],     // referencia a slugs de services
-  techStack: string[],
-  url?: string,
-  featured: boolean,
-  order: number,
-  status: 'draft' | 'published',
-  lang: 'es',
-}
-```
+`web/src/content.config.ts` define schemas Zod por colección con `defineCollection({ loader: glob(...), schema })`. Si un `.mdx` tiene frontmatter inválido → **build rompe** con error tipado. Es deseable: evita publicar contenido roto.
 
-URLs: `/portfolio/[slug]`.
+### Acceso desde páginas Astro
 
-#### `blog` — Posts
+Las rutas dinámicas (`[slug].astro`) y secciones consumen las colecciones a través del helper `web/src/lib/collections.ts`:
 
 ```ts
-{
-  slug: string,
-  title: string,
-  excerpt: string,
-  cover: ImageMetadata,
-  author: string,         // por ahora hardcoded "Jota"
-  categories: string[],
-  tags: string[],
-  publishedAt: Date,
-  seoTitle?: string,
-  seoDescription?: string,
-  status: 'draft' | 'published',
-  lang: 'es',
-}
+import { getOrderedServices, getFeaturedProjects, getRecentPosts } from '@/lib/collections';
+
+const services = await getOrderedServices();        // [...] entries publicadas, ordenadas
+const featured = await getFeaturedProjects();       // [...] entries con featured: true
+const recent = await getRecentPosts(3);             // 3 posts más recientes
 ```
 
-URLs: `/blog/[slug]`.
+Helpers disponibles:
+- `getOrderedServices()`, `getServiceById(id)`
+- `getAllProjects()`, `getFeaturedProjects()`, `getProjectById(id)`
+- `getAllPosts()`, `getRecentPosts(limit)`, `getPostById(id)`
+- `formatDateLong(date)`, `isoDate(date)`
 
-### Validación con Zod
+Filtran automáticamente entries con `status: 'draft'`.
 
-`web/src/content/config.ts` define los schemas. Astro valida en build time; un MDX con un campo inválido rompe el build (deseado).
+### Schemas (resumen — detalle completo en `contenido.md`)
+
+Todos los schemas comparten campos opcionales `seoTitle`, `seoDescription`, `status` (`draft`/`published`/`scheduled` según colección) y `lang` (default `'es'`).
+
+Campos específicos:
+
+- **services:** `title`, `headline`, `excerpt`, `order`, `features[]`, `approach[]`
+- **portfolio:** `title`, `client`, `year`, `excerpt`, `order`, `featured`, `techStack[]`, `servicesUsed[]`, `url?`
+- **blog:** `title`, `excerpt`, `publishedAt` (Date), `readingMinutes`, `categories[]`, `tags[]`, `author?`
+
+### Renderizado del cuerpo MDX
+
+Solo en portfolio y blog:
+
+```astro
+const { Content } = await render(entry);
+// ...
+<Content />
+```
+
+Los estilos editoriales viven scoped en cada layout dinámico:
+- `web/src/pages/blog/[slug].astro` → clase `.post-body` con tipografía pensada para lectura larga (line-height 1.75, h2 grande, enlaces subrayados con color brand).
+- `web/src/pages/portfolio/[slug].astro` → clase `.prose-mimic` más compacta para casos de estudio.
 
 ### Multi-idioma
 
-Todas las colecciones llevan `lang`. Por defecto se filtra `lang === 'es'`. La estructura de rutas con prefijo de idioma queda preparada pero **desactivada** hasta que se implemente inglés.
+Todas las colecciones llevan `lang` (default `'es'`). Estructura preparada para inglés sin implementarlo todavía. Cuando se active: filtrar por `lang` en los helpers y añadir prefijo de ruta `/en/`.
 
 ## 6. SEO
 

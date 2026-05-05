@@ -92,11 +92,58 @@ Self-hosted con Fontsource desde `/fonts/`, no Google Fonts CDN (RGPD + rendimie
 
 ---
 
-## ADR-006 · CI/CD con GitHub Actions y GHCR
+## ADR-006 · Astro 6 con override de Vite 7
 
 **Fecha:** 2026-05-05
-**Estado:** Pendiente de detalle (Fase 8)
+**Estado:** Aceptada
+
+**Contexto.** En Fase 0, al instalar Astro 5 detectamos un advisory XSS en versiones < 6.1.6. Subimos a Astro 6.2.2. Astro 6 acepta `vite ^7.3.2` como peer, pero en la práctica npm resolvió `vite@8.0.x` (rolldown-vite) que es incompatible con `@tailwindcss/vite@4.1.x` (error `Missing field tsconfigPaths on BindingViteResolvePluginConfig.resolveOptions`).
+
+**Decisión.** Forzamos Vite 7 vía `overrides` en `web/package.json`:
+
+```json
+"overrides": {
+  "vite": "^7.3.2"
+}
+```
+
+**Consecuencias.**
+- (+) Build estable con la combinación Astro 6 + Tailwind 4.1.
+- (−) Quedamos atados a Vite 7 hasta que `@tailwindcss/vite` o rolldown-vite resuelvan la incompatibilidad. Revisar trimestralmente.
+
+---
+
+## ADR-007 · Content Collections + MDX (sin Tailwind Typography)
+
+**Fecha:** 2026-05-05
+**Estado:** Aceptada
+
+**Contexto.** En Fase 3 había que mover el contenido fuera del código fuente. Dos decisiones acopladas:
+
+1. ¿Qué API usar? Astro Content Collections v2 (la nueva, con `glob` loader) vs. los antiguos collections con `src/content/config.ts`.
+2. ¿Cómo estilar la prosa Markdown renderizada? Tailwind Typography vs. CSS scoped propio.
+
+**Decisiones.**
+
+1. **Content Collections v2** con `defineCollection({ loader: glob(...) })` y schemas Zod en `web/src/content.config.ts` (no en la antigua ubicación `web/src/content/config.ts`). Razón: es la API actual recomendada en Astro 5+ y permite glob personalizado.
+
+2. **CSS scoped propio** (`.post-body`, `.prose-mimic`) en lugar de Tailwind Typography. Razón:
+   - **Control fino** sobre la jerarquía editorial (h2 con tipografía display, line-height 1.75 para lectura larga, enlaces subrayados con color brand).
+   - **Sin añadir 60-70KB** de plugin Typography que se aplicaría a todo el contenido aunque no lo usemos.
+   - El CSS necesario son ~30 líneas por estilo de prosa, totalmente mantenible.
+
+**Consecuencias.**
+- (+) Contenido versionado, validado y editable sin tocar código.
+- (+) Posts con voz consistente gracias al CSS editorial scoped.
+- (−) Si añadimos otra plantilla de prosa (ej: páginas de ayuda), hay que duplicar/extraer CSS. Aceptable.
+
+---
+
+## ADR-008 · CI/CD con GitHub Actions y GHCR
+
+**Fecha:** 2026-05-05
+**Estado:** Pendiente de detalle (Fase 7)
 
 **Decisión preliminar.** Push a `main` → GitHub Actions construye la imagen Docker → la sube a GHCR → Portainer la recoge mediante webhook o pull manual.
 
-Se cerrará al diseñar la pipeline en Fase 8.
+Se cerrará al diseñar la pipeline en Fase 7.
