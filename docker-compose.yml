@@ -1,0 +1,33 @@
+# Stack de producción para gesdiweb (Hetzner)
+# Astro estático servido por nginx, expuesto a través de Nginx Proxy Manager.
+#
+# Requisito previo en el host:
+#   - Nginx Proxy Manager funcionando con su red Docker.
+#   - Esa red debe llamarse `npm_default` o ajustar el nombre abajo.
+#
+# Despliegue local (test de la imagen de producción):
+#   docker compose -f docker-compose.yml build
+#   docker compose -f docker-compose.yml up -d
+#
+# En producción usaremos imágenes precompiladas en GHCR (Fase 8).
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    image: ghcr.io/dignitasjota/gesdiweb-web:latest
+    container_name: gesdiweb_web
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - "com.gesdiweb.service=web"
+      - "com.gesdiweb.role=frontend"
+
+networks:
+  proxy:
+    # En el VPS Hetzner esta red la creará Nginx Proxy Manager.
+    # Ajustar el nombre `external_name` según el nombre real de la red de NPM.
+    external: true
+    name: npm_default

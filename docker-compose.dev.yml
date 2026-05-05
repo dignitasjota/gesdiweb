@@ -1,0 +1,27 @@
+# Override de desarrollo local.
+# Para Fase 0 NO se usa: el dev habitual es `cd web && npm run dev`.
+# Este archivo queda preparado para fases que requieran simular el contenedor.
+#
+# Uso (cuando aplique):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# Diferencias respecto a producción:
+#   - Expone el puerto 8080 al host para acceder en local sin NPM.
+#   - No se requiere la red externa de NPM.
+
+services:
+  web:
+    ports:
+      - "8080:80"
+    networks:
+      - default
+    restart: "no"
+
+networks:
+  default:
+    driver: bridge
+  # Sobrescribimos la red proxy del compose principal para que en dev no exija
+  # la red externa de Nginx Proxy Manager.
+  proxy:
+    external: false
+    name: gesdiweb_dev_proxy
