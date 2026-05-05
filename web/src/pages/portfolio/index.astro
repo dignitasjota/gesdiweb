@@ -4,13 +4,40 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
 import { getAllProjects } from '../../lib/collections';
+import {
+  itemListSchema,
+  webPageSchema,
+  breadcrumbSchema,
+  SITE,
+} from '../../lib/seo';
 
 const allProjects = await getAllProjects();
+
+const jsonLd = [
+  webPageSchema({
+    url: `${SITE.url}/portfolio`,
+    name: 'Portfolio · gesdiweb',
+    description:
+      'Proyectos recientes de diseño web, apps móviles y posicionamiento SEO.',
+  }),
+  itemListSchema({
+    name: 'Portfolio de gesdiweb',
+    items: allProjects.map((p) => ({
+      url: `${SITE.url}/portfolio/${p.id}`,
+      name: p.data.title,
+    })),
+  }),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Portfolio', url: `${SITE.url}/portfolio` },
+  ]),
+];
 ---
 
 <BaseLayout
   title="Portfolio · gesdiweb"
   description="Proyectos recientes de diseño web, apps móviles y posicionamiento SEO."
+  jsonLd={jsonLd}
 >
   <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
     <Marker label="02.portfolio" />

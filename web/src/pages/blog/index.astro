@@ -4,14 +4,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
 import { getAllPosts, formatDateLong, isoDate } from '../../lib/collections';
+import { blogSchema, breadcrumbSchema, SITE } from '../../lib/seo';
 
 const allPosts = await getAllPosts();
 const [featuredPost, ...rest] = allPosts;
+
+const jsonLd = [
+  blogSchema(),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Blog', url: `${SITE.url}/blog` },
+  ]),
+];
 ---
 
 <BaseLayout
   title="Blog · gesdiweb"
   description="Artículos sobre SEO técnico, diseño web, rendimiento y estrategia digital."
+  jsonLd={jsonLd}
 >
   <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
     <Marker label="03.blog" />

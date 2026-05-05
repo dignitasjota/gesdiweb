@@ -20,13 +20,30 @@ interface Props {
   next: CollectionEntry<'services'>;
 }
 
+import { serviceSchema, breadcrumbSchema, SITE } from '../../lib/seo';
+
 const { service, next } = Astro.props;
 const { data } = service;
+
+const jsonLd = [
+  serviceSchema({
+    slug: service.id,
+    name: data.title,
+    description: data.excerpt,
+    features: data.features,
+  }),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Servicios', url: `${SITE.url}/servicios` },
+    { name: data.title, url: `${SITE.url}/servicios/${service.id}` },
+  ]),
+];
 ---
 
 <BaseLayout
-  title={`${data.title} · gesdiweb`}
+  title={data.seoTitle ?? `${data.title} · gesdiweb`}
   description={data.seoDescription ?? data.excerpt}
+  jsonLd={jsonLd}
 >
   <article>
     <header class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">

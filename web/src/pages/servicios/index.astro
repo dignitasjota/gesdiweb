@@ -6,8 +6,34 @@ import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
 import type { IconName } from '../../components/ui/icon-names';
 import { getOrderedServices } from '../../lib/collections';
+import {
+  itemListSchema,
+  webPageSchema,
+  breadcrumbSchema,
+  SITE,
+} from '../../lib/seo';
 
 const services = await getOrderedServices();
+
+const jsonLd = [
+  webPageSchema({
+    url: `${SITE.url}/servicios`,
+    name: 'Servicios · gesdiweb',
+    description:
+      'SEO, apps móviles, hosting, marketing online y mantenimiento. Cinco servicios complementarios bajo un mismo equipo.',
+  }),
+  itemListSchema({
+    name: 'Servicios de gesdiweb',
+    items: services.map((s) => ({
+      url: `${SITE.url}/servicios/${s.id}`,
+      name: s.data.title,
+    })),
+  }),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Servicios', url: `${SITE.url}/servicios` },
+  ]),
+];
 
 const icons: Record<string, IconName> = {
   'posicionamiento-web': 'seo',
@@ -21,6 +47,7 @@ const icons: Record<string, IconName> = {
 <BaseLayout
   title="Servicios · gesdiweb"
   description="SEO, apps móviles, hosting, marketing online y mantenimiento. Cinco servicios complementarios bajo un mismo equipo."
+  jsonLd={jsonLd}
 >
   <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
     <Marker label="01.servicios" />

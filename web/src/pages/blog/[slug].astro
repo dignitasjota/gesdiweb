@@ -6,6 +6,7 @@ import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Button from '../../components/ui/Button.astro';
 import { formatDateLong, isoDate } from '../../lib/collections';
+import { blogPostingSchema, breadcrumbSchema, SITE } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', (e) => e.data.status !== 'draft');
@@ -29,11 +30,31 @@ interface Props {
 const { post, related } = Astro.props;
 const { data } = post;
 const { Content } = await render(post);
+
+const jsonLd = [
+  blogPostingSchema({
+    slug: post.id,
+    title: data.title,
+    description: data.excerpt,
+    publishedAt: data.publishedAt,
+    author: data.author,
+    keywords: [...data.categories, ...data.tags],
+  }),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Blog', url: `${SITE.url}/blog` },
+    { name: data.title, url: `${SITE.url}/blog/${post.id}` },
+  ]),
+];
 ---
 
 <BaseLayout
-  title={`${data.title} · Blog · gesdiweb`}
+  title={data.seoTitle ?? `${data.title} · Blog · gesdiweb`}
   description={data.seoDescription ?? data.excerpt}
+  ogType="article"
+  publishedTime={data.publishedAt.toISOString()}
+  articleAuthor={data.author}
+  jsonLd={jsonLd}
 >
   <article>
     <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-16">

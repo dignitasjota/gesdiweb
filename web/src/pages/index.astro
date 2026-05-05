@@ -11,11 +11,13 @@ import FeatureStrip from '../components/sections/FeatureStrip.astro';
 import Process from '../components/sections/Process.astro';
 import HomeContactCTA from '../components/sections/HomeContactCTA.astro';
 import BlogRecent from '../components/sections/BlogRecent.astro';
+import { organizationSchema, webSiteSchema } from '../lib/seo';
 ---
 
 <BaseLayout
   title="gesdiweb — diseño web y posicionamiento SEO"
   description="Agencia española de diseño web y posicionamiento SEO. Webs rápidas, accesibles y pensadas para crecer con tu negocio."
+  jsonLd={[organizationSchema(), webSiteSchema()]}
 >
   <Hero />
   <ClientsMarquee />

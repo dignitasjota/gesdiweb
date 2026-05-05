@@ -21,6 +21,12 @@ interface Props {
   next: CollectionEntry<'portfolio'>;
 }
 
+import {
+  creativeWorkSchema,
+  breadcrumbSchema,
+  SITE,
+} from '../../lib/seo';
+
 const { project, next } = Astro.props;
 const { data } = project;
 const { Content } = await render(project);
@@ -29,11 +35,27 @@ const services = await Promise.all(
   data.servicesUsed.map((id) => getServiceById(id)),
 );
 const validServices = services.filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+const jsonLd = [
+  creativeWorkSchema({
+    slug: project.id,
+    name: data.title,
+    description: data.excerpt,
+    year: data.year,
+    client: data.client,
+  }),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Portfolio', url: `${SITE.url}/portfolio` },
+    { name: data.title, url: `${SITE.url}/portfolio/${project.id}` },
+  ]),
+];
 ---
 
 <BaseLayout
-  title={`${data.title} · Portfolio · gesdiweb`}
+  title={data.seoTitle ?? `${data.title} · Portfolio · gesdiweb`}
   description={data.seoDescription ?? data.excerpt}
+  jsonLd={jsonLd}
 >
   <article>
     <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-20">
