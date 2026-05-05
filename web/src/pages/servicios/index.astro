@@ -41,41 +41,20 @@ const icons: Record<string, IconName> = {
 
   <section class="container-fluid pb-20 md:pb-32">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-      {services.map((service, i) => (
+      {services.map((service) => (
         <a
           href={`/servicios/${service.slug}`}
-          class={`group rounded-2xl p-7 md:p-9 flex flex-col gap-5 transition-all hover:-translate-y-1 relative overflow-hidden ${
-            i === 0
-              ? 'md:col-span-2 lg:col-span-2 bg-[--color-brand] text-[--color-fg-inverse]'
-              : 'bg-[--color-bg-soft] border border-[--color-border] hover:border-[--color-brand] hover:bg-[--color-brand-soft]'
-          }`}
+          class="group rounded-2xl p-7 md:p-9 flex flex-col gap-5 transition-all hover:-translate-y-1 bg-[--color-bg-soft] border border-[--color-border] hover:border-[--color-brand] hover:bg-[--color-brand-soft]"
         >
-          {i === 0 && (
-            <div
-              class="absolute -right-8 -bottom-8 text-white/10 pointer-events-none"
-              aria-hidden="true"
-            >
-              <Icon name={icons[service.slug]} size={240} strokeWidth={1} />
-            </div>
-          )}
-
-          <div class="flex items-start justify-between gap-4 relative">
+          <div class="flex items-start justify-between gap-4">
             <span
-              class={`inline-flex items-center justify-center w-12 h-12 rounded-full transition-colors ${
-                i === 0
-                  ? 'bg-white/15 border border-white/20 text-[--color-fg-inverse]'
-                  : 'bg-[--color-brand-soft] text-[--color-brand-hover] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse]'
-              }`}
+              class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[--color-brand-soft] text-[--color-brand-hover] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse] transition-colors"
               aria-hidden="true"
             >
               <Icon name={icons[service.slug]} size={22} />
             </span>
             <span
-              class={`font-mono uppercase tracking-widest ${
-                i === 0
-                  ? 'text-white/70'
-                  : 'text-[--color-muted] group-hover:text-[--color-brand-hover]'
-              } transition-colors`}
+              class="font-mono uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand-hover] transition-colors"
               style="font-size: var(--text-xs);"
             >
               /{String(service.order).padStart(2, '0')}
@@ -83,42 +62,25 @@ const icons: Record<string, IconName> = {
           </div>
 
           <h2
-            class={`font-display font-bold tracking-[-0.02em] leading-tight mt-2 transition-colors relative ${
-              i === 0 ? '' : 'group-hover:text-[--color-brand-hover]'
-            }`}
-            style={`font-size: var(${i === 0 ? '--text-2xl' : '--text-xl'});`}
+            class="font-display font-bold tracking-[-0.02em] leading-tight mt-2 group-hover:text-[--color-brand-hover] transition-colors"
+            style="font-size: var(--text-xl);"
           >
             {service.title}
           </h2>
 
-          <p
-            class={`leading-relaxed flex-1 relative ${
-              i === 0 ? 'text-white/85' : 'text-[--color-fg-soft]'
-            }`}
-            style={`font-size: var(${i === 0 ? '--text-lg' : '--text-base'});`}
-          >
-            {i === 0 ? `${service.headline} ${service.excerpt}` : service.excerpt}
+          <p class="text-[--color-fg-soft] leading-relaxed flex-1">
+            {service.excerpt}
           </p>
 
-          <div
-            class={`flex items-center justify-between pt-4 border-t relative ${
-              i === 0 ? 'border-white/15' : 'border-[--color-border-soft]'
-            }`}
-          >
+          <div class="flex items-center justify-between pt-4 border-t border-[--color-border-soft]">
             <span
-              class={`font-mono uppercase tracking-widest transition-colors ${
-                i === 0 ? 'text-white/70' : 'text-[--color-fg-soft] group-hover:text-[--color-brand-hover]'
-              }`}
+              class="font-mono uppercase tracking-widest text-[--color-fg-soft] group-hover:text-[--color-brand-hover] transition-colors"
               style="font-size: var(--text-xs);"
             >
               ver detalle
             </span>
             <span
-              class={`inline-flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-                i === 0
-                  ? 'bg-[--color-fg-inverse] text-[--color-brand] group-hover:scale-110'
-                  : 'bg-[--color-bg] text-[--color-fg] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse]'
-              }`}
+              class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[--color-bg] text-[--color-fg] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse] transition-colors"
               aria-hidden="true"
             >
               <Icon name="arrow-up-right" size={14} strokeWidth={2.5} />

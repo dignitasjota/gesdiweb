@@ -5,7 +5,6 @@ import type { IconName } from '../ui/icon-names';
 import { getOrderedServices } from '../../data/services';
 
 const services = getOrderedServices();
-const [primary, ...rest] = services;
 
 const icons: Record<string, IconName> = {
   'posicionamiento-web': 'seo',
@@ -37,60 +36,8 @@ const icons: Record<string, IconName> = {
       </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-      {/* Card destacada */}
-      <a
-        href={`/servicios/${primary.slug}`}
-        class="group md:col-span-2 bg-[--color-brand] text-[--color-fg-inverse] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row md:items-end gap-8 md:gap-16 transition-transform hover:-translate-y-1 relative overflow-hidden"
-      >
-        {/* Icono decorativo gigante de fondo */}
-        <div
-          class="absolute -right-8 -bottom-8 text-white/10 pointer-events-none"
-          aria-hidden="true"
-        >
-          <Icon name={icons[primary.slug]} size={280} strokeWidth={1} />
-        </div>
-
-        <div class="flex-1 relative">
-          <div class="flex items-center gap-3 mb-6">
-            <span
-              class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/15 border border-white/20"
-              aria-hidden="true"
-            >
-              <Icon name={icons[primary.slug]} size={18} />
-            </span>
-            <span
-              class="font-mono uppercase tracking-widest text-white/70"
-              style="font-size: var(--text-xs);"
-            >
-              /01 · destacado
-            </span>
-          </div>
-          <h3
-            class="font-display font-bold tracking-[-0.025em] leading-[0.95]"
-            style="font-size: var(--text-2xl);"
-          >
-            {primary.title}
-          </h3>
-          <p
-            class="mt-5 max-w-2xl text-white/85 leading-relaxed"
-            style="font-size: var(--text-base);"
-          >
-            {primary.headline} {primary.excerpt}
-          </p>
-        </div>
-        <div class="flex items-center justify-end gap-6 relative">
-          <span
-            class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[--color-fg-inverse] text-[--color-brand] group-hover:scale-110 transition-transform shrink-0"
-            aria-hidden="true"
-          >
-            <Icon name="arrow-up-right" size={20} strokeWidth={2.5} />
-          </span>
-        </div>
-      </a>
-
-      {/* 4 cards en 2x2 */}
-      {rest.map((service) => (
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+      {services.map((service) => (
         <a
           href={`/servicios/${service.slug}`}
           class="group bg-[--color-bg] border border-[--color-border] rounded-2xl p-7 md:p-9 flex flex-col gap-5 transition-all hover:-translate-y-1 hover:border-[--color-brand] hover:bg-[--color-brand-soft]"
