@@ -1,0 +1,75 @@
+# Cómo añadir imágenes del panel real de Flowfan
+
+Las imágenes del panel privado (las que requieren login) hay que subirlas
+manualmente porque el script automático no puede autenticarse.
+
+## Ruta donde dejar los archivos
+
+```
+/Users/jota/Documents/Desarrollos/gesdiweb/web/src/content/portfolio/imagenes/flowfan/
+```
+
+## Convención de naming
+
+Usa el prefijo `panel-real-` seguido de un nombre descriptivo en kebab-case:
+
+```
+panel-real-dashboard.jpg
+panel-real-conversaciones.jpg
+panel-real-scoring-fan.jpg
+panel-real-broadcasts-editor.jpg
+panel-real-content-gaps.jpg
+panel-real-coaching-negociacion.jpg
+panel-real-detalle-fan.jpg
+panel-real-equipo-permisos.jpg
+panel-real-api-keys.jpg
+panel-real-analytics.jpg
+```
+
+## Especificaciones
+
+| Campo | Recomendación |
+|---|---|
+| Formato | JPG o PNG (Astro las pasa a WebP/AVIF en build) |
+| Resolución mínima | 1600×900 (16:9). Si vienen de tu pantalla, basta |
+| Anonimización | Si sale info sensible (nombres de fans reales, mensajes con texto privado, importes), **emborrónalo o usa datos demo** antes de subirlas |
+| Cantidad | 3-5 son suficientes. La galería luce bien con 4-6 imágenes en total |
+
+## Después de subir
+
+Avísame con un mensaje del tipo "ya he subido 4 imágenes del panel" y yo:
+
+1. Listo qué archivos hay nuevos
+2. Los añado al campo `gallery` del frontmatter en `flowfan.mdx`
+3. Build, commit y push
+
+Si quieres hacerlo tú mismo:
+
+1. Edita `web/src/content/portfolio/flowfan.mdx`
+2. En el bloque `gallery:`, añade líneas con la ruta:
+   ```yaml
+   gallery:
+     - ./imagenes/flowfan/panel-chat-ia.jpg
+     - ./imagenes/flowfan/panel-scoring-perfil.jpg
+     - ./imagenes/flowfan/panel-broadcasts.jpg
+     - ./imagenes/flowfan/panel-equipo.jpg
+     # ↓ Aquí van las nuevas:
+     - ./imagenes/flowfan/panel-real-dashboard.jpg
+     - ./imagenes/flowfan/panel-real-conversaciones.jpg
+   ```
+3. `git add . && git commit -m "feat(portfolio): añadir capturas del panel real de Flowfan" && git push`
+
+## Imágenes que ya están en esta carpeta
+
+- `cover.jpg` — hero de la home pública (cover principal)
+- `panel-chat-ia.jpg` — demo de la home, tab "Chat con IA"
+- `panel-scoring-perfil.jpg` — demo de la home, tab "Scoring & Perfil"
+- `panel-broadcasts.jpg` — demo de la home, tab "Broadcasts"
+- `panel-equipo.jpg` — demo de la home, tab "Equipo"
+- `pricing.jpg` — sección de planes (no en galería todavía, disponible)
+
+## Nota
+
+Este archivo (`_subida-imagenes-panel.md`) está prefijado con `_` para que
+Astro Content Collections **lo ignore** (los archivos con prefijo `_` no se
+procesan como entries). No afecta al build.
