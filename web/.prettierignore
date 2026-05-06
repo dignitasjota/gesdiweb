@@ -1,0 +1,8 @@
+node_modules
+dist
+.astro
+public/og
+public/og-default.png
+src/content/blog/imagenes
+src/content/portfolio/imagenes
+package-lock.json

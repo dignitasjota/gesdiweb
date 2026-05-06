@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+# Pre-commit hook: corre lint-staged dentro de web/ para formatear con
+# Prettier solo los archivos en staging que pertenecen a la app Astro.
+# Otros archivos (docs/, .github/, etc.) no se formatean automáticamente.
+
+# Filtrar staged files que viven en web/ y entregárselos a lint-staged
+# desde dentro de web/. Si no hay archivos web/ en staging, salir limpio.
+
+WEB_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '^web/' || true)
+if [ -z "$WEB_FILES" ]; then
+  exit 0
+fi
+
+cd web && npx lint-staged
