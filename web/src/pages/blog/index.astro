@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
@@ -49,10 +50,25 @@ const jsonLd = [
       >
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
           <div
-            class="md:col-span-7 aspect-[16/9] bg-[--color-brand] rounded-2xl flex items-center justify-center text-[--color-fg-inverse] font-mono uppercase tracking-widest border-4 border-[--color-brand-hover] group-hover:scale-[1.01] transition-transform"
-            aria-hidden="true"
+            class="md:col-span-7 aspect-[16/9] rounded-2xl overflow-hidden border-4 border-[--color-brand-hover] group-hover:scale-[1.01] transition-transform"
           >
-            [PLACEHOLDER · cover destacado]
+            {featuredPost.data.cover ? (
+              <Image
+                src={featuredPost.data.cover}
+                alt={featuredPost.data.coverAlt ?? featuredPost.data.title}
+                widths={[640, 960, 1280, 1920]}
+                sizes="(min-width: 1280px) 800px, 100vw"
+                class="w-full h-full object-cover"
+                loading="eager"
+              />
+            ) : (
+              <div
+                class="bg-[--color-brand] w-full h-full flex items-center justify-center text-[--color-fg-inverse] font-mono uppercase tracking-widest"
+                aria-hidden="true"
+              >
+                [PLACEHOLDER · cover destacado]
+              </div>
+            )}
           </div>
           <div class="md:col-span-5 flex flex-col gap-5">
             <div class="flex items-center gap-3 flex-wrap">
@@ -87,13 +103,28 @@ const jsonLd = [
     <section class="border-t border-[--color-border]">
       <div class="container-fluid py-16 md:py-24">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {rest.map((post) => (
+          {rest.map((post, i) => (
             <a href={`/blog/${post.id}`} class="group flex flex-col gap-5">
               <div
-                class="aspect-[4/3] bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
-                aria-hidden="true"
+                class="aspect-[4/3] rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
               >
-                [PLACEHOLDER · cover]
+                {post.data.cover ? (
+                  <Image
+                    src={post.data.cover}
+                    alt={post.data.coverAlt ?? post.data.title}
+                    widths={[400, 600, 800]}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    class="w-full h-full object-cover"
+                    loading={i < 3 ? 'eager' : 'lazy'}
+                  />
+                ) : (
+                  <div
+                    class="bg-[--color-brand-soft] w-full h-full flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest"
+                    aria-hidden="true"
+                  >
+                    [PLACEHOLDER · cover]
+                  </div>
+                )}
               </div>
               <div class="flex items-center gap-3 flex-wrap">
                 {post.data.categories.slice(0, 1).map((cat) => (

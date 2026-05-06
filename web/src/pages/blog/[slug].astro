@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
@@ -85,12 +86,23 @@ const jsonLd = [
     </header>
 
     <div class="container-fluid pb-12 md:pb-16">
-      <div
-        class="aspect-[16/9] bg-[--color-brand-soft] rounded-2xl border-2 border-[--color-brand] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest"
-        aria-hidden="true"
-      >
-        [PLACEHOLDER · cover]
-      </div>
+      {data.cover ? (
+        <Image
+          src={data.cover}
+          alt={data.coverAlt ?? data.title}
+          widths={[640, 960, 1280, 1920]}
+          sizes="(min-width: 1280px) 1280px, 100vw"
+          class="aspect-[16/9] w-full rounded-2xl object-cover border border-[--color-border]"
+          loading="eager"
+        />
+      ) : (
+        <div
+          class="aspect-[16/9] bg-[--color-brand-soft] rounded-2xl border-2 border-[--color-brand] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest"
+          aria-hidden="true"
+        >
+          [PLACEHOLDER · cover]
+        </div>
+      )}
     </div>
 
     <div class="container-fluid pb-20 md:pb-32">
@@ -131,10 +143,25 @@ const jsonLd = [
             {related.map((p) => (
               <a href={`/blog/${p.id}`} class="group flex flex-col gap-4">
                 <div
-                  class="aspect-[4/3] bg-[--color-brand-soft] rounded-2xl flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
-                  aria-hidden="true"
+                  class="aspect-[4/3] rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
                 >
-                  [PLACEHOLDER · cover]
+                  {p.data.cover ? (
+                    <Image
+                      src={p.data.cover}
+                      alt={p.data.coverAlt ?? p.data.title}
+                      widths={[400, 600, 800]}
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      class="bg-[--color-brand-soft] w-full h-full flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest"
+                      aria-hidden="true"
+                    >
+                      [PLACEHOLDER · cover]
+                    </div>
+                  )}
                 </div>
                 <h3
                   class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
