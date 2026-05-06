@@ -6,6 +6,8 @@ readingMinutes: 14
 categories:
   - "SEO"
 tags: []
+cover: ./imagenes/pasos-auditoria-seo/cover-analytics-2618277_1280.jpg
+coverAlt: "auditoria-seo"
 author: "Diseño Web Valencia"
 ---
 Hablamos mucho de SEO off-page. Construir, administrar y auditar enlaces es un aspecto crítico del SEO, y cada vez es más difícil. El SEO Onpage también es un tema de especial relevancia, especialmente ahora que Google está cambiando cada vez más a la búsqueda semántica, y las tácticas de la vieja escuela relativas a incluir todas las keywords y sus sinónimos en una página no parecen funcionar tan bien como solían hacerlo.

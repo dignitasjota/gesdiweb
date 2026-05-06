@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "Hosting"
 tags: []
+cover: ./imagenes/hosting-variedades/cover-hosting.gif
+coverAlt: "hosting-valencia-gesdiweb"
 author: "consultor seo valencia"
 ---
 # El Hosting y sus variedades  

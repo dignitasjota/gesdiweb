@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "Hosting"
 tags: []
+cover: ./imagenes/hosting-java/cover-datacenter-computer-data-firewall-network-rack.jpg
+coverAlt: "datacenter-computer-data-firewall-network-rack"
 author: "Diseño Web Valencia"
 ---
 El alojamiento de aplicaciones poco tiene que ver con el alojamiento web, y debido al alto nivel de especialización que requiere, podemos elegir entre una gran variedad de opciones y proveedores a la hora de buscar alojamiento de aplicaciones.

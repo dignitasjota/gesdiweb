@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/redes-sociales-en-verano/cover-redes-sociales-en-verano.jpg
+coverAlt: "gestionar las redes sociales en verano"
 author: "Amparo Arnau"
 ---
 # Cómo gestionar tus redes sociales y tu blog en verano

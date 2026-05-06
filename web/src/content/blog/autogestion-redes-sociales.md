@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/autogestion-redes-sociales/cover-redes-sociales.jpg
+coverAlt: "gestion-redes-sociales-errores"
 author: "Amparo Arnau"
 ---
 # 5 errores en la autogestión de redes sociales propias

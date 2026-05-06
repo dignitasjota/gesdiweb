@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/phishing/cover-phishing.jpg
+coverAlt: "phishing-web"
 author: "Amparo Arnau"
 ---
 # Cómo evitar que te hagan phishing en redes sociales

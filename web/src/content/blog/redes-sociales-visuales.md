@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/redes-sociales-visuales/cover-redes-sociales-visuales.jpg
+coverAlt: "redes sociales visuales"
 author: "Amparo Arnau"
 ---
 # 4 redes sociales visuales esenciales para tu estrategia de social media

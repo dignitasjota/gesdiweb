@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "Diseño Móviles"
 tags: []
+cover: ./imagenes/usabilidad-web-mobile-friendly/cover-mobile-phones.jpg
+coverAlt: "Mobile-Friendly-valencia"
 author: "Amparo Arnau"
 ---
 # Diseño web responsive y Mobile friendly
