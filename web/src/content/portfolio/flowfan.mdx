@@ -1,0 +1,57 @@
+---
+title: "Flowfan"
+client: "Flowfan"
+year: 2026
+excerpt: "SaaS para creadores de contenido: CRM con IA conversacional, scoring automático, Telegram en vivo y broadcasts masivos. Stack Next.js + tRPC + Drizzle."
+order: 3
+featured: true
+cover: ./imagenes/flowfan/cover.jpg
+coverAlt: "Hero de Flowfan con el claim 'Gestiona tus fans con inteligencia artificial' y métricas del producto: 8+ plataformas, 5 proveedores IA, respuesta IA en menos de 2 segundos."
+techStack:
+  - "Next.js + React 19"
+  - "Tailwind v4 + shadcn/ui"
+  - "tRPC"
+  - "Drizzle ORM + PostgreSQL 16"
+  - "Redis 7 + BullMQ"
+  - "Resend"
+servicesUsed:
+  - "diseno-web"
+  - "posicionamiento-web"
+url: "https://flowfan.app"
+---
+
+## El reto
+
+Un creador de contenido con audiencia activa puede gestionar **miles de
+mensajes al día** entre todas las plataformas donde está presente. Las
+herramientas existentes en el mercado son fragmentadas (una para cada
+red), caras y carecen de IA real. El cliente necesitaba una **plataforma
+única** que centralizara la conversación con sus fans, automatizara las
+respuestas con IA y diera un panel de control para supervisar todo el
+equipo de chatters.
+
+## La solución
+
+SaaS multi-tenant desarrollado a medida con un stack moderno pensado
+para escalar: **Next.js + React 19** en frontend con **Tailwind v4 +
+shadcn/ui**, **tRPC** para una capa RPC totalmente tipada, **Drizzle
+ORM + PostgreSQL 16** como persistencia, **Redis 7 + BullMQ** para
+procesar colas de mensajes en tiempo real y **Resend** para los emails
+transaccionales.
+
+Funcionalidades clave en producción:
+
+- **IA conversacional** con 5 proveedores integrados y failover
+- **Respuesta IA en menos de 2 segundos** gracias al pipeline asíncrono con BullMQ
+- **CRM con scoring automático** de fans según comportamiento y valor
+- **8+ plataformas integradas**, con Telegram en vivo como la más estratégica
+- **Broadcasts masivos** segmentados por scoring del CRM
+- **Equipo de chatters** colaborativo con permisos granulares
+- **Panel único** para supervisar todo el flujo desde un solo sitio
+
+## Resultados
+
+- Plataforma en producción con onboarding gratuito sin tarjeta
+- Latencia de IA por debajo de 2 segundos sostenida bajo carga
+- Stack diseñado para multi-tenant desde el día 1
+- Arquitectura con colas que absorbe picos sin degradar la UI
