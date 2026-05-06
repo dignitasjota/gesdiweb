@@ -422,6 +422,55 @@ Estas son **guidelines no negociables** para que el blog y los servicios suenen 
 
 ---
 
+## Imágenes de portfolio (cover y galería)
+
+Para que cada proyecto tenga su carpeta y todo quede ordenado:
+
+```
+web/src/content/portfolio/
+├── clinica-parc-central.mdx
+├── clinica-parc-central/                ← carpeta con assets de ese proyecto
+│   ├── cover.jpg                        ← imagen principal
+│   └── galeria-01.jpg                   ← (opcional) imágenes secundarias
+├── otro-proyecto.mdx
+└── otro-proyecto/
+    └── cover.jpg
+```
+
+**Convención:** la subcarpeta se llama **igual que el slug del proyecto** (mismo nombre que el `.mdx` sin extensión). Dentro, las imágenes con nombres descriptivos (`cover.jpg`, `galeria-01.jpg`, etc.).
+
+### Cómo referenciar la cover en el frontmatter
+
+```yaml
+cover: ./clinica-parc-central/cover.jpg
+coverAlt: "Texto descriptivo para SEO + accesibilidad"
+```
+
+### Cómo referenciar una galería (opcional)
+
+```yaml
+gallery:
+  - ./clinica-parc-central/galeria-01.jpg
+  - ./clinica-parc-central/galeria-02.jpg
+```
+
+> El renderizado de la galería en la página de detalle todavía no está conectado — lo añadiré cuando se necesite. La estructura del schema ya está preparada.
+
+### Especificaciones técnicas
+
+| Campo | Recomendación |
+|---|---|
+| Formato | JPG (fotos), PNG (capturas con texto) o WebP. Astro genera AVIF/WebP automáticamente |
+| Cover mínima | **1600×900** (16:9). Si la fuente tiene otro ratio se recorta con `object-cover` |
+| Optimización | Astro la hace en build (typical: 412 KB → 45 KB en WebP) |
+| Variantes responsive | Generadas automáticamente: 480/720/1080/1440/1920px |
+
+### Sin imagen
+
+Si un proyecto del portfolio no tiene cover (`cover` ausente del frontmatter), se renderiza un **placeholder brand-soft** automáticamente con el número y año del proyecto. La web sigue funcionando.
+
+---
+
 ## 9. MDX disponible en este proyecto
 
 ### Markdown estándar que funciona
