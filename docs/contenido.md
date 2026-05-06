@@ -424,25 +424,30 @@ Estas son **guidelines no negociables** para que el blog y los servicios suenen 
 
 ## Imágenes de portfolio (cover y galería)
 
-Para que cada proyecto tenga su carpeta y todo quede ordenado:
+Todas las imágenes del portfolio viven bajo una carpeta común `imagenes/` con una subcarpeta por proyecto. Mantiene la raíz de `portfolio/` limpia: solo los `.mdx`.
 
 ```
 web/src/content/portfolio/
+├── imagenes/                            ← carpeta común para todas las imágenes
+│   ├── clinica-parc-central/            ← subcarpeta = slug del proyecto
+│   │   ├── cover.jpg                    ← imagen principal
+│   │   └── galeria-01.jpg               ← (opcional) imágenes secundarias
+│   └── otro-proyecto/
+│       └── cover.jpg
 ├── clinica-parc-central.mdx
-├── clinica-parc-central/                ← carpeta con assets de ese proyecto
-│   ├── cover.jpg                        ← imagen principal
-│   └── galeria-01.jpg                   ← (opcional) imágenes secundarias
 ├── otro-proyecto.mdx
-└── otro-proyecto/
-    └── cover.jpg
+└── (resto de .mdx)
 ```
 
-**Convención:** la subcarpeta se llama **igual que el slug del proyecto** (mismo nombre que el `.mdx` sin extensión). Dentro, las imágenes con nombres descriptivos (`cover.jpg`, `galeria-01.jpg`, etc.).
+**Convención:**
+- Carpeta raíz `imagenes/` para todas las imágenes del portfolio.
+- Subcarpeta = **slug del proyecto** (mismo nombre que el `.mdx` sin extensión).
+- Dentro, nombres descriptivos: `cover.jpg`, `galeria-01.jpg`, etc.
 
 ### Cómo referenciar la cover en el frontmatter
 
 ```yaml
-cover: ./clinica-parc-central/cover.jpg
+cover: ./imagenes/clinica-parc-central/cover.jpg
 coverAlt: "Texto descriptivo para SEO + accesibilidad"
 ```
 
@@ -450,8 +455,8 @@ coverAlt: "Texto descriptivo para SEO + accesibilidad"
 
 ```yaml
 gallery:
-  - ./clinica-parc-central/galeria-01.jpg
-  - ./clinica-parc-central/galeria-02.jpg
+  - ./imagenes/clinica-parc-central/galeria-01.jpg
+  - ./imagenes/clinica-parc-central/galeria-02.jpg
 ```
 
 > El renderizado de la galería en la página de detalle todavía no está conectado — lo añadiré cuando se necesite. La estructura del schema ya está preparada.
