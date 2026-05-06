@@ -46,7 +46,9 @@ const portfolio = defineCollection({
 });
 
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+  // Posts importados de WordPress son .md (Markdown puro). El .mdx se acepta
+  // por compatibilidad con posts futuros que necesiten componentes Astro.
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
     excerpt: z.string(),
