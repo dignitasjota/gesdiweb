@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "eMail Marketing"
 tags: []
+cover: ./imagenes/novedades-email-marketing-mailrelay/cover-generated.jpg
+coverAlt: "Lo Nuevo que Trae el E-mail Marketing — cover de gesdiweb"
 author: "Diseño Web Valencia"
 ---
 El e-mail marketing o mailing es una herramienta del marketing digital que usa el correo electrónico como principal instrumento. Se trata de enviar un mensaje cuidadosamente diseñado a un gran número de contactos.

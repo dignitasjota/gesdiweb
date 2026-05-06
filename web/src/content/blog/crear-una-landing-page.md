@@ -7,6 +7,8 @@ categories:
   - "Desarrollo Páginas web"
   - "Herramientas de diseño web"
 tags: []
+cover: ./imagenes/crear-una-landing-page/cover-generated.jpg
+coverAlt: "7 Herramientas de diseño web para crear una landing page genial — cover de gesdiweb"
 author: "consultor seo valencia"
 ---
 # Herramientas de diseño web para crear landings

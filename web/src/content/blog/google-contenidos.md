@@ -8,6 +8,8 @@ categories:
   - "Marketing Online"
   - "SEO"
 tags: []
+cover: ./imagenes/google-contenidos/cover-generated.jpg
+coverAlt: "Haz que Google se enamore de tus contenidos y potencia el SEO — cover de gesdiweb"
 author: "consultor seo valencia"
 ---
 # 8 parámetros para que a Google le gusten tus contenidos

@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "SEO"
 tags: []
+cover: ./imagenes/posicionamiento-en-buscadores/cover-generated.jpg
+coverAlt: "Posicionamiento en buscadores — cover de gesdiweb"
 author: "Diseño Web Valencia"
 ---
 # ¿Basta con el diseño para un buen posicionamiento en buscadores?

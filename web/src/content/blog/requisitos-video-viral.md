@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "video marketing"
 tags: []
+cover: ./imagenes/requisitos-video-viral/cover-generated.jpg
+coverAlt: "5 requisitos para que un video sea viral — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # 5 Requisitos para que los vídeos puedan ser virales

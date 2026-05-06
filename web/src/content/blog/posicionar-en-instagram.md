@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/posicionar-en-instagram/cover-generated.jpg
+coverAlt: "Posicionar en Instagram el contenido — cover de gesdiweb"
 author: "Diseño Web Valencia"
 ---
 # Cómo posicionar en Instagram tu contenido

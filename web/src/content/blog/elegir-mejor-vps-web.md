@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "Hosting"
 tags: []
+cover: ./imagenes/elegir-mejor-vps-web/cover-generated.jpg
+coverAlt: "Como elegir el mejor VPS para tu web — cover de gesdiweb"
 author: "Diseño Web Valencia"
 ---
 Normalmente, cuando empezamos un pequeño proyecto como puede ser una página web o una tienda online optamos por el plan de alojamiento más básico y barato ya que solemos empezar con un presupuesto ajustado. ¿Pero qué ocurre cuando empezamos a tener mucho éxito? Carga lenta, constantes caídas, tus mails entran siempre como SPAM y una larga lista de problemas que pueden tirar por la borda todo esos meses o años de duro trabajo en tu negocio online.

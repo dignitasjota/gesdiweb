@@ -6,6 +6,8 @@ readingMinutes: 5
 categories:
   - "Gestión de contenido"
 tags: []
+cover: ./imagenes/viralizar-el-contenido/cover-generated.jpg
+coverAlt: "Consejos para viralizar el contenido — cover de gesdiweb"
 author: "consultor seo valencia"
 ---
 # Viralizar el contenido de tu blog es fácil con estos consejos

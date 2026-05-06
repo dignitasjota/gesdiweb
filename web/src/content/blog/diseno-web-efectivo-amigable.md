@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "Desarrollo Páginas web"
 tags: []
+cover: ./imagenes/diseno-web-efectivo-amigable/cover-generated.jpg
+coverAlt: "5 consejos para un diseño web efectivo y amigable — cover de gesdiweb"
 author: "Diseño Web Valencia"
 ---
 # 5 consejos para un diseño web efectivo y amigable

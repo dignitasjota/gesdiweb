@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/storytelling/cover-generated.jpg
+coverAlt: "Beneficios del storytelling en tu estrategia de contenidos — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # ¿Por qué incluir el stowytelling en tu estrategia de marca?

@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/escaleta-de-contenidos/cover-generated.jpg
+coverAlt: "La escaleta de contenidos en marketing online — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Importancia Escaleta de contenidos en Marketing Online

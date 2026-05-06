@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "Gestión de contenido"
 tags: []
+cover: ./imagenes/bancos-de-imagenes/cover-generated.jpg
+coverAlt: "Los Bancos de Imágenes Gratuitos — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Descubre los mejores Bancos de Imágenes Gratuitos

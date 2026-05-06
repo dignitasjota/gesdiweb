@@ -6,6 +6,8 @@ readingMinutes: 8
 categories:
   - "Marketing Online"
 tags: []
+cover: ./imagenes/marketing-para-navidad/cover-generated.jpg
+coverAlt: "Mejora tu campaña de marketing para esta Navidad — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Potencia y mejora tu campaña de marketing para esta Navidad

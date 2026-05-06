@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/atencion-cliente-redes-sociales/cover-generated.jpg
+coverAlt: "La atención al cliente en redes sociales — cover de gesdiweb"
 author: "Diseño Web Valencia"
 ---
 # [Mejora la atención al cliente en redes sociales](https://www.gesdiweb.es/marketing-online-en-valencia/)

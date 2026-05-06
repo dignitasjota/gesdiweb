@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/content-manager/cover-generated.jpg
+coverAlt: "Content Manager un perfil profesional en alza . ¿Debo contratarlo? — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # ¿Conoces el perfil de un buen content manager?

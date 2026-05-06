@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/estrategia-de-contenidos/cover-generated.jpg
+coverAlt: "Herramientas para la estrategia de contenidos — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Las mejores herramientas para la estrategia de contenidos de tu vida

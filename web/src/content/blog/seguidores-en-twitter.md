@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/seguidores-en-twitter/cover-generated.jpg
+coverAlt: "Consigue más seguidores en Twitter — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Cuatro consejos para aumentar los seguidores en Twitter

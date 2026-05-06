@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "video marketing"
 tags: []
+cover: ./imagenes/crear-canal-youtube-trucos/cover-generated.jpg
+coverAlt: "Crea y personaliza tu canal de Youtube — cover de gesdiweb"
 author: "Diseño Web Valencia"
 ---
 # Crea a la perfección tu canal de Youtube

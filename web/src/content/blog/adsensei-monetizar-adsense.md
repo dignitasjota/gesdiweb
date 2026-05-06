@@ -6,6 +6,8 @@ readingMinutes: 7
 categories:
   - "adsensei"
 tags: []
+cover: ./imagenes/adsensei-monetizar-adsense/cover-generated.jpg
+coverAlt: "Adsensei una forma rápida de monetizar tu blog con Adsense — cover de gesdiweb"
 author: "consultor seo valencia"
 ---
 # [Que es Adsensei y porque es el mejor plugin para monetizar](https://www.gesdiweb.es/adsensei-monetizar-adsense/)

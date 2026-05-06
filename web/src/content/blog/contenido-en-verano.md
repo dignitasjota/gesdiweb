@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/contenido-en-verano/cover-generated.jpg
+coverAlt: "Crea contenido en verano más fresco y dinámico — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Refresca y dinamiza tu contenido en verano

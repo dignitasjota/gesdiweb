@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/redes-sociales-errores/cover-generated.jpg
+coverAlt: "Los errores más comunes en redes sociales — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Errores en redes sociales que debes evitar

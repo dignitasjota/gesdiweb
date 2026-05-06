@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/errores-marketing-contenidos/cover-generated.jpg
+coverAlt: "Los peores errores en marketing de contenidos — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Los errores en marketing de contenidos más graves que puedes cometer

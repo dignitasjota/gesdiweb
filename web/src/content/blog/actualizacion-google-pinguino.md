@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "SEO"
 tags: []
+cover: ./imagenes/actualizacion-google-pinguino/cover-generated.jpg
+coverAlt: "Actualización Google pingüino (Penguin) 23 septiembre 2016 — cover de gesdiweb"
 author: "consultor seo valencia"
 ---
 Bueno aquí estoy un viernes por la noche escribiendo el post sobre la actualización de Google pingüino de hoy 23 de septiembre, esta vez si es oficial, les ha costado poder **integrar el Algoritmo de Penguin en el Core del buscador** pero definitivamente lo tenemos on fire ! Os hago una breve introducción del pingüino y me pongo al tema

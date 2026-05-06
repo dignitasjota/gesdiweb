@@ -7,6 +7,8 @@ categories:
   - "eMail Marketing"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/mejora-tasa-apertura-newsletter/cover-generated.jpg
+coverAlt: "Mejora la tasa de apertura de las Newsletter — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 # Consejos para mejorar la tase de apertura de las Newsletter

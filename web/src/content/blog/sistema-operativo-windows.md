@@ -7,6 +7,8 @@ categories:
   - "Mantenimiento informático"
   - "Windows"
 tags: []
+cover: ./imagenes/sistema-operativo-windows/cover-generated.jpg
+coverAlt: "El mantenimiento del sistema operativo Windows — cover de gesdiweb"
 author: "Amparo Arnau"
 ---
 ## Mejora el mantenimiento de tu sistema operativo Windows
