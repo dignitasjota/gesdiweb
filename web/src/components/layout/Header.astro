@@ -9,6 +9,8 @@ const navLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
+const isActive = (href: string) =>
+  currentPath === href || currentPath.startsWith(href + '/');
 ---
 
 <header
@@ -30,22 +32,19 @@ const currentPath = Astro.url.pathname;
     </a>
 
     <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-8">
-      {navLinks.map(({ href, label }) => {
-        const isActive = currentPath === href || currentPath.startsWith(href + '/');
-        return (
-          <a
-            href={href}
-            class={`text-sm font-medium tracking-tight transition-colors ${
-              isActive
-                ? 'text-[--color-fg]'
-                : 'text-[--color-fg-soft] hover:text-[--color-fg]'
-            }`}
-            aria-current={isActive ? 'page' : undefined}
-          >
-            {label}
-          </a>
-        );
-      })}
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class={`text-sm font-medium tracking-tight transition-colors ${
+            isActive(href)
+              ? 'text-[--color-fg]'
+              : 'text-[--color-fg-soft] hover:text-[--color-fg]'
+          }`}
+          aria-current={isActive(href) ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))}
     </nav>
 
     <div class="flex items-center gap-3">
@@ -55,9 +54,10 @@ const currentPath = Astro.url.pathname;
 
       <button
         type="button"
-        class="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2"
+        class="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 text-[--color-fg]"
         aria-label="Abrir menú"
         aria-expanded="false"
+        aria-controls="mobile-menu"
         data-mobile-menu-toggle
       >
         <span class="sr-only">Menú</span>
@@ -70,13 +70,107 @@ const currentPath = Astro.url.pathname;
           stroke="currentColor"
           stroke-width="1.5"
           aria-hidden="true"
+          data-icon-open
         >
           <line x1="4" y1="8" x2="20" y2="8" />
           <line x1="4" y1="16" x2="20" y2="16" />
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+          class="hidden"
+          data-icon-close
+        >
+          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="6" y1="18" x2="18" y2="6" />
         </svg>
       </button>
     </div>
   </div>
 </header>
 
+<!-- Drawer del menú móvil -->
+<div
+  id="mobile-menu"
+  class="mobile-menu md:hidden"
+  data-open="false"
+  aria-hidden="true"
+>
+  <div class="container-fluid pt-24 pb-12 flex flex-col h-full">
+    <nav aria-label="Navegación principal móvil" class="flex flex-col gap-8 flex-1">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class={`font-display font-bold tracking-[-0.025em] leading-none transition-colors ${
+            isActive(href)
+              ? 'text-[--color-brand]'
+              : 'text-[--color-fg] hover:text-[--color-brand]'
+          }`}
+          style="font-size: var(--text-2xl);"
+          aria-current={isActive(href) ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="border-t border-[--color-border] pt-8 mt-8 space-y-4">
+      <Button href="/contacto" variant="primary" size="lg" class="w-full justify-center">
+        Hablemos
+      </Button>
+      <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
+        // hola@gesdiweb.es
+      </p>
+    </div>
+  </div>
+</div>
+
 <div class="h-16 md:h-20" aria-hidden="true"></div>
+
+<script>
+  function setupMobileMenu() {
+    const toggle = document.querySelector<HTMLButtonElement>(
+      '[data-mobile-menu-toggle]',
+    );
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = toggle?.querySelector<SVGElement>('[data-icon-open]');
+    const iconClose = toggle?.querySelector<SVGElement>('[data-icon-close]');
+    if (!toggle || !menu) return;
+
+    const setOpen = (open: boolean) => {
+      menu.dataset.open = String(open);
+      menu.setAttribute('aria-hidden', String(!open));
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      document.body.dataset.mobileMenuOpen = open ? 'true' : '';
+      iconOpen?.classList.toggle('hidden', open);
+      iconClose?.classList.toggle('hidden', !open);
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(menu.dataset.open !== 'true');
+    });
+
+    // Cerrar al hacer click en cualquier link del menú
+    menu.querySelectorAll('a').forEach((link) =>
+      link.addEventListener('click', () => setOpen(false)),
+    );
+
+    // Cerrar con ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.dataset.open === 'true') setOpen(false);
+    });
+
+    // Cerrar al cambiar de página (View Transitions)
+    document.addEventListener('astro:before-swap', () => setOpen(false));
+  }
+
+  setupMobileMenu();
+  document.addEventListener('astro:page-load', setupMobileMenu);
+</script>

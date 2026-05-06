@@ -162,6 +162,59 @@ video {
 }
 
 /* ───────────────────────────────────────────────────────────
+   Skip link · accesibilidad teclado
+   ─────────────────────────────────────────────────────────── */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-fg);
+  color: var(--color-fg-inverse);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  border-bottom-right-radius: var(--radius-md);
+  transform: translateY(-110%);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--color-brand);
+  outline-offset: 0;
+}
+
+/* ───────────────────────────────────────────────────────────
+   Menú móvil · drawer overlay
+   ─────────────────────────────────────────────────────────── */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    visibility 0s linear var(--duration-base);
+  visibility: hidden;
+}
+.mobile-menu[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    visibility 0s linear 0s;
+}
+body[data-mobile-menu-open="true"] {
+  overflow: hidden;
+}
+
+/* ───────────────────────────────────────────────────────────
    Reveals — animación al entrar en viewport
    ─────────────────────────────────────────────────────────── */
 /*
