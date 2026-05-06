@@ -7,7 +7,7 @@
 const SITE_URL = 'https://gesdiweb.es';
 const SITE_NAME = 'gesdiweb';
 const SITE_TAGLINE = 'Diseño web y posicionamiento SEO';
-const DEFAULT_OG = `${SITE_URL}/og-default.svg`;
+const DEFAULT_OG = `${SITE_URL}/og-default.png`;
 
 const ORG_LOGO = `${SITE_URL}/logo.svg`; // pendiente de SVG real
 
