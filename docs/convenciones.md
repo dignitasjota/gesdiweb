@@ -150,6 +150,34 @@ Todo MDX debe pasar el schema Zod definido en `web/src/content.config.ts`. Si As
 - Una clase de utilidad por intención. Si una combinación se repite > 3 veces, extraer a un componente.
 - Nada de CSS-in-JS.
 
+### Resets y Cascade Layers (regla crítica)
+
+Tailwind 4 ordena `@layer theme, base, components, utilities`. Las **reglas fuera de cualquier `@layer` ganan siempre** sobre las que están en capas, independientemente de la especificidad. Si añades un reset en `globals.css` para un elemento HTML, **debe ir dentro de `@layer base`**:
+
+```css
+/* ✅ correcto: utilities pueden sobreescribir */
+@layer base {
+  img, svg, video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ❌ incorrecto: bloquea .h-9, .hidden, etc. en imgs y svgs */
+img, svg, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+```
+
+Bug histórico (corregido 2026-05-07, ADR-020): el reset de imgs estaba fuera de capa, lo que hacía que `.h-9`, `.hidden`, etc. no se aplicaran a `<img>` ni `<svg>`. El icono X del menú móvil con `class="hidden"` siempre era visible. El logo con `class="h-9"` no respetaba la altura. Si vuelves a ver síntomas similares, comprueba que el reset esté en `@layer base`.
+
+### Componente Button (bug conocido)
+
+`<Button>` aplica internamente `inline-flex` y luego concatena las clases que le pasamos. Si pasas `class="hidden md:inline-flex"`, Tailwind genera ambas en `@layer utilities` con misma especificidad y gana la última que aparezca en el CSS final. Resultado: el botón se ve cuando debería estar oculto en mobile. Workaround temporal: usar `<a>` con clases directas hasta que se refactorice el componente.
+
 ---
 
 ## 5. Accesibilidad (AA mínimo)

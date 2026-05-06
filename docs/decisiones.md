@@ -250,3 +250,184 @@ Self-hosted con Fontsource desde `/fonts/`, no Google Fonts CDN (RGPD + rendimie
 - (+) Cache de GitHub Actions reduce builds repetidos a ~30s.
 - (+) Push solo afecta a `web/`, `docker-compose.yml` o el workflow — los cambios docs-only no construyen.
 - (−) Dependencia de Portainer corriendo. Si Portainer cae, despliegues manuales por SSH.
+
+---
+
+## ADR-014 · Variables de entorno con `astro:env/server` (sustituye al ADR-009)
+
+**Fecha:** 2026-05-06
+**Estado:** Aceptada (sustituye ADR-009)
+
+**Contexto.** Tras el fix de ADR-009 (`process.env` en lugar de `import.meta.env`), el dueño reportó que en desarrollo local el `.env` no se cargaba: `process.env.RESEND_API_KEY` aparecía undefined, aunque Astro detecta y carga `.env` automáticamente. Astro 5+ expone una API tipada y consistente entre dev/prod: `astro:env/server`.
+
+**Decisión.** En `astro.config.mjs` declarar el schema:
+
+```js
+env: {
+  schema: {
+    RESEND_API_KEY: envField.string({ context: 'server', access: 'secret' }),
+    RESEND_FROM_EMAIL: envField.string({ context: 'server', access: 'secret' }),
+    LEAD_NOTIFICATION_EMAIL: envField.string({ context: 'server', access: 'secret' }),
+  },
+}
+```
+
+En el endpoint:
+
+```ts
+import { RESEND_API_KEY, RESEND_FROM_EMAIL, LEAD_NOTIFICATION_EMAIL } from 'astro:env/server';
+```
+
+**Consecuencias.**
+- (+) Carga consistente de `.env` en dev, env vars de docker-compose en prod, sin diferencias de comportamiento.
+- (+) Tipado fuerte: si una var falta o tiene tipo incorrecto, error explícito.
+- (+) `access: 'secret'` impide que se inlinee accidentalmente en el cliente.
+- (−) Hay que mantener el schema sincronizado con `.env.example` y el docker-compose.
+
+---
+
+## ADR-015 · OG images per-entry pre-generadas con Playwright (sustituye al ADR-012)
+
+**Fecha:** 2026-05-06
+**Estado:** Aceptada (sustituye ADR-012)
+
+**Contexto.** ADR-012 dejó un único SVG estático como OG fallback. Limitaciones detectadas:
+- Algunos clientes (Slack legacy, ciertos email) no soportan SVG en OG.
+- Una imagen única para todo el sitio reduce el CTR en social vs imágenes contextuales por entry.
+
+Opciones evaluadas:
+1. Generación dinámica en runtime (Satori, `@vercel/og`) — añade dependencias y CPU en el endpoint.
+2. Pre-generar PNGs en build/CI con Playwright headless — funciona offline, idempotente.
+3. Pedir al dueño una imagen por post — no escala con 69 posts.
+
+**Decisión.** Opción 2: script `web/scripts/generate-og-images.mjs` que recorre las collections, lee el frontmatter y renderiza HTML con Playwright a PNG 1200×630. Una imagen por entry de blog/portfolio/services + el `og-default.png` global. Idempotente: salta archivos existentes salvo `--force`.
+
+Paleta diferenciada por colección:
+- **blog** → fondo blanco, accent brand, asterisco soft (artículos de prosa).
+- **portfolio** → fondo dark, accent brand, asterisco translúcido (foco visual).
+- **services** → fondo brand, texto blanco, asterisco translúcido (estilo agencia).
+
+**Consecuencias.**
+- (+) 80 OG images PNG en `web/public/og/` (compatibles con todos los clientes).
+- (+) Build de producción no se ralentiza (las PNGs ya están en el repo).
+- (+) Cambiar el template afecta a todo: `npm run og:force` regenera.
+- (−) PNGs entran al repo Git (~50KB cada una × 80 = ~4MB total). Aceptable.
+- (−) Cuando se añade un post nuevo, hay que correr `npm run og` antes del commit.
+
+---
+
+## ADR-016 · Importar blog WP vía REST API (no XML/WXR)
+
+**Fecha:** 2026-05-06
+**Estado:** Aceptada
+
+**Contexto.** Para Fase 8 había que migrar 69 posts de la WordPress antigua. Opciones:
+1. Export → WXR (XML nativo de WP). Posts vienen con shortcodes sin renderizar.
+2. REST API (`/wp-json/wp/v2/posts`). Posts vienen con HTML ya renderizado.
+
+**Decisión.** REST API. El HTML renderizado contiene los shortcodes ya expandidos, las imágenes con sus URLs reales y los enlaces internos resueltos. Solo hay que sanear y convertir a Markdown.
+
+**Consecuencias.**
+- (+) Sin parser de shortcodes propios, sin conversión de oEmbed.
+- (+) Imágenes con URL final: descarga directa.
+- (+) Categorías y tags vienen ya con sus nombres legibles vía endpoints anidados.
+- (−) Requiere que la WP origen tenga la REST API habilitada (estaba ok).
+- (~) Algún HTML residual ha de limpiarse (clases CSS, `<div class="wp-block-...">` redundantes). Asumido.
+
+---
+
+## ADR-017 · Blog en `.md` (no `.mdx`) por incompatibilidad de WordPress
+
+**Fecha:** 2026-05-06
+**Estado:** Aceptada
+
+**Contexto.** Inicialmente el schema de la collection `blog` aceptaba `**/*.{md,mdx}`. Al importar posts WP, MDX intentaba parsear sintaxis tipo `%{REQUEST_URI}` o ejemplos de código que contienen `<2 segundos` como JSX y rompía el build.
+
+**Decisión.** Restringir el glob de la collection `blog` a **solo `*.md`**. Markdown puro pasa esos contenidos como texto literal sin intentar interpretar JSX.
+
+```ts
+blog: defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  schema: ...
+})
+```
+
+`portfolio` y `services` siguen aceptando `.mdx` porque su contenido es controlado y sí se beneficia de componentes inline.
+
+**Consecuencias.**
+- (+) Build estable con contenido WP histórico.
+- (−) En `blog/` no se pueden usar componentes Astro inline. Aceptable: los posts son prosa.
+- (~) Si en el futuro queremos un post nuevo con componentes, se podría hacer `.mdx` y sanear su contenido.
+
+---
+
+## ADR-018 · DX: Husky + lint-staged + Prettier a nivel repo
+
+**Fecha:** 2026-05-06
+**Estado:** Aceptada
+
+**Contexto.** El proyecto está en estructura "monorepo light" — repo en `/gesdiweb`, app Astro en `/gesdiweb/web`. Hace falta formatear automáticamente al hacer commit, pero solo los archivos de la app, no docs ni configs raíz.
+
+**Decisión.**
+- **Prettier 3.8** + **plugin-astro** dentro de `web/`.
+- **Husky** con `core.hooksPath = .husky` apuntando al `.husky/` raíz (configurado en `npm run prepare` desde `web/`).
+- **lint-staged** dentro de `web/package.json` formatea solo archivos staged.
+- Hook `pre-commit` filtra archivos con prefijo `web/` y delega a lint-staged dentro de `web/`. Si no hay archivos `web/` en staging, exit 0 (no formatea docs).
+
+**Consecuencias.**
+- (+) Formato consistente en cada commit.
+- (+) Docs y configs raíz no tocadas por Prettier.
+- (+) Los LLMs no tienen que recordar correr `format` manualmente.
+- (−) Primer setup en máquina nueva requiere `npm install` desde `web/` (instala husky vía script `prepare`).
+
+---
+
+## ADR-019 · Renovate para PRs automáticos de dependencias
+
+**Fecha:** 2026-05-06
+**Estado:** Aceptada
+
+**Contexto.** Con Astro 6, Tailwind 4 y varias dependencias activas, mantenerlas al día manualmente es tedioso y se olvida. Dependabot vs Renovate vs scripts custom.
+
+**Decisión.** Renovate (config `.github/renovate.json`):
+- Schedule: lunes antes de las 6am Europe/Madrid.
+- **Patch + minor agrupados** en un solo PR semanal (reduce ruido).
+- **Majors críticos** (`astro`, `@astrojs/*`, `vite`, `tailwindcss`, `react`) con label `needs-review` y sin automerge.
+- **Fontsource agrupado** en su propio PR.
+- `lockFileMaintenance` semanal.
+- Vulnerability alerts con label `security`, sin automerge.
+
+**Consecuencias.**
+- (+) Un PR por semana con casi todo, fácil de revisar.
+- (+) Majors críticos no pasan automáticamente — protege de la incompatibilidad Astro 6 / rolldown-vite (ADR-006).
+- (−) Hay que tener Renovate instalado en la org GitHub (cuenta gratuita).
+
+---
+
+## ADR-020 · Reset de imágenes dentro de `@layer base` para que Tailwind utilities ganen
+
+**Fecha:** 2026-05-07
+**Estado:** Aceptada
+
+**Contexto.** Al integrar el logo oficial, las clases `h-8 md:h-9 w-auto` no se aplicaban al `<img>`. Computed: `height: 167px` (calculado por aspect-ratio del attribute `width`/`height`), no `36px` (lo que `.h-9` debía aplicar). Investigación: el reset `img,svg,video { display: block; max-width: 100%; height: auto }` en `globals.css` estaba **fuera de cualquier `@layer`**. CSS Cascade Layers hace que las reglas fuera de capas siempre ganen sobre las que están en capas, independientemente de la especificidad. Entonces `height: auto` (sin layer) sobreescribía `.h-9 { height: 36px }` (en `@layer utilities`).
+
+Esto afectaba a más sitios: el `class="hidden"` no ocultaba el SVG del icono X del menú móvil (siempre se veían los dos iconos juntos), las imágenes responsive no respetaban heights asignadas, etc.
+
+**Decisión.** Mover el reset de imgs/svgs/videos a `@layer base`:
+
+```css
+@layer base {
+  img, svg, video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+```
+
+Tailwind 4 ordena `@layer theme, base, components, utilities`. Las utilities ganan sobre base.
+
+**Consecuencias.**
+- (+) `.hidden`, `.h-X`, `.w-X` aplican correctamente a imgs y svgs.
+- (+) El reset sigue funcionando como default cuando no hay clases utility.
+- (~) Cualquier futuro reset de elemento HTML que escribamos debe ir dentro de `@layer base` salvo que conscientemente queramos que tenga prioridad máxima.

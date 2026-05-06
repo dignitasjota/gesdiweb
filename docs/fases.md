@@ -12,9 +12,9 @@ Estado global:
 | 3 | Content collections (MDX) | ✅ Completada (2026-05-05) |
 | 4 | Formulario de contacto + Resend | ✅ Completada (2026-05-05) |
 | 5 | Animaciones y pulido | ✅ Completada (2026-05-05) |
-| 6 | SEO técnico y performance | ✅ Completada (2026-05-05) |
-| 7 | Despliegue en VPS Hetzner | ⏳ |
-| 8 | Migración SEO y switch DNS | ⏳ |
+| 6 | SEO técnico y performance | ✅ Completada (2026-05-05) · OG per-entry añadido (2026-05-06) |
+| 7 | Despliegue en VPS Hetzner | 🟡 Artefactos listos · ejecución pendiente del dueño |
+| 8 | Migración SEO y switch DNS | 🟡 Adelanto parcial: blog WP importado (69 posts) · pendiente 301s + switch DNS |
 
 > **Cambio respecto al briefing original:** el briefing tenía 9 fases incluyendo "Fase 1: Configuración de Directus". Como Directus se descartó (ADR-001), esa fase desaparece y las siguientes se renumeran.
 
@@ -101,6 +101,10 @@ Estado global:
 
 **Verificación cumplida:** validación inválida → 400 con issues tipados; honeypot relleno → 200 sin enviar; rate limit → 429.
 
+**Mejoras posteriores (2026-05-06):**
+- Variables runtime migradas a `astro:env/server` (ADR-014) — funciona consistentemente en dev y prod.
+- Deliverability: subject prefijado con `[gesdiweb]`, headers `Auto-Submitted: auto-generated` y `List-Unsubscribe` (one-click) para que clientes serios marquen el email como transaccional legítimo.
+
 ---
 
 ## Fase 5 — Animaciones y pulido ✅
@@ -137,6 +141,12 @@ Estado global:
 
 **Verificación cumplida:** tipos JSON-LD detectados en HTML output, meta tags completos, sitemap excluye styleguide.
 
+**Mejoras posteriores (2026-05-06):**
+- OG default migrado de SVG a PNG 1200×630 generado con Playwright (ADR-015 sustituye ADR-012).
+- **80 OG images per-entry** en `web/public/og/{blog,portfolio,services}/<slug>.png` con paleta diferenciada por colección. Generador idempotente en `web/scripts/generate-og-images.mjs` (`npm run og` o `npm run og:force`).
+- Logo oficial integrado (2026-05-07): `web/public/logo.png` para JSON-LD `Organization`, `web/public/logo-mark.png` (sin tagline) para el Header.
+- Bug raíz corregido (2026-05-07): el reset de imgs/svgs en `globals.css` movido dentro de `@layer base` para que las utilidades de Tailwind ganen (ADR-020).
+
 **Pendiente para Fase 7+:** ejecutar auditorías Lighthouse 95+ y axe-core 0 violaciones contra producción real.
 
 ---
@@ -166,21 +176,23 @@ Estado global:
 
 ---
 
-## Fase 8 — Migración SEO y switch DNS
+## Fase 8 — Migración SEO y switch DNS 🟡
 
-**Pre-requisitos:**
+**Adelanto parcial completado (2026-05-06):**
+- ✅ **Blog WordPress migrado:** 69 posts importados vía REST API (no XML/WXR — decisión ADR-016). HTML renderizado convertido a Markdown puro (no MDX, ADR-017). Imágenes descargadas a `web/src/content/blog/imagenes/<slug>/`.
+- ✅ Covers de blog: 36 detectados desde imágenes en el body, 8 desde `featured_media`, 25 generados sintéticamente con paleta brand. Total 69/69 con cover.
+- ✅ Slug rules formalizadas: kebab-case, sin acentos, sin guiones bajos. Helper `safeFilename` slugify aplicado al renombrar (decodifica URL-encoded antes).
+
+**Pre-requisitos pendientes:**
 - El dueño extrae las URLs reales que rankean desde Google Search Console.
-- El dueño exporta el blog WordPress en XML/WXR.
 
-**Tareas:**
+**Tareas pendientes:**
 1. Mapear URLs antiguas → nuevas (incluso 1:1 si los slugs coinciden).
 2. Configurar redirecciones 301 en NPM o nginx del contenedor `web`.
-3. Migrar posts del WordPress a MDX (script Node + `xml2js` o conversión manual).
-4. Migrar imágenes del blog a `web/public/images/blog/`.
-5. Cambiar DNS del dominio `gesdiweb.es` al VPS Hetzner.
-6. Verificar todas las redirecciones con `curl -I`.
-7. Resubir sitemap a Google Search Console y Bing Webmaster Tools.
-8. Monitorizar errores 404 las primeras 2 semanas.
+3. Cambiar DNS del dominio `gesdiweb.es` al VPS Hetzner.
+4. Verificar todas las redirecciones con `curl -I`.
+5. Resubir sitemap a Google Search Console y Bing Webmaster Tools.
+6. Monitorizar errores 404 las primeras 2 semanas.
 
 **Detalle completo en [`seo-migracion.md`](seo-migracion.md).**
 

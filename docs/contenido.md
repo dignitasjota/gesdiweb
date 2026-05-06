@@ -75,7 +75,10 @@ No hace falta tocar ninguna página `.astro`.
 
 ## 3. Schemas detallados (qué campos llevan)
 
-### 3.1 — Blog (`web/src/content/blog/<slug>.mdx`)
+### 3.1 — Blog (`web/src/content/blog/<slug>.md`)
+
+> **Importante:** la colección `blog` solo acepta `.md` (Markdown puro), **no `.mdx`**. Razón: los posts importados desde el WordPress antiguo contienen sintaxis tipo `%{REQUEST_URI}` y ejemplos de código (`<2 segundos`) que MDX intentaría parsear como JSX y rompería el build (ADR-017). Si necesitas componentes inline en un post nuevo, plantéatelo y consúltalo antes.
+
 
 | Campo | Tipo | Obligatorio | Notas |
 |---|---|---|---|
@@ -199,15 +202,28 @@ npm run dev
 # Abrir http://localhost:4321/blog/seo-local-vs-seo-general
 ```
 
-### Paso 6 — Publicar
+### Paso 6 — Generar la OG image del post
+
+Antes de hacer commit, regenera las OG images si has añadido un post o servicio o proyecto nuevo:
 
 ```bash
-git add web/src/content/blog/seo-local-vs-seo-general.mdx
+cd web
+npm run og              # solo genera las que faltan (idempotente)
+npm run og:force        # regenera todas (si has cambiado el template)
+```
+
+El script `web/scripts/generate-og-images.mjs` lee el frontmatter de cada entry, renderiza un HTML 1200×630 con Playwright headless y guarda la PNG en `web/public/og/<colección>/<slug>.png`. Cada colección tiene paleta propia (blog blanco, portfolio dark, services brand). Las imágenes entran al repo Git.
+
+### Paso 7 — Publicar
+
+```bash
+git add web/src/content/blog/seo-local-vs-seo-general.md \
+        web/public/og/blog/seo-local-vs-seo-general.png
 git commit -m "docs(blog): añadir post sobre SEO local vs SEO general"
 git push origin main
 ```
 
-El despliegue automático en Hetzner (Fase 8 en adelante) reconstruye y publica en ~2 minutos.
+El pre-commit hook formatea con Prettier los archivos staged. El despliegue automático en Hetzner (Fase 8 en adelante) reconstruye y publica en ~2 minutos.
 
 ---
 

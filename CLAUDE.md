@@ -12,7 +12,7 @@
 - **Sustituye:** una WordPress antigua que sigue online y rankea (poco tráfico, pero tráfico real que NO debe perderse).
 - **Estética objetivo:** suiza moderna, tipografía gigante, mucho blanco, marcadores tipográficos `// 00.01°`, marquees infinitos, scroll suave, animaciones reveal. Inspiración (no clon): [createstudio.framer.media](https://createstudio.framer.media/).
 - **Idioma de lanzamiento:** español. Arquitectura preparada para multi-idioma sin implementar inglés todavía.
-- **Estado actual:** Fases 0–6 completadas y artefactos de Fase 7 listos (2026-05-05). Sistema de diseño operativo, 22 páginas maquetadas, contenido en MDX con content collections, formulario de contacto operativo con Resend, animaciones, JSON-LD por tipo de página y meta tags SEO completos, GitHub Actions CI/CD configurado, docker-compose producción listo, guía de despliegue completa. Pendiente ejecución del despliegue real por parte del dueño en Hetzner siguiendo [`docs/despliegue.md`](docs/despliegue.md).
+- **Estado actual (2026-05-07):** Fases 0–6 cerradas + paquete de mejoras técnicas + adelanto parcial de Fase 8. Sistema de diseño operativo, 22 páginas maquetadas, **69 posts del blog importados desde WordPress**, **5 proyectos reales en portfolio** y **6 servicios**, formulario de contacto con Resend operativo (deliverability mejorado), animaciones, JSON-LD por tipo de página, **80 OG images per-entry generadas con Playwright**, **logo oficial integrado** en Header y JSON-LD, GitHub Actions CI/CD listo, Husky+Prettier+lint-staged + Renovate. Fase 7 con artefactos listos pero pendiente ejecución del dueño siguiendo [`docs/despliegue.md`](docs/despliegue.md). Snapshot completo en [`docs/estado.md`](docs/estado.md).
 - **Dueño / único editor:** Jota (`dignitasjota@gmail.com`), perfil técnico (terminal, Docker, GitHub, Claude Code).
 
 ## 2. Reglas de oro (no negociables)
@@ -40,10 +40,14 @@
 | MDX | `@astrojs/mdx` | 5.0.x | Renderizado del cuerpo de posts y casos de estudio |
 | Contenido | **Content Collections + MDX en `web/src/content/`** | — | Sin CMS — el dueño es técnico y el flujo Markdown+Git es más rápido que cualquier panel. Schemas Zod validan el frontmatter |
 | Tipografías | Bricolage Grotesque + Inter + JetBrains Mono Variable, Fontsource self-hosted | 5.2.x | Privacidad RGPD, rendimiento, sin CDN externo |
-| Animaciones | GSAP + ScrollTrigger | 3.15.x (instalado, sin uso hasta Fase 5) | Estándar profesional |
+| Animaciones | CSS + IntersectionObserver (reveals) + GSAP lazy (parallax) | GSAP 3.15.x | 0KB JS por defecto; GSAP solo si la página tiene `[data-parallax]` |
 | Smooth scroll | Lenis | 1.3.x (activo) | Scroll suave estilo Createstudio, respeta `prefers-reduced-motion` |
-| Iconografía | SVG inline custom (`web/src/components/ui/Icon.astro`) | — | 26 iconos lineales propios, hereda `currentColor` |
-| Email transaccional | **Resend** | (Fase 4+) | Plan free 3.000 emails/mes, API moderna, dominio verificado con SPF+DKIM+DMARC |
+| Iconografía | SVG inline custom (`web/src/components/ui/Icon.astro`) | — | 26+ iconos lineales propios, hereda `currentColor` |
+| Email transaccional | **Resend** | (Fase 4+) | Plan free 3.000 emails/mes, API moderna, dominio verificado con SPF+DKIM+DMARC. Deliverability: subject `[gesdiweb] ...` + headers `Auto-Submitted` + `List-Unsubscribe` |
+| Variables runtime | **`astro:env/server`** (no `process.env` ni `import.meta.env`) | — | Funciona consistentemente en dev y prod. Schema declarado en `astro.config.mjs#env.schema` |
+| OG images | **Pre-generadas con Playwright** | — | Script idempotente `web/scripts/generate-og-images.mjs`. Una imagen por entry de blog/portfolio/services con paleta diferenciada por colección |
+| DX (formato + hooks) | Prettier 3.8 + plugin-astro + Husky + lint-staged | — | Hook `pre-commit` filtra `web/` y delega a lint-staged. `core.hooksPath = .husky` a nivel repo |
+| Updates de deps | Renovate | — | Lunes antes de las 6am · agrupa patch+minor · majors críticos a revisión manual |
 | Reverse proxy + SSL | **Nginx Proxy Manager** existente en el VPS | — | Ya desplegado en Hetzner. SSL Let's Encrypt automático |
 | Runtime contenedor | **nginx 1.27 alpine** | — | Sirve los archivos estáticos generados por Astro |
 | Base de imagen build | **node 22 alpine** | — | Multi-stage Dockerfile |
@@ -118,21 +122,29 @@ gesdiweb/
 │   └── seo-migracion.md            Plan de migración SEO desde la WordPress antigua (Fase 9)
 │
 └── web/                            Aplicación Astro
-    ├── package.json                Override de vite forzado a ^7.3.2
+    ├── package.json                Override de vite forzado a ^7.3.2 · scripts og/og:force/format/format:check
     ├── tsconfig.json               Strict, alias @/* → src/*
-    ├── astro.config.mjs            site, sitemap (excluye /styleguide), mdx, tailwind
-    ├── Dockerfile                  Multi-stage: node 22 build → nginx 1.27 alpine
-    ├── nginx.conf                  gzip, headers cache, headers seguridad
+    ├── astro.config.mjs            site, sitemap (excluye /styleguide), mdx, tailwind, env.schema
+    ├── Dockerfile                  Multi-stage: node 22 build → node 22 alpine runtime (server)
+    ├── nginx.conf                  (legacy, ya no se usa con output: 'server')
     ├── .dockerignore
+    ├── .prettierrc.json            100 chars · single quote · trailing all · plugin-astro
+    ├── .prettierignore             excluye dist, .astro, public/og, contenido importado
     ├── public/
     │   ├── favicon.svg             Provisional (azul corporativo + G blanca)
+    │   ├── logo.png                Logo oficial completo (397×146 con tagline) → JSON-LD
+    │   ├── logo-mark.png           Logo recortado (397×92 sin tagline) → Header
+    │   ├── og-default.png          OG fallback 1200×630 generado con Playwright
+    │   ├── og/{blog,portfolio,services}/<slug>.png   80 OG images per-entry
     │   └── robots.txt              Apunta a /sitemap-index.xml
+    ├── scripts/
+    │   └── generate-og-images.mjs  Generador de OG images (Playwright, idempotente)
     └── src/
-        ├── content.config.ts       ← Schemas Zod para services / portfolio / blog
-        ├── content/                ← Fuente única de contenido (MDX)
-        │   ├── services/           5 servicios (.mdx con solo frontmatter)
+        ├── content.config.ts       ← Schemas Zod (blog: solo `*.md`, portfolio/services: `*.mdx`)
+        ├── content/                ← Fuente única de contenido
+        │   ├── services/           6 servicios (.mdx con solo frontmatter)
         │   ├── portfolio/          5 proyectos (.mdx con cuerpo de caso de estudio)
-        │   └── blog/               3 posts (.mdx con cuerpo Markdown real)
+        │   └── blog/               69 posts (.md importados desde WordPress vía REST API)
         ├── pages/
         │   ├── index.astro                  Home (9 secciones)
         │   ├── servicios/index.astro        Listado de servicios
@@ -172,9 +184,9 @@ gesdiweb/
 | 3 | Content collections + MDX | ✅ Completada (2026-05-05) | |
 | 4 | Formulario de contacto + Resend | ✅ Completada (2026-05-05) | |
 | 5 | Animaciones y pulido | ✅ Completada (2026-05-05) | |
-| 6 | SEO técnico y performance | ✅ Completada (2026-05-05) | |
-| 7 | Despliegue en VPS Hetzner | ✅ Artefactos listos (2026-05-05). Pendiente ejecución por dueño | [`docs/despliegue.md`](docs/despliegue.md) |
-| 8 | Migración SEO y switch DNS | ⏳ | |
+| 6 | SEO técnico y performance | ✅ Completada (2026-05-05). OG per-entry añadido (2026-05-06) | |
+| 7 | Despliegue en VPS Hetzner | 🟡 Artefactos listos (2026-05-05). Pendiente ejecución por dueño | [`docs/despliegue.md`](docs/despliegue.md) |
+| 8 | Migración SEO y switch DNS | 🟡 Adelantado parcialmente (blog WP importado, OG generado). Pendiente: 301s + switch DNS | |
 
 > **Nota sobre la numeración.** El briefing original tenía 9 fases incluyendo "Fase 1: Directus". Como Directus se descartó (ADR-001), las fases se renumeraron. La numeración vigente está en `docs/fases.md`. Cuando hables con el dueño, refiérete a las fases por nombre además de número para evitar confusiones.
 
@@ -244,5 +256,5 @@ Si te incorporas al proyecto, en este orden:
 
 ---
 
-**Última actualización de este archivo:** 2026-05-05 (cierre de Fase 3).
-**Mantenedor:** se actualiza al cerrar cada fase. Si tras tu sesión ha cambiado algo de los puntos 3, 5, 6, 7, 8 o 9, **edítalo** antes de cerrar.
+**Última actualización de este archivo:** 2026-05-07 (logo oficial integrado + paquete de mejoras post-Fase 7 documentado).
+**Mantenedor:** se actualiza al cerrar cada fase y cuando la realidad del repo se separa de los docs. Si tras tu sesión ha cambiado algo de los puntos 3, 5, 6, 7, 8 o 9, **edítalo** antes de cerrar.
