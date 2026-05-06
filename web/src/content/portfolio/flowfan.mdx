@@ -2,7 +2,7 @@
 title: "Flowfan"
 client: "Flowfan"
 year: 2026
-excerpt: "SaaS para creadores de contenido: CRM con IA conversacional, scoring automático, Telegram en vivo y broadcasts masivos. Stack Next.js + tRPC + Drizzle."
+excerpt: "SaaS multi-tenant para creadores de contenido: CRM con IA conversacional, scoring, detección de churn y API pública. Stack Next.js + tRPC + Drizzle."
 order: 3
 featured: true
 cover: ./imagenes/flowfan/cover.jpg
@@ -22,36 +22,77 @@ url: "https://flowfan.app"
 
 ## El reto
 
-Un creador de contenido con audiencia activa puede gestionar **miles de
-mensajes al día** entre todas las plataformas donde está presente. Las
-herramientas existentes en el mercado son fragmentadas (una para cada
-red), caras y carecen de IA real. El cliente necesitaba una **plataforma
-única** que centralizara la conversación con sus fans, automatizara las
-respuestas con IA y diera un panel de control para supervisar todo el
-equipo de chatters.
+Los creadores de contenido con audiencia activa gestionan miles de DMs
+diarios entre múltiples plataformas. Hacerlo a mano consume horas que
+deberían estar en producir. Las herramientas existentes en el mercado
+son fragmentadas (una por cada red social), caras y carecen de IA real.
+
+Flowfan necesitaba una **plataforma SaaS multi-tenant** que centralizara
+la conversación con los fans, automatizara respuestas con IA, midiera
+en tiempo real el valor de cada fan y abriera el producto a equipos e
+integradores externos.
 
 ## La solución
 
-SaaS multi-tenant desarrollado a medida con un stack moderno pensado
-para escalar: **Next.js + React 19** en frontend con **Tailwind v4 +
-shadcn/ui**, **tRPC** para una capa RPC totalmente tipada, **Drizzle
+Desarrollo full-stack a medida con stack moderno pensado para escalar:
+**Next.js + React 19** en frontend con **Tailwind v4 y shadcn/ui**,
+**tRPC** como capa RPC totalmente tipada cliente-servidor, **Drizzle
 ORM + PostgreSQL 16** como persistencia, **Redis 7 + BullMQ** para
-procesar colas de mensajes en tiempo real y **Resend** para los emails
-transaccionales.
+procesar colas en tiempo real y **Resend** para emails transaccionales.
 
-Funcionalidades clave en producción:
+### Para el creador
 
-- **IA conversacional** con 5 proveedores integrados y failover
-- **Respuesta IA en menos de 2 segundos** gracias al pipeline asíncrono con BullMQ
-- **CRM con scoring automático** de fans según comportamiento y valor
-- **8+ plataformas integradas**, con Telegram en vivo como la más estratégica
-- **Broadcasts masivos** segmentados por scoring del CRM
-- **Equipo de chatters** colaborativo con permisos granulares
-- **Panel único** para supervisar todo el flujo desde un solo sitio
+- **Asistente IA conversacional** que sugiere 3 variantes de respuesta
+  (casual, sales, retention) adaptadas al funnel stage del fan
+- **Coaching de negociación** con análisis estratégico: perfil
+  psicológico del fan, palancas, tácticas con nivel de riesgo y
+  movimiento sugerido por la IA
+- **Detección de churn** con predicción 0-100 ponderando 5 factores
+  y alertas por email para VIP y buyers en riesgo
+- **Content Gaps** — descubre qué contenido pide la audiencia
+  analizando patrones agregados de conversación
+- **Secuencias automáticas** de nurturing para fans nuevos y
+  re-engagement para inactivos
+- **A/B testing** para validar configuraciones de tono y estilo
+  con métricas de conversión y confianza estadística
+
+### Para equipos
+
+- Roles base más roles personalizados con permisos granulares
+- Asignación de conversaciones, audit log completo y presencia en
+  tiempo real
+- Multi-idioma en 6 idiomas para respuestas y análisis
+
+### Para integradores
+
+- API REST pública (Pro read-only, Business full) y webhooks
+  salientes firmados
+- Dashboard de analytics, import masivo por CSV y export de datos
+
+## Decisiones arquitectónicas clave
+
+- **Autorización declarativa en tRPC** mediante procedures específicos:
+  protectedProcedure, managerProcedure, ownerProcedure y
+  permissionProcedure parametrizable por permisos. La política viaja
+  con la firma del endpoint, no con código defensivo dentro del handler
+- **Resolución de modos conversacionales** con merge de 3 capas:
+  default de la plataforma, ajuste por canal y override del creador.
+  El estado efectivo se calcula una sola vez por petición
+- **Scoring desacoplado vía BullMQ** — actualización en tiempo real
+  al enviar mensajes y proceso batch cada 6 horas para recalcular
+  churn. Las colas absorben picos sin degradar la UI
+- **Análisis de content gaps en dos fases** — agregación SQL pura
+  primero, interpretación IA después. Así nunca se envían mensajes
+  crudos al LLM (ahorra tokens y elimina riesgo de fuga de PII)
+- **API keys con doble almacenamiento** — hash SHA-256 para lookup
+  rápido y cifrado AES-256-GCM para mostrar el secreto al usuario
+  una sola vez. Diseño compatible con cumplimiento
 
 ## Resultados
 
 - Plataforma en producción con onboarding gratuito sin tarjeta
 - Latencia de IA por debajo de 2 segundos sostenida bajo carga
-- Stack diseñado para multi-tenant desde el día 1
-- Arquitectura con colas que absorbe picos sin degradar la UI
+- Aislamiento multi-tenant garantizado desde el día 1
+- Extensibilidad vía API REST y webhooks para integradores
+- Plataforma que convierte la gestión manual de DMs en un flujo
+  asistido por IA con scoring, automatización y experimentación
