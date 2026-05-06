@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/redes-sociales-pymes/redes-sociales-para-PYMES.jpg
+coverAlt: "Redes sociales para PYMES"
 author: "Amparo Arnau"
 ---
 # Las 7 redes sociales para PYMES con más ventajas

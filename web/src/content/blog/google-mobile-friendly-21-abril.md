@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "SEO"
 tags: []
+cover: ./imagenes/google-mobile-friendly-21-abril/diseno-web-valencia.jpg
+coverAlt: "paginas-web-valencia"
 author: "consultor seo valencia"
 ---
 # Algoritmo de google mobile friendly

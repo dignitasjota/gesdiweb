@@ -7,6 +7,8 @@ categories:
   - "Gestión de situaciones de crisis"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/troll-en-redes-sociales/troll-en-redes-sociales.jpg
+coverAlt: "Troll en redes sociales"
 author: "Amparo Arnau"
 ---
 # [3 consejos para hacer frente a un troll en redes sociales](https://www.gesdiweb.es/troll-en-redes-sociales/)

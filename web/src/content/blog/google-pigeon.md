@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "SEO"
 tags: []
+cover: ./imagenes/google-pigeon/google-pigeon.jpg
+coverAlt: "Algoritmo de Google Pigeo"
 author: "consultor seo valencia"
 ---
 # Mejora el SEO local con Search Console y Google trends

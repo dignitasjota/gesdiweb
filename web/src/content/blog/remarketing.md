@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "Marketing Online"
 tags: []
+cover: ./imagenes/remarketing/remarketing.jpg
+coverAlt: "remarketing"
 author: "Amparo Arnau"
 ---
 # Usa el remarketing como herramienta de ventas

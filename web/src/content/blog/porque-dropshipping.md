@@ -7,6 +7,8 @@ categories:
   - "Desarrollo Páginas web"
   - "eCommerce"
 tags: []
+cover: ./imagenes/porque-dropshipping/dropshipping-ecommerce-1024x438.jpg
+coverAlt: "dropshipping ventajas"
 author: "Elisa Rosado"
 ---
 Hoy en día no conocemos a nadie que no navegue por Internet por algún motivo, ya sea para buscar información, para realizar alguna compra o simplemente pasando tiempo de ocio entre página y página. El uso generalizado de Internet por todo el mundo ha cambiado la forma en que la gente se desenvuelve en todos los ámbitos: se relacionan por las redes sociales, buscan trabajo en la red o realizan sus compras en tiendas online. Es por esto que han ido apareciendo y afianzándose distintos tipos de negocios en la red. Uno de ellos es la tienda online modelo dropshipping, de la que vamos a tratar en este artículo.

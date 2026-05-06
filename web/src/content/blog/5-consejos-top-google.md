@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "SEO"
 tags: []
+cover: ./imagenes/5-consejos-top-google/como-ser-top-google.jpg
+coverAlt: "como ser top en google"
 author: "Diseño Web Valencia"
 ---
 ![como ser top en google](./imagenes/5-consejos-top-google/como-ser-top-google.jpg)

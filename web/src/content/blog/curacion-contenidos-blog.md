@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/curacion-contenidos-blog/aumentar-seguidores-redes-sociales.jpg
+coverAlt: "marketing-online-depuracion-redes"
 author: "Amparo Arnau"
 ---
 # 5 Herramientas de curación de contenidos para el blog

@@ -6,6 +6,8 @@ readingMinutes: 6
 categories:
   - "SEO"
 tags: []
+cover: ./imagenes/crear-contenido-seo-local/posicionamiento-seo-local-1024x683.jpg
+coverAlt: "posicionamiento-seo-local"
 author: "Diseño Web Valencia"
 ---
 Uno de los segmentos más competidos en la búsqueda orgánica es el SEO Local. Es uno de los más competitivos porque también engloba una gran oportunidad de ganar clientes. El [Posicionamiento SEO Local](https://www.codigonexo.com/blog/captacion-de-trafico/seo/posicionamiento-seo-local/) es indispensable para captar clientes potenciales que realicen búsquedas en una zona geográfica determinada. En este artículo te ofrecemos algunos consejos que puedes seguir para conseguir ser de los primeros en los resultados de búsquedas locales.

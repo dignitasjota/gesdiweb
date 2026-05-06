@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/titulares-para-tus-articulos/titular-blog-1024x681.jpg
+coverAlt: "mejores-titulares-blog"
 author: "Amparo Arnau"
 ---
 # Descubre cómo mejorar los titulares para tus artículos del blog

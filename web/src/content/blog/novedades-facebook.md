@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/novedades-facebook/novedades-facebook.jpg
+coverAlt: "novedades-facebook"
 author: "Diseño Web Valencia"
 ---
 # **Tu estrategia de redes sociales será mucho más efectiva con estas novedades de** **Facebook**

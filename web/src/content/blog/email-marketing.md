@@ -7,6 +7,8 @@ categories:
   - "eMail Marketing"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/email-marketing/marketing-offline-valencia.jpg
+coverAlt: "marketing-offline-valencia"
 author: "Amparo Arnau"
 ---
 # Sácale mayor partido a tu email marketing

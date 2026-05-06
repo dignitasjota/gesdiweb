@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "SEO"
 tags: []
+cover: ./imagenes/keywords-seo/herramientas-seo-palabras-clave.jpg
+coverAlt: "herramientas-keywords-seo"
 author: "consultor seo valencia"
 ---
 # Las 6 mejores herramientas para elegir las mejores keywords para tu estrategia SEO

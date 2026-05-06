@@ -8,6 +8,8 @@ categories:
   - "eCommerce"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/como-vender-internet/marketing-tiendas-online.jpg
+coverAlt: "marketing-tiendas-online"
 author: "Diseño Web Valencia"
 ---
 # ¿Vender por internet? Atento a cómo ha cambiado

@@ -6,6 +6,8 @@ readingMinutes: 2
 categories:
   - "Marketing Online"
 tags: []
+cover: ./imagenes/blog-marca-personal/marca-personal.jpg
+coverAlt: "marca personal"
 author: "Diseño Web Valencia"
 ---
 # Por qué merece tener un blog para relanzar tu marca personal

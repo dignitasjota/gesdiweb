@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/contenido-duplicado/REPORTAR-GOOGLE-CONTENIDO-COPIADO.jpg
+coverAlt: "reportar-google-contenido-copiado"
 author: "consultor seo valencia"
 ---
 # Como detectar y reportar el contenido copiado a Google  

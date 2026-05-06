@@ -6,6 +6,8 @@ readingMinutes: 8
 categories:
   - "Marketing Online"
 tags: []
+cover: ./imagenes/producto-importante-empresa/empresa-producto.jpg
+coverAlt: "empresa-producto"
 author: "Diseño Web Valencia"
 ---
 # Defiende tu producto, no tu precio

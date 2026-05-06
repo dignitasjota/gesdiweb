@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "Desarrollo Páginas web"
 tags: []
+cover: ./imagenes/por-que-necesitas-pagina-web/marketing-online.jpg
+coverAlt: "marketing-online"
 author: "Diseño Web Valencia"
 ---
 ¿Tienes una empresa y deseas fortalecerla? Continúa con nosotros y descubrirás claves, consejos y razones que te permitirán abrirte camino en esta era digital sin fracasar en el intento.

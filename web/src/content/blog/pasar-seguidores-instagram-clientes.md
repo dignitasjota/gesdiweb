@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/pasar-seguidores-instagram-clientes/seguidores-de-instagram-1024x759.jpg
+coverAlt: "de seguidores de instagram a clientes"
 author: "Amparo Arnau"
 ---
 # Consigue que tus seguidores de Instagram se conviertan en clientes

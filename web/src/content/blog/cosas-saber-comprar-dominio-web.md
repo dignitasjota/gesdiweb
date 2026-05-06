@@ -7,6 +7,8 @@ categories:
   - "Hosting"
   - "SEO"
 tags: []
+cover: ./imagenes/cosas-saber-comprar-dominio-web/dominio-web.png
+coverAlt: "comprar-dominio-web"
 author: "Diseño Web Valencia"
 ---
 # Como Comprar un Dominio Web

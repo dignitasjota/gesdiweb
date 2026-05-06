@@ -7,6 +7,8 @@ categories:
   - "inbound marketing"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/inbound-marketing/inboun-marketing.png
+coverAlt: "inbound marketing"
 author: "Amparo Arnau"
 ---
 # Descubre el inbound marketing

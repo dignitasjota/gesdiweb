@@ -7,6 +7,8 @@ categories:
   - "inbound marketing"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/marketing-rebajas/MARKETING-REBAJAS.png
+coverAlt: "marketing-navidad"
 author: "Diseño Web Valencia"
 ---
 # ¡Que comiencen los juegos de las Rebajas!

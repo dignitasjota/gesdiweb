@@ -6,6 +6,8 @@ readingMinutes: 4
 categories:
   - "eCommerce"
 tags: []
+cover: ./imagenes/ventajas-crear-tienda-online/Ecommerce-Valencia-1-1024x382.jpg
+coverAlt: "Ecommerce Valencia"
 author: "Diseño Web Valencia"
 ---
 # Ventajas de crear una tienda Online

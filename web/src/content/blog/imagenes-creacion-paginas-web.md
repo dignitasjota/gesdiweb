@@ -7,6 +7,8 @@ categories:
   - "Desarrollo Páginas web"
   - "Herramientas de diseño web"
 tags: []
+cover: ./imagenes/imagenes-creacion-paginas-web/medidas-en-redes-sociales.jpg
+coverAlt: "medidas-diseño-imagenes-redes-sociales"
 author: "Amparo Arnau"
 ---
 # 6 Herramientas para diseñar imágenes web y social media  

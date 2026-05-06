@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "inbound marketing"
 tags: []
+cover: ./imagenes/el-email-de-agradecimiento/Dar-las-gracias.jpg
+coverAlt: "Email de agradecimiento"
 author: "Amparo Arnau"
 ---
 # El email de agradecimiento para fidelizar suscriptores

@@ -7,6 +7,8 @@ categories:
   - "eMail Marketing"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/bases-datos-email-marketing/Especial-Base-de-datos-de-empresas-1024x537.jpg
+coverAlt: "base-datos-empresas"
 author: "Diseño Web Valencia"
 ---
 Si lo que deseas es llevar un perfecto funcionamiento de tu negocio o empresa, además de realizar un buen marketing, te traemos lo beneficios que se desprende al utilizar una base de datos gracias a la actividad económica, si te interesa sigue leyendo.

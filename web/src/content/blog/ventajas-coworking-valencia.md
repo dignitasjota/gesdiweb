@@ -6,6 +6,8 @@ readingMinutes: 3
 categories:
   - "Desarrollo Páginas web"
 tags: []
+cover: ./imagenes/ventajas-coworking-valencia/coworking-valencia-1024x602.jpeg
+coverAlt: "coworking valencia"
 author: "Diseño Web Valencia"
 ---
 El coworking es una forma de trabajo cada vez más habitual para informáticos, programadores y desarrolladores web. Descubre las ventajas de compartir tu espacio de trabajo con otros profesionales.

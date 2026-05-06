@@ -49,19 +49,22 @@ const blog = defineCollection({
   // Posts importados de WordPress son .md (Markdown puro). El .mdx se acepta
   // por compatibilidad con posts futuros que necesiten componentes Astro.
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({
-    title: z.string(),
-    excerpt: z.string(),
-    author: z.string().default('Jota'),
-    publishedAt: z.coerce.date(),
-    readingMinutes: z.number().int().positive(),
-    categories: z.array(z.string()),
-    tags: z.array(z.string()),
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().optional(),
-    status: z.enum(['draft', 'scheduled', 'published']).default('published'),
-    lang: z.string().default('es'),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      excerpt: z.string(),
+      author: z.string().default('Jota'),
+      publishedAt: z.coerce.date(),
+      readingMinutes: z.number().int().positive(),
+      categories: z.array(z.string()),
+      tags: z.array(z.string()),
+      cover: image().optional(),
+      coverAlt: z.string().optional(),
+      seoTitle: z.string().optional(),
+      seoDescription: z.string().optional(),
+      status: z.enum(['draft', 'scheduled', 'published']).default('published'),
+      lang: z.string().default('es'),
+    }),
 });
 
 export const collections = { services, portfolio, blog };

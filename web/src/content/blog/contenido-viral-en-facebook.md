@@ -7,6 +7,8 @@ categories:
   - "Marketing Online"
   - "Redes Sociales"
 tags: []
+cover: ./imagenes/contenido-viral-en-facebook/contenido-viral-en-facebook.jpg
+coverAlt: "contenido viral en facebook"
 author: "Diseño Web Valencia"
 ---
 # Crea contenido viral en Facebook de forma fácil

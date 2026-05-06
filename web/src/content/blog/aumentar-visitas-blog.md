@@ -8,6 +8,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/aumentar-visitas-blog/desarrollo-web-valencia.jpg
+coverAlt: "ideas-desarrollo-web-valencia"
 author: "consultor seo valencia"
 ---
 # 7 consejos para conseguir más visitas en tu blog

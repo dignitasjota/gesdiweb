@@ -7,6 +7,8 @@ categories:
   - "Desarrollo Páginas web"
   - "Internet"
 tags: []
+cover: ./imagenes/tendencias-de-logotipos-para-2019/laptop-2443743_960_720.jpg
+coverAlt: "Laptop 2443743 960 720"
 author: "Diseño Web Valencia"
 ---
 # Tendencias de logotipos para 2019

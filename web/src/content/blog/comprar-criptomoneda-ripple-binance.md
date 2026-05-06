@@ -6,6 +6,8 @@ readingMinutes: 2
 categories:
   - "Criptomonedas"
 tags: []
+cover: ./imagenes/comprar-criptomoneda-ripple-binance/donde-comprar-ripple.jpg
+coverAlt: "donde-comprar-ripple"
 author: "Diseño Web Valencia"
 ---
 # Comprar Ripple y otras Criptomonedas en Binance

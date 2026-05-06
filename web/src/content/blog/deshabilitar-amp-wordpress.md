@@ -6,6 +6,8 @@ readingMinutes: 8
 categories:
   - "Desarrollo Páginas web"
 tags: []
+cover: ./imagenes/deshabilitar-amp-wordpress/desactivar-amp-1024x1024.jpg
+coverAlt: "desactivar-amp"
 author: "Diseño Web Valencia"
 ---
 # ¿Qué hacer para deshabilitar tu wordpress para AMP?

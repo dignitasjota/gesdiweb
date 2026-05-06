@@ -6,6 +6,8 @@ readingMinutes: 6
 categories:
   - "Marketing Online"
 tags: []
+cover: ./imagenes/acciones-marketing-san-valentin/acciones-marketing-san-valentin.jpg
+coverAlt: "acciones-marketing-san-valentin"
 author: "Diseño Web Valencia"
 ---
 # Mejora tus ventas en San Valentín con estas acciones en el punto de venta

@@ -7,6 +7,8 @@ categories:
   - "eMail Marketing"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/asuntos-email-marketing/mail-marketing.jpg
+coverAlt: "MAIL-MARKETING-MEJORAR"
 author: "Amparo Arnau"
 ---
 # Asuntos para tu estrategia de email Marketing

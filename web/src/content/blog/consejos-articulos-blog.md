@@ -7,6 +7,8 @@ categories:
   - "Gestión de contenido"
   - "Marketing Online"
 tags: []
+cover: ./imagenes/consejos-articulos-blog/articulos-del-blog.jpg
+coverAlt: "empezar tus artículos del blog"
 author: "Diseño Web Valencia"
 ---
 # ¿Cómo empezar tus artículos del blog?
