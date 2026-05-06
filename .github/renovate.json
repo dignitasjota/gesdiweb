@@ -1,0 +1,45 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":maintainLockFilesWeekly"
+  ],
+  "labels": ["dependencies"],
+  "schedule": ["before 6am on monday"],
+  "timezone": "Europe/Madrid",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "rangeStrategy": "bump",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "automerge": false
+  },
+  "packageRules": [
+    {
+      "description": "Agrupar updates patch+minor en un solo PR para reducir ruido",
+      "matchUpdateTypes": ["patch", "minor"],
+      "matchPackagePatterns": ["*"],
+      "groupName": "all dependencies (patch+minor)",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "description": "Pinnear majors críticos a revisión manual",
+      "matchUpdateTypes": ["major"],
+      "matchPackagePatterns": ["^astro$", "^@astrojs/", "^vite$", "^tailwindcss$", "^react"],
+      "labels": ["dependencies", "major", "needs-review"],
+      "automerge": false
+    },
+    {
+      "description": "Agrupar todo lo de Fontsource",
+      "matchPackagePatterns": ["^@fontsource"],
+      "groupName": "fontsource",
+      "groupSlug": "fontsource"
+    }
+  ],
+  "ignorePaths": ["**/node_modules/**", "**/dist/**"]
+}
