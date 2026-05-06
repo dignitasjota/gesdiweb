@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
@@ -77,12 +78,23 @@ const jsonLd = [
     </header>
 
     <div class="container-fluid pb-16 md:pb-24">
-      <div
-        class="aspect-[16/9] bg-[--color-brand-soft] rounded-2xl border-2 border-[--color-brand] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest"
-        aria-hidden="true"
-      >
-        [PLACEHOLDER · cover hero]
-      </div>
+      {data.cover ? (
+        <Image
+          src={data.cover}
+          alt={data.coverAlt ?? `${data.title} — captura del proyecto`}
+          widths={[640, 960, 1280, 1920]}
+          sizes="(min-width: 1280px) 1280px, 100vw"
+          class="aspect-[16/9] w-full rounded-2xl object-cover border border-[--color-border]"
+          loading="eager"
+        />
+      ) : (
+        <div
+          class="aspect-[16/9] bg-[--color-brand-soft] rounded-2xl border-2 border-[--color-brand] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest"
+          aria-hidden="true"
+        >
+          [PLACEHOLDER · cover hero]
+        </div>
+      )}
     </div>
 
     <section class="border-y border-[--color-border]">

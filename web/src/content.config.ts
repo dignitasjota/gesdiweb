@@ -24,21 +24,25 @@ const services = defineCollection({
 
 const portfolio = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/portfolio' }),
-  schema: z.object({
-    title: z.string(),
-    client: z.string(),
-    year: z.number().int(),
-    excerpt: z.string(),
-    techStack: z.array(z.string()),
-    servicesUsed: z.array(z.string()),
-    url: z.string().url().optional(),
-    featured: z.boolean().default(false),
-    order: z.number().int().positive(),
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().optional(),
-    status: z.enum(['draft', 'published']).default('published'),
-    lang: z.string().default('es'),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      client: z.string(),
+      year: z.number().int(),
+      excerpt: z.string(),
+      cover: image().optional(),
+      coverAlt: z.string().optional(),
+      gallery: z.array(image()).optional(),
+      techStack: z.array(z.string()),
+      servicesUsed: z.array(z.string()),
+      url: z.string().url().optional(),
+      featured: z.boolean().default(false),
+      order: z.number().int().positive(),
+      seoTitle: z.string().optional(),
+      seoDescription: z.string().optional(),
+      status: z.enum(['draft', 'published']).default('published'),
+      lang: z.string().default('es'),
+    }),
 });
 
 const blog = defineCollection({

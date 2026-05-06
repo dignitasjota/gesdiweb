@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Marker from '../../components/ui/Marker.astro';
 import Tag from '../../components/ui/Tag.astro';
@@ -68,15 +69,28 @@ const jsonLd = [
             }`}
           >
             <div
-              class={`bg-[--color-brand-soft] rounded-2xl overflow-hidden flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors relative ${
+              class={`relative rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors ${
                 i % 3 === 0 ? 'aspect-[16/8]' : 'aspect-[4/3]'
-              }`}
-              aria-hidden="true"
-              style="font-size: var(--text-xs);"
+              } ${project.data.cover ? '' : 'bg-[--color-brand-soft] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest'}`}
+              aria-hidden={project.data.cover ? undefined : 'true'}
+              style={project.data.cover ? undefined : 'font-size: var(--text-xs);'}
             >
-              <span class="absolute top-6 left-6">/{String(project.data.order).padStart(2, '0')}</span>
-              <span class="absolute top-6 right-6">{project.data.year}</span>
-              [PLACEHOLDER · {project.data.title}]
+              {project.data.cover ? (
+                <Image
+                  src={project.data.cover}
+                  alt={project.data.coverAlt ?? `${project.data.title} — captura`}
+                  widths={[480, 720, 1080, 1440]}
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  class="w-full h-full object-cover"
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                />
+              ) : (
+                <>
+                  <span class="absolute top-6 left-6">/{String(project.data.order).padStart(2, '0')}</span>
+                  <span class="absolute top-6 right-6">{project.data.year}</span>
+                  [PLACEHOLDER · {project.data.title}]
+                </>
+              )}
             </div>
             <div class="flex items-baseline justify-between gap-4">
               <h2

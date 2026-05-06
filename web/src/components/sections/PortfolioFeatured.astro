@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Marker from '../ui/Marker.astro';
 import Tag from '../ui/Tag.astro';
 import Reveal from '../animations/Reveal.astro';
@@ -33,34 +34,47 @@ const featured = await getFeaturedProjects();
         class={`group flex flex-col gap-5 ${i === 0 ? 'md:col-span-2' : ''}`}
       >
         <div
-          class={`bg-[--color-brand-soft] rounded-2xl overflow-hidden flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest border-2 border-transparent group-hover:border-[--color-brand] transition-colors relative ${
+          class={`relative rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors ${
             i === 0 ? 'aspect-[16/8]' : 'aspect-[4/3]'
-          }`}
-          aria-hidden="true"
+          } ${project.data.cover ? '' : 'bg-[--color-brand-soft] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest'}`}
+          aria-hidden={project.data.cover ? undefined : 'true'}
         >
-          <div class="text-center">
-            <div
-              class="w-14 h-14 rounded-full bg-[--color-brand] flex items-center justify-center mx-auto mb-4"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                <line x1="7" y1="17" x2="17" y2="7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
-            </div>
-            <p style="font-size: var(--text-sm);">[PLACEHOLDER · {project.data.title}]</p>
-          </div>
-          <span
-            class="absolute top-6 left-6 font-mono text-[--color-brand-hover]"
-            style="font-size: var(--text-xs);"
-          >
-            /{String(project.data.order).padStart(2, '0')}
-          </span>
-          <span
-            class="absolute top-6 right-6 font-mono text-[--color-brand-hover]"
-            style="font-size: var(--text-xs);"
-          >
-            {project.data.year}
-          </span>
+          {project.data.cover ? (
+            <Image
+              src={project.data.cover}
+              alt={project.data.coverAlt ?? `${project.data.title} — captura`}
+              widths={[480, 720, 1080, 1440, 1920]}
+              sizes={i === 0 ? '(min-width: 1024px) 1280px, 100vw' : '(min-width: 1024px) 50vw, 100vw'}
+              class="w-full h-full object-cover"
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+          ) : (
+            <>
+              <div class="text-center">
+                <div
+                  class="w-14 h-14 rounded-full bg-[--color-brand] flex items-center justify-center mx-auto mb-4"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <line x1="7" y1="17" x2="17" y2="7" />
+                    <polyline points="7 7 17 7 17 17" />
+                  </svg>
+                </div>
+                <p style="font-size: var(--text-sm);">[PLACEHOLDER · {project.data.title}]</p>
+              </div>
+              <span
+                class="absolute top-6 left-6 font-mono text-[--color-brand-hover]"
+                style="font-size: var(--text-xs);"
+              >
+                /{String(project.data.order).padStart(2, '0')}
+              </span>
+              <span
+                class="absolute top-6 right-6 font-mono text-[--color-brand-hover]"
+                style="font-size: var(--text-xs);"
+              >
+                {project.data.year}
+              </span>
+            </>
+          )}
         </div>
         <div class="flex items-baseline justify-between gap-4">
           <h3
