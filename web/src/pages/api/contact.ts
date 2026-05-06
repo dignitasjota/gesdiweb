@@ -1,4 +1,9 @@
 import type { APIRoute } from 'astro';
+import {
+  RESEND_API_KEY,
+  RESEND_FROM_EMAIL,
+  LEAD_NOTIFICATION_EMAIL,
+} from 'astro:env/server';
 import { Resend } from 'resend';
 import { contactSchema } from '../../lib/contact-schema';
 import { checkRateLimit } from '../../lib/rate-limit';
@@ -9,15 +14,6 @@ import {
 } from '../../lib/email/contact-template';
 
 export const prerender = false;
-
-// IMPORTANTE: usamos process.env (no import.meta.env) porque las variables
-// se inyectan en runtime desde docker-compose.yml. import.meta.env se
-// reemplaza estáticamente en build y se quedaría con el valor vacío.
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL || 'hola@gesdiweb.es';
-const LEAD_NOTIFICATION_EMAIL =
-  process.env.LEAD_NOTIFICATION_EMAIL || 'hola@gesdiweb.es';
 
 const json = (status: number, body: unknown): Response =>
   new Response(JSON.stringify(body), {

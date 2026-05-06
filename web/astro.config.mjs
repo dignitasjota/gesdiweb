@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import node from '@astrojs/node';
@@ -16,6 +16,28 @@ export default defineConfig({
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',
+  },
+  // Variables de entorno con tipado y validación.
+  // El runtime las carga de .env (dev) o del entorno del proceso (prod).
+  // Acceso vía `import { RESEND_API_KEY } from 'astro:env/server';`
+  env: {
+    schema: {
+      RESEND_API_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      RESEND_FROM_EMAIL: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: 'hola@gesdiweb.es',
+      }),
+      LEAD_NOTIFICATION_EMAIL: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: 'hola@gesdiweb.es',
+      }),
+    },
   },
   integrations: [
     mdx(),
