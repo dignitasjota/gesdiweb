@@ -5,6 +5,7 @@ export type IconName =
   | 'server'
   | 'megaphone'
   | 'wrench'
+  | 'browser'
   // Stats
   | 'calendar'
   | 'grid'
