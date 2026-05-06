@@ -1,11 +1,11 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ───────────────────────────────────────────────────────────
    Tipografías self-hosted con Fontsource (subset latin)
    ─────────────────────────────────────────────────────────── */
-@import "@fontsource-variable/bricolage-grotesque/wdth.css";
-@import "@fontsource-variable/inter/index.css";
-@import "@fontsource-variable/jetbrains-mono/index.css";
+@import '@fontsource-variable/bricolage-grotesque/wdth.css';
+@import '@fontsource-variable/inter/index.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
 
 /* ───────────────────────────────────────────────────────────
    Sistema de diseño · gesdiweb
@@ -27,9 +27,9 @@
   --color-muted: #a7a7a7;
 
   /* ── Familias tipográficas ──────────────────────────── */
-  --font-display: "Bricolage Grotesque Variable", system-ui, sans-serif;
-  --font-sans: "Inter Variable", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
 
   /* ── Escala tipográfica fluida (clamp) ──────────────── */
   --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.85rem);
@@ -118,7 +118,12 @@ body {
 }
 
 /* Headings con la familia display por defecto */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.05;
@@ -138,13 +143,17 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-fg-inverse);
 }
 
-/* Imágenes responsive por defecto */
-img,
-svg,
-video {
-  display: block;
-  max-width: 100%;
-  height: auto;
+/* Imágenes responsive por defecto.
+   Va dentro de @layer base para que utilities de Tailwind (.hidden, .h-9, etc.)
+   puedan sobreescribir display/height en imgs y svgs. */
+@layer base {
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 /* ───────────────────────────────────────────────────────────
@@ -202,7 +211,7 @@ video {
     visibility 0s linear var(--duration-base);
   visibility: hidden;
 }
-.mobile-menu[data-open="true"] {
+.mobile-menu[data-open='true'] {
   opacity: 1;
   pointer-events: auto;
   visibility: visible;
@@ -210,7 +219,7 @@ video {
     opacity var(--duration-base) var(--ease-out),
     visibility 0s linear 0s;
 }
-body[data-mobile-menu-open="true"] {
+body[data-mobile-menu-open='true'] {
   overflow: hidden;
 }
 
@@ -237,12 +246,12 @@ body[data-mobile-menu-open="true"] {
     transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-[data-reveal][data-reveal-stagger="true"] {
+[data-reveal][data-reveal-stagger='true'] {
   opacity: 1;
   transform: none;
 }
 
-[data-reveal][data-reveal-stagger="true"] > * {
+[data-reveal][data-reveal-stagger='true'] > * {
   opacity: 0;
   transform: translateY(24px);
   transition:
@@ -252,14 +261,14 @@ body[data-mobile-menu-open="true"] {
 }
 
 [data-reveal].is-visible,
-[data-reveal][data-reveal-stagger="true"].is-visible > * {
+[data-reveal][data-reveal-stagger='true'].is-visible > * {
   opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
-  [data-reveal][data-reveal-stagger="true"] > * {
+  [data-reveal][data-reveal-stagger='true'] > * {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -283,13 +292,21 @@ body[data-mobile-menu-open="true"] {
 }
 
 @keyframes vt-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes vt-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -303,8 +320,12 @@ body[data-mobile-menu-open="true"] {
    Animación marquee infinita (CSS puro)
    ─────────────────────────────────────────────────────────── */
 @keyframes marquee-x {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .marquee-track {

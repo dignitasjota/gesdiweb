@@ -9,42 +9,41 @@ const navLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
-const isActive = (href: string) =>
-  currentPath === href || currentPath.startsWith(href + '/');
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(href + '/');
 ---
 
 <header
   class="fixed top-0 left-0 right-0 z-[--z-header] bg-[--color-bg]/85 backdrop-blur-md border-b border-[--color-border-soft] before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-[--color-brand] before:to-transparent before:opacity-60"
 >
   <div class="container-fluid flex items-center justify-between h-16 md:h-20">
-    <a
-      href="/"
-      class="flex items-center gap-2 font-display font-bold text-lg tracking-tight"
-      aria-label="gesdiweb · ir a la home"
-    >
-      <span
-        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[--color-brand] text-[--color-fg-inverse] font-bold text-sm"
-        aria-hidden="true"
-      >
-        G
-      </span>
-      <span>gesdiweb</span>
+    <a href="/" class="flex items-center" aria-label="gesdiweb · ir a la home">
+      <img
+        src="/logo-mark.png"
+        alt="gesdiweb"
+        width="397"
+        height="92"
+        class="h-8 md:h-9 w-auto"
+        decoding="sync"
+        fetchpriority="high"
+      />
     </a>
 
     <nav aria-label="Navegación principal" class="hidden md:flex items-center gap-8">
-      {navLinks.map(({ href, label }) => (
-        <a
-          href={href}
-          class={`text-sm font-medium tracking-tight transition-colors ${
-            isActive(href)
-              ? 'text-[--color-fg]'
-              : 'text-[--color-fg-soft] hover:text-[--color-fg]'
-          }`}
-          aria-current={isActive(href) ? 'page' : undefined}
-        >
-          {label}
-        </a>
-      ))}
+      {
+        navLinks.map(({ href, label }) => (
+          <a
+            href={href}
+            class={`text-sm font-medium tracking-tight transition-colors ${
+              isActive(href)
+                ? 'text-[--color-fg]'
+                : 'text-[--color-fg-soft] hover:text-[--color-fg]'
+            }`}
+            aria-current={isActive(href) ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
     </nav>
 
     <div class="flex items-center gap-3">
@@ -72,8 +71,8 @@ const isActive = (href: string) =>
           aria-hidden="true"
           data-icon-open
         >
-          <line x1="4" y1="8" x2="20" y2="8" />
-          <line x1="4" y1="16" x2="20" y2="16" />
+          <line x1="4" y1="8" x2="20" y2="8"></line>
+          <line x1="4" y1="16" x2="20" y2="16"></line>
         </svg>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -87,8 +86,8 @@ const isActive = (href: string) =>
           class="hidden"
           data-icon-close
         >
-          <line x1="6" y1="6" x2="18" y2="18" />
-          <line x1="6" y1="18" x2="18" y2="6" />
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="6" y1="18" x2="18" y2="6"></line>
         </svg>
       </button>
     </div>
@@ -96,28 +95,25 @@ const isActive = (href: string) =>
 </header>
 
 <!-- Drawer del menú móvil -->
-<div
-  id="mobile-menu"
-  class="mobile-menu md:hidden"
-  data-open="false"
-  aria-hidden="true"
->
+<div id="mobile-menu" class="mobile-menu md:hidden" data-open="false" aria-hidden="true">
   <div class="container-fluid pt-24 pb-12 flex flex-col h-full">
     <nav aria-label="Navegación principal móvil" class="flex flex-col gap-8 flex-1">
-      {navLinks.map(({ href, label }) => (
-        <a
-          href={href}
-          class={`font-display font-bold tracking-[-0.025em] leading-none transition-colors ${
-            isActive(href)
-              ? 'text-[--color-brand]'
-              : 'text-[--color-fg] hover:text-[--color-brand]'
-          }`}
-          style="font-size: var(--text-2xl);"
-          aria-current={isActive(href) ? 'page' : undefined}
-        >
-          {label}
-        </a>
-      ))}
+      {
+        navLinks.map(({ href, label }) => (
+          <a
+            href={href}
+            class={`font-display font-bold tracking-[-0.025em] leading-none transition-colors ${
+              isActive(href)
+                ? 'text-[--color-brand]'
+                : 'text-[--color-fg] hover:text-[--color-brand]'
+            }`}
+            style="font-size: var(--text-2xl);"
+            aria-current={isActive(href) ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
     </nav>
 
     <div class="border-t border-[--color-border] pt-8 mt-8 space-y-4">
@@ -135,9 +131,7 @@ const isActive = (href: string) =>
 
 <script>
   function setupMobileMenu() {
-    const toggle = document.querySelector<HTMLButtonElement>(
-      '[data-mobile-menu-toggle]',
-    );
+    const toggle = document.querySelector<HTMLButtonElement>('[data-mobile-menu-toggle]');
     const menu = document.getElementById('mobile-menu');
     const iconOpen = toggle?.querySelector<SVGElement>('[data-icon-open]');
     const iconClose = toggle?.querySelector<SVGElement>('[data-icon-close]');
@@ -158,9 +152,9 @@ const isActive = (href: string) =>
     });
 
     // Cerrar al hacer click en cualquier link del menú
-    menu.querySelectorAll('a').forEach((link) =>
-      link.addEventListener('click', () => setOpen(false)),
-    );
+    menu
+      .querySelectorAll('a')
+      .forEach((link) => link.addEventListener('click', () => setOpen(false)));
 
     // Cerrar con ESC
     document.addEventListener('keydown', (e) => {

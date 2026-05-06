@@ -9,7 +9,7 @@ const SITE_NAME = 'gesdiweb';
 const SITE_TAGLINE = 'Diseño web y posicionamiento SEO';
 const DEFAULT_OG = `${SITE_URL}/og-default.png`;
 
-const ORG_LOGO = `${SITE_URL}/logo.svg`; // pendiente de SVG real
+const ORG_LOGO = `${SITE_URL}/logo.png`;
 
 // ──────────────────────────────────────────────────────────
 // Organization + LocalBusiness (singleton, se reutiliza)
@@ -206,8 +206,7 @@ export const blogSchema = () => ({
   '@id': `${SITE_URL}/blog#blog`,
   url: `${SITE_URL}/blog`,
   name: 'Blog · gesdiweb',
-  description:
-    'Artículos sobre SEO técnico, diseño web, rendimiento y estrategia digital.',
+  description: 'Artículos sobre SEO técnico, diseño web, rendimiento y estrategia digital.',
   inLanguage: 'es-ES',
   publisher: { '@id': `${SITE_URL}/#organization` },
 });
@@ -216,9 +215,7 @@ export const blogSchema = () => ({
 // BreadcrumbList (cualquier página interna)
 // ──────────────────────────────────────────────────────────
 
-export const breadcrumbSchema = (
-  items: { name: string; url: string }[],
-) => ({
+export const breadcrumbSchema = (items: { name: string; url: string }[]) => ({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: items.map((item, i) => ({
