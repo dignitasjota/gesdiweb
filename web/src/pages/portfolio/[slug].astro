@@ -166,6 +166,30 @@ const jsonLd = [
       </div>
     </section>
 
+    {data.gallery && data.gallery.length > 0 && (
+      <section class="container-fluid pb-20 md:pb-32">
+        <Marker label="galería" />
+        <h2
+          class="mt-6 font-display font-bold tracking-tight leading-tight"
+          style="font-size: var(--text-xl);"
+        >
+          Más vistas del proyecto
+        </h2>
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {data.gallery.map((img, i) => (
+            <Image
+              src={img}
+              alt={`${data.title} — vista ${i + 1}`}
+              widths={[640, 960, 1280, 1600]}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              class="aspect-[16/9] w-full rounded-2xl object-cover border border-[--color-border]"
+              loading="lazy"
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
     <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
       <div class="container-fluid section-spacing">
         <Marker label="stack técnico" />
