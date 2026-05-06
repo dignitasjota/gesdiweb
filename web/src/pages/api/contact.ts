@@ -111,9 +111,20 @@ export const POST: APIRoute = async ({ request }) => {
       from: `gesdiweb <${RESEND_FROM_EMAIL}>`,
       to: LEAD_NOTIFICATION_EMAIL,
       replyTo: data.email,
-      subject: `Nuevo lead · ${data.name}${data.service ? ` · ${data.service}` : ''}`,
+      subject: `[gesdiweb] Nuevo contacto desde la web — ${data.name}${data.service ? ` · ${data.service}` : ''}`,
       html: renderContactEmailHtml(payload),
       text: renderContactEmailText(payload),
+      headers: {
+        // Identifica el email como generado automáticamente (RFC 3834).
+        // Gmail y Outlook lo usan para no clasificar transaccionales como
+        // promociones ni para responder con auto-replies en bucle.
+        'Auto-Submitted': 'auto-generated',
+        // Aunque List-Unsubscribe es típico de marketing, Gmail recomienda
+        // incluirlo en cualquier email automatizado para mejor deliverability.
+        // Apunta a un mailto del propio remitente con el ID en subject.
+        'List-Unsubscribe': `<mailto:${RESEND_FROM_EMAIL}?subject=Unsubscribe>`,
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+      },
     });
 
     if (error) {
