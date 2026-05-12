@@ -1,98 +1,280 @@
 ---
 import { Image } from 'astro:assets';
-import Marker from '../ui/Marker.astro';
-import Tag from '../ui/Tag.astro';
-import Reveal from '../animations/Reveal.astro';
-import { getFeaturedProjects } from '../../lib/collections';
+import { getFeaturedProjects, getAllProjects } from '../../lib/collections';
 
-const featured = await getFeaturedProjects();
+// Si hay menos de 3 featured, completamos con los más recientes no featured
+let projects = await getFeaturedProjects();
+if (projects.length < 3) {
+  const all = await getAllProjects();
+  const extras = all
+    .filter((p) => !projects.find((f) => f.id === p.id))
+    .slice(0, 3 - projects.length);
+  projects = [...projects, ...extras];
+}
+
+const palette = ['#76c2da', '#0a0a0a', '#5fb3cf', '#1a1a1a', '#76c2da'];
+
+// Iniciales como "mark" gigante en cards sin cover
+function initials(title: string) {
+  return title
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
+}
 ---
 
-<section class="container-fluid section-spacing">
-  <Reveal class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
-    <div>
-      <Marker label="00.04° trabajo reciente" />
-      <h2
-        class="mt-5 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[22ch]"
-        style="font-size: var(--text-2xl);"
-      >
-        Proyectos que <span class="text-[--color-brand]">han crecido</span> con nosotros.
-      </h2>
+<section class="portfolio-section" id="trabajos">
+  <div class="portfolio-inner">
+    <div class="portfolio-eyebrow">
+      <span class="dot" aria-hidden="true"></span>
+      Trabajos seleccionados · {String(projects.length).padStart(3, '0')}
     </div>
-    <a
-      href="/portfolio"
-      class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
-    >
-      ver portfolio completo →
-    </a>
-  </Reveal>
 
-  <Reveal class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12" stagger>
-    {featured.map((project, i) => (
-      <a
-        href={`/portfolio/${project.id}`}
-        class={`group flex flex-col gap-5 ${i === 0 ? 'md:col-span-2' : ''}`}
-      >
-        <div
-          class={`relative rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors ${
-            i === 0 ? 'aspect-[16/8]' : 'aspect-[4/3]'
-          } ${project.data.cover ? '' : 'bg-[--color-brand-soft] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest'}`}
-          aria-hidden={project.data.cover ? undefined : 'true'}
-        >
-          {project.data.cover ? (
-            <Image
-              src={project.data.cover}
-              alt={project.data.coverAlt ?? `${project.data.title} — captura`}
-              widths={[480, 720, 1080, 1440, 1920]}
-              sizes={i === 0 ? '(min-width: 1024px) 1280px, 100vw' : '(min-width: 1024px) 50vw, 100vw'}
-              class="w-full h-full object-cover"
-              loading={i === 0 ? 'eager' : 'lazy'}
-            />
-          ) : (
-            <>
-              <div class="text-center">
-                <div
-                  class="w-14 h-14 rounded-full bg-[--color-brand] flex items-center justify-center mx-auto mb-4"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <line x1="7" y1="17" x2="17" y2="7" />
-                    <polyline points="7 7 17 7 17 17" />
-                  </svg>
-                </div>
-                <p style="font-size: var(--text-sm);">[PLACEHOLDER · {project.data.title}]</p>
+    <h2 class="portfolio-headline">
+      Algunos proyectos de los que<br />
+      estamos <em>orgullosos.</em>
+    </h2>
+
+    <div class="portfolio-grid">
+      {
+        projects.map((p, i) => {
+          const color = palette[i % palette.length];
+          const cover = p.data.cover;
+          return (
+            <a class="portfolio-card" href={`/portfolio/${p.id}`}>
+              <div class="portfolio-card-media" style={`background: ${color};`}>
+                {cover ? (
+                  <Image
+                    src={cover}
+                    alt={p.data.coverAlt ?? p.data.title}
+                    widths={[480, 720, 960]}
+                    sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
+                    class="portfolio-card-img"
+                  />
+                ) : (
+                  <span
+                    class="portfolio-card-mark"
+                    style={
+                      color === '#0a0a0a' || color === '#1a1a1a'
+                        ? 'color:#fafaf8;'
+                        : 'color:#ffffff;'
+                    }
+                  >
+                    {initials(p.data.title)}
+                  </span>
+                )}
+                <span class="portfolio-card-num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="portfolio-card-cta">Ver caso ↗</span>
               </div>
-              <span
-                class="absolute top-6 left-6 font-mono text-[--color-brand-hover]"
-                style="font-size: var(--text-xs);"
-              >
-                /{String(project.data.order).padStart(2, '0')}
-              </span>
-              <span
-                class="absolute top-6 right-6 font-mono text-[--color-brand-hover]"
-                style="font-size: var(--text-xs);"
-              >
-                {project.data.year}
-              </span>
-            </>
-          )}
-        </div>
-        <div class="flex items-baseline justify-between gap-4">
-          <h3
-            class="font-display font-bold tracking-[-0.02em] group-hover:text-[--color-brand-hover] transition-colors"
-            style="font-size: var(--text-xl);"
-          >
-            {project.data.title}
-          </h3>
-        </div>
-        <p class="text-[--color-fg-soft] max-w-[55ch]">
-          {project.data.excerpt}
-        </p>
-        <div class="flex flex-wrap gap-2">
-          {project.data.techStack.slice(0, 3).map((tech) => (
-            <Tag label={tech} />
-          ))}
-        </div>
-      </a>
-    ))}
-  </Reveal>
+              <div class="portfolio-card-meta">
+                <div class="pc-name">{p.data.title}</div>
+                <div class="pc-sub">
+                  {p.data.client} · {p.data.year}
+                </div>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+
+    <a class="portfolio-cta" href="/portfolio">
+      Ver todos los trabajos
+      <svg width="16" height="16" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M5 17L17 5M17 5H7M17 5V15" stroke="currentColor" stroke-width="1.4"></path>
+      </svg>
+    </a>
+  </div>
 </section>
+
+<style>
+  .portfolio-section {
+    padding: var(--space-section) 32px;
+    background: var(--color-bg);
+  }
+  .portfolio-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .portfolio-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 60px;
+  }
+  .portfolio-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+  .portfolio-headline {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    max-width: 20ch;
+    margin-bottom: 80px;
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px 24px;
+  }
+  @media (min-width: 700px) {
+    .portfolio-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .portfolio-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .portfolio-card {
+    display: block;
+    color: var(--color-fg);
+  }
+  .portfolio-card-media {
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.6s var(--ease);
+  }
+  .portfolio-card:hover .portfolio-card-media {
+    transform: translateY(-6px);
+  }
+  .portfolio-card-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.06) 0 2px,
+      transparent 2px 16px
+    );
+    mix-blend-mode: overlay;
+    transition: transform 1s var(--ease);
+    pointer-events: none;
+  }
+  .portfolio-card:hover .portfolio-card-media::after {
+    transform: translate(40px, 40px);
+  }
+  .portfolio-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .portfolio-card-mark {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 10vw, 10rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    transition:
+      transform 0.6s var(--ease),
+      filter 0.6s var(--ease);
+  }
+  .portfolio-card:hover .portfolio-card-mark {
+    transform: scale(1.08) rotate(-2deg);
+    filter: blur(1.5px);
+  }
+  .portfolio-card-num {
+    position: absolute;
+    top: 16px;
+    left: 18px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.08em;
+    z-index: 2;
+  }
+  .portfolio-card-cta {
+    position: absolute;
+    bottom: 16px;
+    right: 18px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.4s var(--ease),
+      transform 0.4s var(--ease);
+    z-index: 2;
+  }
+  .portfolio-card:hover .portfolio-card-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .portfolio-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 16px;
+    gap: 16px;
+  }
+  .pc-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .pc-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    text-align: right;
+  }
+
+  .portfolio-cta {
+    margin-top: 60px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border-strong);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-fg);
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease);
+  }
+  .portfolio-cta:hover {
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+  }
+  .portfolio-cta svg {
+    transition: transform 0.3s var(--ease);
+  }
+  .portfolio-cta:hover svg {
+    transform: rotate(-45deg);
+  }
+</style>

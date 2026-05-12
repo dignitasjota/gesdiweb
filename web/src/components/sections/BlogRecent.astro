@@ -1,101 +1,215 @@
 ---
 import { Image } from 'astro:assets';
-import Marker from '../ui/Marker.astro';
-import Tag from '../ui/Tag.astro';
-import Icon from '../ui/Icon.astro';
-import Reveal from '../animations/Reveal.astro';
-import { getRecentPosts, formatDateLong, isoDate } from '../../lib/collections';
+import { getRecentPosts, formatDateLong } from '../../lib/collections';
 
 const posts = await getRecentPosts(3);
 ---
 
-<section class="bg-[--color-brand-soft] border-y border-[--color-brand]/20">
-  <div class="container-fluid section-spacing">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
-      <div>
-        <Marker label="00.08° blog" />
-        <h2
-          class="mt-5 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[22ch]"
-          style="font-size: var(--text-2xl);"
-        >
-          Lo último <span class="text-[--color-brand-hover]">que pensamos</span>.
-        </h2>
-      </div>
-      <a
-        href="/blog"
-        class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto inline-flex items-center gap-2"
-      >
-        ver todos los posts
-        <Icon name="arrow-up-right" size={14} />
+<section class="blog-recent">
+  <div class="blog-recent-inner">
+    <div class="blog-recent-eyebrow">
+      <span class="dot" aria-hidden="true"></span>
+      Desde el blog · 008
+    </div>
+
+    <div class="blog-recent-header">
+      <h2 class="blog-recent-headline">
+        Apuntes <em>técnicos</em><br />
+        que aclaran decisiones.
+      </h2>
+      <a class="blog-recent-cta" href="/blog">
+        Ver todos los artículos
+        <svg width="16" height="16" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M5 17L17 5M17 5H7M17 5V15" stroke="currentColor" stroke-width="1.4"></path>
+        </svg>
       </a>
     </div>
 
-    <Reveal class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8" stagger>
-      {posts.map((post, i) => (
-        <a
-          href={`/blog/${post.id}`}
-          class="group flex flex-col gap-5 bg-[--color-bg] rounded-2xl p-5 md:p-6 transition-transform hover:-translate-y-1"
-        >
-          <div
-            class={`aspect-[4/3] rounded-xl overflow-hidden border-2 border-transparent transition-colors relative ${
-              i === 0
-                ? 'group-hover:border-[--color-brand-hover]'
-                : 'group-hover:border-[--color-brand]'
-            }`}
-          >
-            {post.data.cover ? (
-              <Image
-                src={post.data.cover}
-                alt={post.data.coverAlt ?? post.data.title}
-                widths={[400, 600, 800]}
-                sizes="(min-width: 768px) 33vw, 100vw"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            ) : (
-              <div
-                class={`w-full h-full flex items-center justify-center font-mono uppercase tracking-widest ${
-                  i === 0
-                    ? 'bg-[--color-brand] text-[--color-fg-inverse]'
-                    : 'bg-[--color-brand-soft] text-[--color-brand-hover]'
-                }`}
-                aria-hidden="true"
-                style="font-size: var(--text-xs);"
-              >
-                <span class="absolute top-4 left-4 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm">
-                  <Icon name={i === 0 ? 'sparkle' : 'pen'} size={16} />
-                </span>
-                [PLACEHOLDER · cover]
+    <div class="blog-recent-grid">
+      {
+        posts.map((post, i) => {
+          const cover = post.data.cover;
+          return (
+            <a class="blog-card" href={`/blog/${post.id}`}>
+              <div class="blog-card-media">
+                {cover ? (
+                  <Image
+                    src={cover}
+                    alt={post.data.coverAlt ?? post.data.title}
+                    widths={[480, 720, 960]}
+                    sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 33vw"
+                    class="blog-card-img"
+                  />
+                ) : (
+                  <span class="blog-card-mark">{String(i + 1).padStart(2, '0')}</span>
+                )}
               </div>
-            )}
-          </div>
-          <div class="flex items-center gap-2">
-            {post.data.categories.slice(0, 1).map((cat) => (
-              <Tag label={cat} variant="brand" />
-            ))}
-            <span
-              class="font-mono text-[--color-muted] inline-flex items-center gap-1.5"
-              style="font-size: var(--text-xs);"
-            >
-              <Icon name="clock" size={12} />
-              {post.data.readingMinutes} min
-            </span>
-          </div>
-          <h3
-            class="font-display font-bold tracking-[-0.02em] leading-tight group-hover:text-[--color-brand-hover] transition-colors"
-            style="font-size: var(--text-lg);"
-          >
-            {post.data.title}
-          </h3>
-          <p class="text-[--color-fg-soft] line-clamp-3">{post.data.excerpt}</p>
-          <p
-            class="font-mono uppercase tracking-widest text-[--color-muted] mt-auto"
-            style="font-size: var(--text-xs);"
-          >
-            <time datetime={isoDate(post.data.publishedAt)}>{formatDateLong(post.data.publishedAt)}</time>
-          </p>
-        </a>
-      ))}
-    </Reveal>
+              <div class="blog-card-meta">
+                <span class="bc-date">{formatDateLong(post.data.publishedAt)}</span>
+                {post.data.categories?.[0] && <span class="bc-cat">{post.data.categories[0]}</span>}
+              </div>
+              <h3 class="bc-title">{post.data.title}</h3>
+              <p class="bc-excerpt">{post.data.excerpt}</p>
+            </a>
+          );
+        })
+      }
+    </div>
   </div>
 </section>
+
+<style>
+  .blog-recent {
+    padding: var(--space-section) 32px;
+    background: var(--color-bg-soft);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .blog-recent-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .blog-recent-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .blog-recent-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+
+  .blog-recent-header {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 60px;
+  }
+  @media (min-width: 800px) {
+    .blog-recent-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+  .blog-recent-headline {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    max-width: 20ch;
+  }
+  .blog-recent-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border-strong);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-fg);
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease);
+    flex-shrink: 0;
+  }
+  .blog-recent-cta:hover {
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+  }
+
+  .blog-recent-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px 32px;
+  }
+  @media (min-width: 700px) {
+    .blog-recent-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .blog-recent-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .blog-card {
+    display: block;
+    color: var(--color-fg);
+  }
+  .blog-card-media {
+    aspect-ratio: 16 / 10;
+    border-radius: 4px;
+    background: var(--color-brand);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s var(--ease);
+  }
+  .blog-card:hover .blog-card-media {
+    transform: translateY(-4px);
+  }
+  .blog-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .blog-card-mark {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.04em;
+  }
+
+  .blog-card-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 16px 0 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+  }
+  .bc-cat {
+    color: var(--color-brand);
+  }
+  .bc-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    transition: color 0.3s var(--ease);
+  }
+  .blog-card:hover .bc-title {
+    color: var(--color-brand);
+  }
+  .bc-excerpt {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-muted);
+    max-width: 40ch;
+  }
+</style>

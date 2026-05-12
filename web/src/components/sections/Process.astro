@@ -1,117 +1,213 @@
 ---
-import Marker from '../ui/Marker.astro';
-import Icon from '../ui/Icon.astro';
-import Reveal from '../animations/Reveal.astro';
-import type { IconName } from '../ui/icon-names';
-
 interface Step {
+  num: string;
   title: string;
+  em: string;
   description: string;
-  accent: 'soft' | 'brand' | 'dark';
-  icon: IconName;
+  tags: string[];
 }
 
 const steps: Step[] = [
   {
-    title: 'Descubrimiento',
+    num: 'Fase 01',
+    title: 'Descubrir',
+    em: 'Descubrir',
     description:
       'Reunión inicial, análisis de objetivos, competencia y limitaciones reales. Sin esta fase no se diseña una sola línea.',
-    accent: 'soft',
-    icon: 'compass',
+    tags: ['Briefing', 'Auditoría', 'Estrategia'],
   },
   {
-    title: 'Estrategia',
+    num: 'Fase 02',
+    title: 'Definir',
+    em: 'Definir',
     description:
-      'Plan claro: qué se hace, en qué orden, con qué métricas y con qué presupuesto. Documento firmado por ambas partes.',
-    accent: 'brand',
-    icon: 'map',
+      'Plan claro: arquitectura de información, alcance, métricas y presupuesto. Documento firmado por ambas partes.',
+    tags: ['Wireframes', 'Sitemap', 'Stack'],
   },
   {
-    title: 'Diseño y desarrollo',
+    num: 'Fase 03',
+    title: 'Diseñar',
+    em: 'Diseñar',
     description:
-      'Iteraciones quincenales con builds reales que ya puedes tocar. Diseño UI, desarrollo front y back, y SEO técnico desde el día 1.',
-    accent: 'dark',
-    icon: 'pen',
+      'Iteraciones quincenales con builds reales que ya puedes tocar. Diseño UI, copy y SEO técnico desde el día 1.',
+    tags: ['UI', 'Prototipo', 'Copy'],
   },
   {
-    title: 'Lanzamiento y crecimiento',
+    num: 'Fase 04',
+    title: 'Lanzar',
+    em: 'Lanzar',
     description:
-      'Go-live ordenado, monitorización las primeras semanas y plan de mantenimiento + crecimiento que activa el siguiente ciclo.',
-    accent: 'soft',
-    icon: 'rocket',
+      'Go-live ordenado, monitorización las primeras semanas y plan de mantenimiento que activa el siguiente ciclo.',
+    tags: ['Build', 'QA', 'Crecimiento'],
   },
 ];
-
-const accentStyles: Record<string, string> = {
-  soft: 'bg-[--color-bg] border border-[--color-border]',
-  brand: 'bg-[--color-brand] text-[--color-fg-inverse]',
-  dark: 'bg-[--color-bg-inverse] text-[--color-fg-inverse]',
-};
-
-const iconBgStyles: Record<string, string> = {
-  soft: 'bg-[--color-brand-soft] text-[--color-brand-hover]',
-  brand: 'bg-white/15 text-[--color-fg-inverse] border border-white/20',
-  dark: 'bg-[--color-brand]/15 text-[--color-brand] border border-[--color-brand]/30',
-};
 ---
 
-<section class="section-spacing">
-  <div class="container-fluid">
-    <Marker label="00.06° proceso" />
+<section class="process-section" id="proceso">
+  <div class="process-inner">
+    <div class="process-eyebrow">
+      <span class="dot" aria-hidden="true"></span>
+      Cómo trabajamos · 004
+    </div>
 
-    <h2
-      class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
-      style="font-size: var(--text-2xl);"
-    >
-      Cuatro pasos.<br />
-      <span class="text-[--color-brand]">Cero atajos</span>.
+    <h2 class="process-headline">
+      Un proceso <em>honesto.</em><br />
+      Sin humo.
     </h2>
 
-    <Reveal as="ol" class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6" stagger>
-      {steps.map((step, i) => (
-        <li
-          class={`rounded-2xl p-7 md:p-10 flex flex-col gap-5 ${accentStyles[step.accent]}`}
-        >
-          <div class="flex items-center justify-between">
-            <span
-              class={`inline-flex items-center justify-center w-12 h-12 rounded-full ${iconBgStyles[step.accent]}`}
-              aria-hidden="true"
-            >
-              <Icon name={step.icon} size={22} />
-            </span>
-            <span
-              class={`font-display font-bold leading-none tracking-[-0.04em] ${
-                step.accent === 'soft' ? 'text-[--color-brand]' : ''
-              }`}
-              style="font-size: var(--text-3xl);"
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
+    <div class="process-grid">
+      {
+        steps.map((p) => (
+          <div class="process-step">
+            <div class="p-num">{p.num}</div>
+            <h3 class="p-title">
+              {p.title.split(p.em)[0]}
+              <em>{p.em}</em>
+              {p.title.split(p.em)[1]}
+            </h3>
+            <p class="p-desc">{p.description}</p>
+            <div class="p-tags">
+              {p.tags.map((t) => (
+                <span>{t}</span>
+              ))}
+            </div>
           </div>
-
-          <div
-            class={`h-px ${
-              step.accent === 'soft' ? 'bg-[--color-border]' : 'bg-white/15'
-            }`}
-            aria-hidden="true"
-          ></div>
-
-          <h3
-            class="font-display font-bold tracking-[-0.02em] leading-tight"
-            style="font-size: var(--text-xl);"
-          >
-            {step.title}
-          </h3>
-          <p
-            class={`leading-relaxed max-w-[45ch] ${
-              step.accent === 'soft' ? 'text-[--color-fg-soft]' : 'text-white/85'
-            }`}
-            style="font-size: var(--text-base);"
-          >
-            {step.description}
-          </p>
-        </li>
-      ))}
-    </Reveal>
+        ))
+      }
+    </div>
   </div>
 </section>
+
+<style>
+  .process-section {
+    padding: var(--space-section) 32px;
+    background: var(--color-bg);
+  }
+  .process-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .process-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 60px;
+  }
+  .process-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+  .process-headline {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    max-width: 18ch;
+    margin-bottom: 80px;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 700px) {
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1100px) {
+    .process-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .process-step {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+  @media (min-width: 700px) {
+    .process-step {
+      padding: 40px 24px 60px;
+      border-right: 1px solid var(--color-border);
+      min-height: 360px;
+    }
+    .process-step:nth-child(2) {
+      border-right: 0;
+    }
+    .process-step:nth-child(1),
+    .process-step:nth-child(2) {
+      border-bottom: 1px solid var(--color-border);
+    }
+  }
+  @media (min-width: 1100px) {
+    .process-step {
+      border-bottom: 0;
+      border-right: 1px solid var(--color-border);
+    }
+    .process-step:nth-child(2) {
+      border-right: 1px solid var(--color-border);
+    }
+    .process-step:last-child {
+      border-right: 0;
+    }
+  }
+
+  .p-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+  @media (min-width: 700px) {
+    .p-num {
+      margin-bottom: 60px;
+    }
+  }
+
+  .p-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+
+  .p-desc {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-muted);
+    margin-bottom: 24px;
+  }
+
+  .p-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .p-tags span {
+    padding: 4px 10px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-muted);
+  }
+</style>
