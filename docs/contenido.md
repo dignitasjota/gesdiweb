@@ -83,7 +83,7 @@ No hace falta tocar ninguna página `.astro`.
 | Campo | Tipo | Obligatorio | Notas |
 |---|---|---|---|
 | `title` | string | ✅ | Título del post (50-60 chars ideal para SEO) |
-| `excerpt` | string | ✅ | Resumen 1-2 frases (150-160 chars ideal) |
+| `excerpt` | string | ✅ | Resumen 1-2 frases (150-160 chars ideal). **Doble función:** meta description SEO **+** se renderiza como párrafo intro del post con drop cap Instrument Serif italic en color brand (ADR-027). Procura que comience con una letra clara, ya que la primera letra recibe tamaño 4em y se convierte en capital decorativa |
 | `publishedAt` | fecha `YYYY-MM-DD` | ✅ | Fecha visible al público |
 | `readingMinutes` | número entero | ✅ | Calcular: ≈ palabras / 220 |
 | `categories` | array de strings | ✅ | Mínimo 1, máximo 2 (ej: `["SEO técnico"]`) |
@@ -93,6 +93,21 @@ No hace falta tocar ninguna página `.astro`.
 | `seoDescription` | string | opcional | Override de la meta description |
 | `status` | `'draft'` / `'scheduled'` / `'published'` | opcional | Por defecto `'published'`. Los `'draft'` no se publican |
 | `lang` | string | opcional | Por defecto `"es"` |
+
+#### Formato editorial del cuerpo del post (rediseño 2026-05)
+
+El cuerpo Markdown del post se renderiza con un sistema editorial enriquecido. **No tienes que tocar nada** para aprovecharlo, pero conviene conocer los patrones:
+
+- **Drop cap automático**: la primera letra del `excerpt` se convierte en capital decorativa Instrument Serif italic color brand. No uses números ni símbolos como primera letra del excerpt.
+- **TOC sticky lateral**: se genera automáticamente desde los `## h2` del cuerpo. Si tu post tiene menos de 2 `h2`, el TOC se omite. Para que aparezca, usa al menos 2 secciones.
+- **Numeración automática** `/ 01 / 02 ...`: cada `## h2` recibe un número antes del texto (CSS counter). No lo escribas a mano.
+- **Pull-quote decorativo**: cualquier `>` (blockquote markdown) se renderiza con margen negativo, borde brand, comilla decorativa gigante y fuente Instrument Serif italic. Úsalo para frases con peso editorial:
+  ```md
+  > El SEO técnico no se hace al final. Se hace desde el primer wireframe.
+  ```
+- **Reading progress bar**: barra de progreso fija arriba en color brand, calculada automáticamente al scroll. Cero código por tu parte.
+- **Code blocks**: con triple backtick ```` ``` ```` se renderizan en fondo dark, monospace. Ideal para snippets cortos.
+- **Tags como pills**: los `tags` del frontmatter aparecen en el rail derecho del post.
 
 ### 3.2 — Servicios (`web/src/content/services/<slug>.mdx`)
 

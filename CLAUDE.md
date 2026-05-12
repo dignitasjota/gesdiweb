@@ -10,9 +10,9 @@
 
 - **Proyecto:** rediseño completo de [gesdiweb.es](https://gesdiweb.es), web corporativa de una agencia española de **diseño web y posicionamiento SEO**.
 - **Sustituye:** una WordPress antigua que sigue online y rankea (poco tráfico, pero tráfico real que NO debe perderse).
-- **Estética objetivo:** suiza moderna, tipografía gigante, mucho blanco, marcadores tipográficos `// 00.01°`, marquees infinitos, scroll suave, animaciones reveal. Inspiración (no clon): [createstudio.framer.media](https://createstudio.framer.media/).
+- **Estética objetivo:** rediseño "Claude Design" (mayo 2026) — tipografía gigantesca **Space Grotesk** con énfasis decorativos en **Instrument Serif italic** color brand, fondo off-white `#fafaf8`, marcadores tipográficos monospace con dot brand, marquees con asteriscos, disco "morphing" animado, hover azul en filas, drop cap en intros de blog. Inspiración previa: [createstudio.framer.media](https://createstudio.framer.media/).
 - **Idioma de lanzamiento:** español. Arquitectura preparada para multi-idioma sin implementar inglés todavía.
-- **Estado actual (2026-05-07):** Fases 0–6 cerradas + paquete de mejoras técnicas + adelanto parcial de Fase 8. Sistema de diseño operativo, 22 páginas maquetadas, **69 posts del blog importados desde WordPress**, **5 proyectos reales en portfolio** y **6 servicios**, formulario de contacto con Resend operativo (deliverability mejorado), animaciones, JSON-LD por tipo de página, **80 OG images per-entry generadas con Playwright**, **logo oficial integrado** en Header y JSON-LD, GitHub Actions CI/CD listo, Husky+Prettier+lint-staged + Renovate. Fase 7 con artefactos listos pero pendiente ejecución del dueño siguiendo [`docs/despliegue.md`](docs/despliegue.md). Snapshot completo en [`docs/estado.md`](docs/estado.md).
+- **Estado actual (2026-05-12):** Fases 0–6 cerradas + **rediseño visual "Claude Design" completo** (5 fases A–E + blog v3, commits `0cab235`..`cbdf95c`). Sistema de diseño nuevo con Space Grotesk + Instrument Serif italic, fondo `#fafaf8`, accent `#76c2da`. 23 páginas (añadida `/proceso` independiente), 69 posts del blog, 5 proyectos portfolio, 6 servicios, formulario contacto con Resend, JSON-LD por tipo, 80 OG images, logo oficial integrado, GitHub Actions CI/CD, Husky+Prettier+lint-staged + Renovate, CookieBanner RGPD. Fase 7 con artefactos listos pero pendiente ejecución del dueño siguiendo [`docs/despliegue.md`](docs/despliegue.md). Snapshot completo en [`docs/estado.md`](docs/estado.md).
 - **Dueño / único editor:** Jota (`dignitasjota@gmail.com`), perfil técnico (terminal, Docker, GitHub, Claude Code).
 
 ## 2. Reglas de oro (no negociables)
@@ -39,10 +39,10 @@
 | Sitemap | `@astrojs/sitemap` | 3.7.x | Generación automática, excluye `/styleguide` |
 | MDX | `@astrojs/mdx` | 5.0.x | Renderizado del cuerpo de posts y casos de estudio |
 | Contenido | **Content Collections + MDX en `web/src/content/`** | — | Sin CMS — el dueño es técnico y el flujo Markdown+Git es más rápido que cualquier panel. Schemas Zod validan el frontmatter |
-| Tipografías | Bricolage Grotesque + Inter + JetBrains Mono Variable, Fontsource self-hosted | 5.2.x | Privacidad RGPD, rendimiento, sin CDN externo |
-| Animaciones | CSS + IntersectionObserver (reveals) + GSAP lazy (parallax) | GSAP 3.15.x | 0KB JS por defecto; GSAP solo si la página tiene `[data-parallax]` |
-| Smooth scroll | Lenis | 1.3.x (activo) | Scroll suave estilo Createstudio, respeta `prefers-reduced-motion` |
-| Iconografía | SVG inline custom (`web/src/components/ui/Icon.astro`) | — | 26+ iconos lineales propios, hereda `currentColor` |
+| Tipografías | **Space Grotesk Variable** (display+sans) + **Instrument Serif 400 italic** (énfasis) + JetBrains Mono Variable, Fontsource self-hosted | 5.x | Privacidad RGPD, rendimiento, sin CDN externo. Bricolage e Inter sustituidos en el rediseño 2026-05 |
+| Animaciones | CSS + IntersectionObserver (reveals) + animaciones decorativas CSS puras | — | 0KB JS por defecto. Disco morphing, word swap, marquees, drop cap, reading progress — todo CSS. GSAP eliminado del bundle por defecto. |
+| Smooth scroll | Lenis | 1.3.x (activo) | Scroll suave, respeta `prefers-reduced-motion` |
+| Iconografía | SVG inline en cada componente | — | Sin librería de iconos. Cada SVG se escribe inline donde se usa (≤10 iconos totales en la web). Tras el rediseño 2026-05 el `Icon.astro` legacy fue retirado. |
 | Email transaccional | **Resend** | (Fase 4+) | Plan free 3.000 emails/mes, API moderna, dominio verificado con SPF+DKIM+DMARC. Deliverability: subject `[gesdiweb] ...` + headers `Auto-Submitted` + `List-Unsubscribe` |
 | Variables runtime | **`astro:env/server`** (no `process.env` ni `import.meta.env`) | — | Funciona consistentemente en dev y prod. Schema declarado en `astro.config.mjs#env.schema` |
 | OG images | **Pre-generadas con Playwright** | — | Script idempotente `web/scripts/generate-og-images.mjs`. Una imagen por entry de blog/portfolio/services con paleta diferenciada por colección |
@@ -127,9 +127,10 @@ gesdiweb/
     ├── astro.config.mjs            site, sitemap (excluye /styleguide), mdx, tailwind, env.schema
     ├── Dockerfile                  Multi-stage: node 22 build → node 22 alpine runtime (server)
     ├── nginx.conf                  (legacy, ya no se usa con output: 'server')
-    ├── .dockerignore
+    ├── .dockerignore               + _design-legacy
     ├── .prettierrc.json            100 chars · single quote · trailing all · plugin-astro
-    ├── .prettierignore             excluye dist, .astro, public/og, contenido importado
+    ├── .prettierignore             excluye dist, .astro, public/og, _design-legacy, contenido importado
+    ├── _design-legacy/             ← Backup pre-rediseño 2026-05 (eliminable; ver README dentro)
     ├── public/
     │   ├── favicon.svg             Provisional (azul corporativo + G blanca)
     │   ├── logo.png                Logo oficial completo (397×146 con tagline) → JSON-LD
@@ -146,32 +147,37 @@ gesdiweb/
         │   ├── portfolio/          5 proyectos (.mdx con cuerpo de caso de estudio)
         │   └── blog/               69 posts (.md importados desde WordPress vía REST API)
         ├── pages/
-        │   ├── index.astro                  Home (9 secciones)
-        │   ├── servicios/index.astro        Listado de servicios
-        │   ├── servicios/[slug].astro       Detalle dinámico (consume content collections)
-        │   ├── portfolio/index.astro        Listado portfolio
-        │   ├── portfolio/[slug].astro       Caso de estudio (renderiza MDX con <Content />)
-        │   ├── blog/index.astro             Listado de posts
-        │   ├── blog/[slug].astro            Post individual (renderiza MDX)
-        │   ├── contacto.astro               Formulario maquetado (envío Fase 4)
+        │   ├── index.astro                  Home (Hero, Marquee, Services, Marquee brand, Portfolio, Process, BlogRecent)
+        │   ├── servicios/index.astro        Listado tipo "filas hover azul"
+        │   ├── servicios/[slug].astro       Detalle con title gigante + mark decorativo + next service
+        │   ├── portfolio/index.astro        Listado grid 3 cols (cover o iniciales)
+        │   ├── portfolio/[slug].astro       Caso de estudio editorial con galería y tech-grid
+        │   ├── blog/index.astro             Hero + featured + filtro categorías sticky + grid editorial
+        │   ├── blog/[slug].astro            Post con TOC izq sticky + drop cap + rail derecho + reading progress
+        │   ├── proceso.astro                Página independiente con stats + sticky TOC + 4 fases + 6 principios
+        │   ├── contacto.astro               Form Resend con chips de radio + mark decorativo
         │   ├── styleguide.astro             Página interna (noindex, fuera del sitemap)
-        │   ├── aviso-legal.astro
-        │   ├── politica-privacidad.astro
-        │   └── politica-cookies.astro
+        │   ├── aviso-legal.astro            LegalLayout con TOC sticky
+        │   ├── politica-privacidad.astro    LegalLayout con TOC sticky
+        │   └── politica-cookies.astro       LegalLayout con TOC sticky
         ├── layouts/
-        │   ├── BaseLayout.astro    Meta SEO + Header + Footer + SmoothScroll
-        │   └── LegalLayout.astro   Layout específico de páginas legales
+        │   ├── BaseLayout.astro    Meta SEO + Header + Footer + SmoothScroll + CookieBanner
+        │   └── LegalLayout.astro   Hero + TOC sticky lateral + prose con numeración auto
         ├── components/
-        │   ├── ui/                 Marker, Button, Tag, Badge, StatBlock, Icon (+ icon-names.ts)
-        │   ├── layout/             Header (fijo, hamburguesa móvil), Footer (con strip brand)
-        │   ├── sections/           Hero, ClientsMarquee, Statement, ServicesNumberedList,
-        │   │                       PortfolioFeatured, Stats, FeatureStrip, Process,
-        │   │                       HomeContactCTA, BlogRecent
-        │   └── animations/         SmoothScroll (Lenis)
+        │   ├── ui/                 CookieBanner (vanilla JS, 3 acciones, localStorage)
+        │   ├── layout/             Header (fixed + drawer mobile), Footer (dark + bigtype gigante)
+        │   ├── sections/           Hero, Marquee, ServicesNumberedList, PortfolioFeatured,
+        │   │                       Process, BlogRecent
+        │   ├── animations/         SmoothScroll (Lenis)
+        │   └── forms/              ContactFormClient (envío AJAX con fetch al endpoint)
         ├── lib/
-        │   └── collections.ts      ← Helpers async sobre getCollection (drop-in API)
+        │   ├── collections.ts      ← Helpers async sobre getCollection (drop-in API)
+        │   ├── contact-schema.ts   Schema Zod compartido cliente/servidor del form
+        │   ├── seo.ts              Builders de JSON-LD por tipo de página
+        │   └── email/              Plantilla del email transaccional Resend
         └── styles/
-            └── globals.css         Tailwind import + tokens corporativos + escala fluida
+            └── globals.css         Tailwind + tokens + Space Grotesk/Instrument Serif/JetBrains Mono
+                                    + helpers (.serif-em, .disc-morph, marker-eye, [data-reveal])
 ```
 
 ## 5. Estado del proyecto
@@ -256,5 +262,5 @@ Si te incorporas al proyecto, en este orden:
 
 ---
 
-**Última actualización de este archivo:** 2026-05-07 (logo oficial integrado + paquete de mejoras post-Fase 7 documentado).
+**Última actualización de este archivo:** 2026-05-12 (rediseño "Claude Design" completo: 5 fases + blog v3).
 **Mantenedor:** se actualiza al cerrar cada fase y cuando la realidad del repo se separa de los docs. Si tras tu sesión ha cambiado algo de los puntos 3, 5, 6, 7, 8 o 9, **edítalo** antes de cerrar.

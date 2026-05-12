@@ -431,3 +431,165 @@ Tailwind 4 ordena `@layer theme, base, components, utilities`. Las utilities gan
 - (+) `.hidden`, `.h-X`, `.w-X` aplican correctamente a imgs y svgs.
 - (+) El reset sigue funcionando como default cuando no hay clases utility.
 - (~) Cualquier futuro reset de elemento HTML que escribamos debe ir dentro de `@layer base` salvo que conscientemente queramos que tenga prioridad máxima.
+
+---
+
+## ADR-021 · Rediseño "Claude Design" (Space Grotesk + Instrument Serif)
+
+**Fecha:** 2026-05-12
+**Estado:** Aceptada (sustituye al sistema de diseño v1 con Bricolage + Inter)
+
+**Contexto.** El dueño propuso un rediseño visual completo basado en una nueva propuesta generada con Claude Design. Mantenemos arquitectura (Astro 6, content collections, Resend, JSON-LD), contenido (69 posts, 5 portfolio, 6 servicios) y endpoints. Solo cambia la capa visual y los componentes que la implementan.
+
+**Decisión.** Rediseño en 5 fases más una de blog/post:
+- **Fase A** — tokens + tipografías (Space Grotesk Variable + Instrument Serif 400 italic + JetBrains Mono Variable)
+- **Fase B** — Header con CTA pill + nav monospace + drawer mobile · Footer dark con bigtype "GESDIWEB®" + magnetic CTA · componente `Marquee` reutilizable
+- **Fase C** — home rediseñada (Hero con disco morphing + word swap, services hover azul, portfolio grid 3 cols con marks, process 4 cols)
+- **Fase D** — páginas detalle (servicios, portfolio, blog, contacto, **/proceso nueva independiente**)
+- **Fase E** — legales con TOC sticky lateral + CookieBanner vanilla + limpieza
+
+Paleta:
+- Fondo `#fafaf8` (off-white, no blanco puro)
+- Foreground `#0a0a0a`
+- Accent brand `#76c2da` (mantenido del anterior `#77c2da`)
+- Muted `#a7a7a7`
+
+Patrón visual distintivo: **cualquier `<em>` dentro de `<h1>..<h4>`** se renderiza automáticamente en Instrument Serif italic color brand vía un selector global. Esto permite escribir `<h2>Hacemos cosas <em>raras</em></h2>` y obtener el estilo sin clases extra. Helper `.serif-em` para el mismo efecto fuera de headings.
+
+**Consecuencias.**
+- (+) Identidad visual diferenciada y memorable. Los énfasis serif son "la marca" de la web.
+- (+) Cero JS para los énfasis: todo se resuelve con CSS y la tipografía.
+- (+) Tokens consistentes en `globals.css` con cascada Tailwind 4 (`@theme`).
+- (−) Editar contenido nuevo requiere recordar la convención `<em>` para los énfasis (ya documentada en `convenciones.md`).
+- (−) Subimos del bundle CSS por las dos familias variables nuevas. Aceptable: ~30KB total con subsetting latin.
+
+Backup del diseño anterior en `web/_design-legacy/` para permitir revert hasta que se valide en producción. Excluido del docker build y de Prettier. Eliminable con `rm -rf web/_design-legacy`.
+
+---
+
+## ADR-022 · Disco morphing + word swap + reveals con CSS puro (sin GSAP en bundle)
+
+**Fecha:** 2026-05-12
+**Estado:** Aceptada (refuerza ADR-010)
+
+**Contexto.** El nuevo diseño tiene varias animaciones decorativas: disco que cambia de forma orgánicamente, palabras rotativas en el hero, marquees infinitos, reveals al scroll, drop cap en blog. En la primera iteración (Fase 5 original) decidimos usar GSAP solo para parallax. Con el rediseño, parallax desaparece y todas las animaciones son CSS puro.
+
+**Decisión.** Cero JS para animaciones decorativas del rediseño. Todo CSS:
+- `disc-morph` keyframes con border-radius cambiante
+- Word swap del hero con keyframes `hero-swap-cycle` y delays escalonados
+- Marquee con `translateX(-50%)` y duplicación de items
+- Reading progress bar (post) con `scroll` listener trivial que actualiza un `style.width`
+- Drop cap con `::first-letter`
+- Numeración auto de h2 con CSS counter (`counter-increment: post-h2`)
+
+GSAP queda solo como dependencia disponible en `package.json` pero **no se importa en ningún archivo**. Si en el futuro se necesita una animación compleja se puede recuperar con un import lazy.
+
+**Consecuencias.**
+- (+) 0KB JS de animaciones en producción. Solo el código vanilla del reveal observer y el reading progress (juntos <2KB).
+- (+) `prefers-reduced-motion` se respeta con un solo bloque CSS por animación.
+- (+) Animaciones siguen funcionando aunque falle el JS.
+- (~) Posibilidad real de retirar GSAP de `package.json` cuando confirmemos que no hace falta en el roadmap futuro.
+
+---
+
+## ADR-023 · Eliminación del componente `Button` y demás UI legacy
+
+**Fecha:** 2026-05-12
+**Estado:** Aceptada
+
+**Contexto.** El sistema v1 tenía componentes UI atómicos (`Marker`, `Tag`, `Badge`, `StatBlock`, `Icon`, `Button`) usados en home y secciones. El rediseño elimina la necesidad de varios de ellos y, además, reveló un bug en `Button`: combinaba `inline-flex` internamente con clases pasadas (`hidden md:inline-flex`), generando ambas reglas en `@layer utilities` con misma especificidad, y ganaba la última en aparición en el CSS. Resultado: en mobile el botón "Hablemos" se veía cuando debería estar oculto.
+
+**Decisión.** Eliminar todos los componentes UI legacy del árbol activo y reemplazarlos por CSS inline en cada página/componente que los use. Los CTAs ahora se escriben como `<a class="...">...</a>` con clases pill construidas en el style scoped del componente.
+
+Componentes eliminados (siguen en `web/_design-legacy/` por si hay que recuperar algo):
+- `Marker`, `Tag`, `Badge`, `StatBlock`, `Icon`, `Button`
+- `Statement`, `Stats`, `FeatureStrip`, `HomeContactCTA`, `ClientsMarquee`
+- `Reveal` (sustituido por CSS `[data-reveal]` global + IO en `SmoothScroll`)
+
+**Consecuencias.**
+- (+) Bug del Button resuelto sin parche: el componente que causaba el problema ya no existe.
+- (+) Árbol más simple. Cada página/sección tiene su CSS scoped.
+- (+) Menos abstracción: leer una página te muestra el diseño completo sin saltar entre componentes.
+- (−) Si el sistema crece, podría tener sentido reintroducir un `Button` saneado. Por ahora no se justifica con 5 CTAs en toda la web.
+
+---
+
+## ADR-024 · `/proceso` como página independiente (no solo sección de la home)
+
+**Fecha:** 2026-05-12
+**Estado:** Aceptada
+
+**Contexto.** En la web v1 el proceso era una sección de la home (`Process.astro`). El rediseño propuso una página dedicada `/proceso.html` con más profundidad: hero con stats, sticky TOC con saltos a cada fase, descripción larga de cada fase con entregables y herramientas, y una sección de "principios" al final.
+
+**Decisión.** Crear `/proceso` como página independiente prerenderizada con SEO propio (JSON-LD WebPage, meta tags). El componente `Process` de la home sigue existiendo como resumen condensado en 4 columnas y enlaza al detalle.
+
+**Consecuencias.**
+- (+) Página dedicada para SEO ("proceso diseño web agencia") sin saturar la home.
+- (+) Más espacio para contar el método con honestidad (entregables reales por fase, tiempos).
+- (+) La home queda más ligera y enfocada en convertir.
+- (~) Hay que mantener consistencia entre el resumen de la home y el detalle. Si se cambia una fase se actualizan los dos sitios.
+
+---
+
+## ADR-025 · CookieBanner vanilla en BaseLayout
+
+**Fecha:** 2026-05-12
+**Estado:** Aceptada
+
+**Contexto.** RGPD requiere consentimiento explícito para cookies no esenciales. Actualmente no usamos cookies de analítica ni marketing, pero queremos tener la infraestructura lista para el futuro (Plausible/Umami autohospedado) y dar transparencia al usuario.
+
+**Decisión.** Componente `CookieBanner.astro` inyectado desde `BaseLayout` con tres modos:
+
+1. **Aceptar todas** — activa analytics y marketing en localStorage
+2. **Solo necesarias** — guarda preferencias con todo desactivado
+3. **Personalizar** — panel expandido con 3 toggles (necesarias locked, analytics, marketing)
+
+El estado se persiste en localStorage (`gesdiweb_cookies_v1`). Tras la primera decisión, el banner se oculta y queda un botón flotante abajo-izquierda para reabrirlo.
+
+Implementación 100% vanilla JS sin dependencias. ~3KB gzipped. Se monta en `astro:page-load` para que View Transitions funcione correctamente.
+
+**Consecuencias.**
+- (+) Cumple RGPD sin librerías de terceros.
+- (+) Privacidad por diseño: no usamos GA ni FB Pixel. Si activamos analítica será sin cookies de seguimiento.
+- (+) Si en el futuro se añaden cookies opcionales, el código que las active solo tiene que leer `localStorage.getItem('gesdiweb_cookies_v1')` y comprobar `analytics: true`.
+- (~) Documentado en `politica-cookies.astro` con tabla de tipos y enlaces a cómo gestionarlas desde el navegador.
+
+---
+
+## ADR-026 · TOC del post automático desde `headings.depth === 2`
+
+**Fecha:** 2026-05-12
+**Estado:** Aceptada
+
+**Contexto.** El diseño de post incluye una columna izquierda sticky con índice de contenidos del artículo. Generarlo manualmente en cada post sería ruido en el frontmatter; preferimos extraerlo del contenido del MDX/MD.
+
+**Decisión.** En `/blog/[slug].astro`, usar la API de Astro Content `const { Content, headings } = await render(post)` para extraer los headings del artículo. Filtramos por `depth === 2` (solo h2 de primer nivel) y renderizamos un TOC con numeración 01, 02, ... y links a los slugs auto-generados de Astro (rehype-slug por defecto).
+
+Si el post tiene **menos de 2 h2**, el TOC se omite y el `.post-content` ocupa 2 columnas en lugar de 1 (regla CSS `.post-content.with-toc` opcional). Esto cubre posts cortos sin forzar UI vacía.
+
+Adicionalmente, los h2 del cuerpo del post llevan numeración automática `/ 01`, `/ 02`, ... antes del texto vía CSS counter (`counter-increment: post-h2`). No requiere tocar el contenido MD.
+
+**Consecuencias.**
+- (+) Posts del blog WP importado tienen TOC sin necesidad de retocar 69 archivos.
+- (+) Si el autor reordena o renombra h2, el TOC se actualiza solo.
+- (+) Los slugs de los anclajes coinciden con los `id` auto-generados de rehype-slug → links del TOC funcionan sin código extra.
+- (−) El TOC solo cubre h2. h3 quedan fuera. Aceptable para artículos de blog cortos.
+
+---
+
+## ADR-027 · Drop cap del post con `excerpt` como párrafo intro
+
+**Fecha:** 2026-05-12
+**Estado:** Aceptada
+
+**Contexto.** El diseño de post incluye un párrafo intro con drop cap (letra capital decorativa) en Instrument Serif italic color brand. Tradicionalmente esto requiere un marcador en el contenido (un `<p class="intro">` específico). No queremos pedirle al autor que marque el primer párrafo en cada post.
+
+**Decisión.** El `<p class="post-intro">` se renderiza desde el campo `excerpt` del frontmatter (que ya es obligatorio en todos los posts). El drop cap se aplica con `.post-intro::first-letter`.
+
+El contenido del MDX/MD renderizado con `<Content />` se mete en `.post-prose` debajo, sin drop cap (los párrafos del body son normales).
+
+**Consecuencias.**
+- (+) El excerpt cumple dos funciones: meta description SEO + intro visual del post.
+- (+) Los 69 posts importados de WP tienen excerpt → drop cap funciona sin retocar nada.
+- (+) Si el excerpt es corto el drop cap se ve más impactante (mejor para escaneo).
+- (−) El autor debe cuidar que el excerpt comience con una letra mayúscula visualmente fuerte (no número, no símbolo). Documentado en `contenido.md`.

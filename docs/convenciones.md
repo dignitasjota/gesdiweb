@@ -150,6 +150,116 @@ Todo MDX debe pasar el schema Zod definido en `web/src/content.config.ts`. Si As
 - Una clase de utilidad por intención. Si una combinación se repite > 3 veces, extraer a un componente.
 - Nada de CSS-in-JS.
 
+### Sistema de diseño v2 ("Claude Design", 2026-05)
+
+**Tokens principales** (`web/src/styles/globals.css#@theme`):
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--color-bg` | `#fafaf8` | Fondo de página (off-white, no blanco puro) |
+| `--color-fg` | `#0a0a0a` | Texto principal |
+| `--color-brand` | `#76c2da` | Accent, hover de filas, dots, énfasis |
+| `--color-muted` | `#a7a7a7` | Texto secundario, eyebrows |
+| `--color-border` | `rgba(10,10,10,0.08)` | Líneas divisorias |
+| `--color-border-strong` | `rgba(10,10,10,0.18)` | Pills, bordes destacados |
+| `--font-display` | `Space Grotesk Variable` | Display + sans (mismo font) |
+| `--font-serif` | `Instrument Serif` | Énfasis decorativos italic |
+| `--font-mono` | `JetBrains Mono Variable` | Markers, eyebrows |
+| `--text-display-hero` | `clamp(64px, 13vw, 224px)` | Title del hero |
+| `--text-display` | `clamp(56px, 5.5vw + 1rem, 144px)` | Titles de sección |
+| `--ease` | `cubic-bezier(0.65, 0, 0.05, 1)` | Easing principal |
+
+**Patrones reutilizables:**
+
+1. **Énfasis serif italic automático.** Cualquier `<em>` dentro de `<h1>..<h4>` se renderiza en Instrument Serif italic color brand. Sin clases:
+   ```html
+   <h2>Hacemos webs que <em>posicionan</em>.</h2>
+   ```
+   Fuera de headings, usar el helper `.serif-em`:
+   ```html
+   <p>El proyecto es <span class="serif-em">honesto</span>.</p>
+   ```
+
+2. **Marker eyebrow (monospace + dot brand).** Patrón para introducir secciones:
+   ```html
+   <div class="marker-eye">● Capacidades · 006</div>
+   ```
+   o inline con dot manual:
+   ```html
+   <div style="display:inline-flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-muted);">
+     <span style="width:8px;height:8px;border-radius:999px;background:var(--color-brand);"></span>
+     Capacidades · 006
+   </div>
+   ```
+
+3. **Disco morphing decorativo.** Para acentos visuales (hero, CTAs):
+   ```html
+   <span class="disc-morph" style="width:120px;height:120px;display:inline-block;"></span>
+   ```
+   Respeta `prefers-reduced-motion`.
+
+4. **CTA pill.** No hay componente Button. Los CTAs son `<a>` con clases inline. Patrón canónico:
+   ```html
+   <a href="/contacto" class="cta-btn">
+     Hablemos
+     <svg ...><path d="M5 17L17 5..." stroke="currentColor"/></svg>
+   </a>
+   ```
+   Con CSS scoped:
+   ```css
+   .cta-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 12px;
+     padding: 16px 28px;
+     border-radius: 999px;
+     background: var(--color-fg);
+     color: var(--color-fg-inverse);
+     font-family: var(--font-mono);
+     font-size: 12px;
+     text-transform: uppercase;
+     letter-spacing: 0.1em;
+     transition: background 0.3s var(--ease);
+   }
+   .cta-btn:hover { background: var(--color-brand); color: var(--color-fg); }
+   .cta-btn svg { transition: transform 0.3s var(--ease); }
+   .cta-btn:hover svg { transform: rotate(-45deg); }
+   ```
+
+5. **Mark decorativo gigante.** Letra/palabra a tamaño 400–700px con opacity 0.08 que rellena el espacio negativo:
+   ```html
+   <span class="mark-bg" aria-hidden="true">¶</span>
+   ```
+   ```css
+   .mark-bg {
+     position: absolute;
+     right: -2vw; bottom: -8vw;
+     font-family: var(--font-display);
+     font-size: clamp(280px, 40vw, 640px);
+     font-weight: 500;
+     letter-spacing: -0.06em;
+     color: var(--color-brand);
+     opacity: 0.08;
+     pointer-events: none;
+     line-height: 0.85;
+   }
+   ```
+
+6. **Filas con hover azul.** Patrón usado en `/servicios`. La fila se vuelve brand al pasar el ratón:
+   ```css
+   .row { position: relative; overflow: hidden; transition: padding 0.5s var(--ease); }
+   .row::before {
+     content: ''; position: absolute; inset: 0;
+     background: var(--color-brand);
+     transform: translateY(100%);
+     transition: transform 0.6s var(--ease);
+     z-index: 0;
+   }
+   .row:hover::before { transform: translateY(0); }
+   .row:hover { color: var(--color-fg-inverse); padding-inline: 16px; }
+   .row > * { position: relative; z-index: 1; }
+   ```
+
 ### Resets y Cascade Layers (regla crítica)
 
 Tailwind 4 ordena `@layer theme, base, components, utilities`. Las **reglas fuera de cualquier `@layer` ganan siempre** sobre las que están en capas, independientemente de la especificidad. Si añades un reset en `globals.css` para un elemento HTML, **debe ir dentro de `@layer base`**:
@@ -174,9 +284,9 @@ img, svg, video {
 
 Bug histórico (corregido 2026-05-07, ADR-020): el reset de imgs estaba fuera de capa, lo que hacía que `.h-9`, `.hidden`, etc. no se aplicaran a `<img>` ni `<svg>`. El icono X del menú móvil con `class="hidden"` siempre era visible. El logo con `class="h-9"` no respetaba la altura. Si vuelves a ver síntomas similares, comprueba que el reset esté en `@layer base`.
 
-### Componente Button (bug conocido)
+### ~~Componente Button (bug conocido)~~ — resuelto 2026-05-12
 
-`<Button>` aplica internamente `inline-flex` y luego concatena las clases que le pasamos. Si pasas `class="hidden md:inline-flex"`, Tailwind genera ambas en `@layer utilities` con misma especificidad y gana la última que aparezca en el CSS final. Resultado: el botón se ve cuando debería estar oculto en mobile. Workaround temporal: usar `<a>` con clases directas hasta que se refactorice el componente.
+El componente `Button` legacy combinaba `inline-flex` con las clases pasadas y generaba conflictos en cascade. **Eliminado en el rediseño "Claude Design" (ADR-023).** Los CTAs ahora se escriben como `<a class="...">` con CSS scoped (ver patrón "CTA pill" más arriba). El bug ya no existe.
 
 ---
 

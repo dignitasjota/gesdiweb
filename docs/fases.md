@@ -7,12 +7,13 @@ Estado global:
 | # | Fase | Estado |
 |---|---|---|
 | 0 | Setup base | ✅ Completada (2026-05-05) |
-| 1 | Sistema de diseño | ✅ Completada (2026-05-05) |
-| 2 | Páginas estáticas y maquetación | ✅ Completada (2026-05-05) |
+| 1 | Sistema de diseño v1 | ✅ Completada (2026-05-05) — **sustituida por rediseño "Claude Design" (2026-05-12)** |
+| 2 | Páginas estáticas y maquetación | ✅ Completada (2026-05-05) — rediseñadas en 2026-05-12 |
 | 3 | Content collections (MDX) | ✅ Completada (2026-05-05) |
-| 4 | Formulario de contacto + Resend | ✅ Completada (2026-05-05) |
-| 5 | Animaciones y pulido | ✅ Completada (2026-05-05) |
+| 4 | Formulario de contacto + Resend | ✅ Completada (2026-05-05) — rediseño form con chips (2026-05-12) |
+| 5 | Animaciones y pulido | ✅ Completada (2026-05-05) — animaciones decorativas reescritas en CSS puro (2026-05-12) |
 | 6 | SEO técnico y performance | ✅ Completada (2026-05-05) · OG per-entry añadido (2026-05-06) |
+| 🔁 | **Rediseño "Claude Design"** | ✅ Completado 2026-05-12 (5 fases A–E + blog v3) |
 | 7 | Despliegue en VPS Hetzner | 🟡 Artefactos listos · ejecución pendiente del dueño |
 | 8 | Migración SEO y switch DNS | 🟡 Adelanto parcial: blog WP importado (69 posts) · pendiente 301s + switch DNS |
 
@@ -148,6 +149,68 @@ Estado global:
 - Bug raíz corregido (2026-05-07): el reset de imgs/svgs en `globals.css` movido dentro de `@layer base` para que las utilidades de Tailwind ganen (ADR-020).
 
 **Pendiente para Fase 7+:** ejecutar auditorías Lighthouse 95+ y axe-core 0 violaciones contra producción real.
+
+---
+
+## Rediseño "Claude Design" — 5 fases + blog v3 ✅ (2026-05-12)
+
+Rediseño visual completo siguiendo nueva propuesta del dueño. Mantiene arquitectura, contenido, endpoints y SEO; solo cambia la capa visual y los componentes que la implementan. Ver ADR-021 a ADR-027.
+
+**Fase A · sistema de diseño** (commit `0cab235`)
+- Sustituidas Bricolage Grotesque + Inter por **Space Grotesk Variable** (display + sans).
+- Añadido **Instrument Serif italic 400** para énfasis decorativos.
+- Tokens: fondo `#fafaf8`, accent `#76c2da`, escala fluida ampliada hasta `--text-display-hero` (224px), easing principal `cubic-bezier(0.65, 0, 0.05, 1)`.
+- Helpers globales: `.serif-em`, `.disc-morph`, `marker-eye` (utility), `[data-reveal]`.
+- Patrón distintivo: `<em>` dentro de h1–h4 = Instrument Serif italic brand automático.
+- Backup del diseño anterior en `web/_design-legacy/`.
+
+**Fase B · Header + Footer + Marquee** (commit `e4391ec`)
+- Header: nav monospace uppercase + CTA pill "Hablemos" + drawer mobile fullscreen. Logo oficial.
+- Footer dark con eyebrow pulsante, título gigante "¿Tienes una idea?", CTA con efecto magnético (sin libs), grid 4 cols (Estudio + Servicios + Estudio nav + Legal), "GESDIWEB®" gigante en outline.
+- Componente `Marquee.astro` reutilizable con variants `light` y `brand`, asteriscos como separadores, pausa en hover.
+
+**Fase C · home rediseñada** (commit `7fdbc09`)
+- Hero gigantesco (`--text-display-hero`) con disco morphing + word swap rotativo (5 palabras en serif italic).
+- Marquees alternantes blanco/azul.
+- Services como filas con hover azul (fondo brand sube desde abajo).
+- Portfolio en grid 3 cols con marks gigantes o cover real, traslación en hover + desplazamiento de la trama diagonal.
+- Process en 4 columnas con tags pill.
+- BlogRecent con cards homogéneas.
+- Eliminados de la home: `Statement`, `Stats`, `FeatureStrip`, `HomeContactCTA`, `ClientsMarquee` (el CTA principal vive ahora en el Footer dark).
+
+**Fase D · páginas detalle** (commit `b34b3b4`)
+- `/servicios`: listado con filas hover azul + detalle con title gigante + tagline serif + mark decorativo de la primera palabra (a 700px opacity 0.08).
+- `/portfolio`: listado grid 3 cols + detalle con breadcrumb monospace + meta 4 cols + hero media 64vh + galería + tech-grid hover azul + next project con thumb 280px.
+- `/contacto`: hero con mark `↗` + grid 1.4fr/1fr (form / info side). Form con chips de radio (no select) para servicio y presupuesto, manteniendo lógica Resend intacta.
+- `/blog`: listado + detalle (refactorizados después en blog v3).
+- **`/proceso` NUEVA** (página independiente): hero con title 220px + stats 4 cols + sticky TOC con anclajes a cada fase + 4 fases con copy/viz/entregables/herramientas + sección "principios" con 6 cards en grid 3 cols (ADR-024).
+
+**Fase E · legales + cookie banner + limpieza** (commit `19e68fb`)
+- `LegalLayout` refactor: prop `emphasis` (palabra serif italic en el título), `toc` opcional sticky lateral, numeración 01/02/03 antes de cada h2 (data-num), `info-box` con tinte brand, tablas con header monospace.
+- Las 3 páginas legales reescritas: aviso legal (8 secciones), política de privacidad (RGPD con tabla de tratamientos), política de cookies (con nota de "privacidad por diseño").
+- `CookieBanner.astro`: vanilla JS, 3 modos (todas / solo necesarias / personalizar) con toggles animados, persistencia en localStorage, botón flotante para reabrir. 100% RGPD (ADR-025).
+- Limpieza: eliminados del árbol activo los componentes UI legacy (`Marker`, `Tag`, `Badge`, `StatBlock`, `Icon`, `Button`, `Statement`, `Stats`, `FeatureStrip`, `HomeContactCTA`, `ClientsMarquee`, `Reveal`). Quedan en `web/_design-legacy/` para revert (ADR-023).
+- Styleguide reescrita con los tokens y patrones del rediseño.
+
+**Blog v3 · diseño editorial completo** (commit `cbdf95c`)
+- `/blog` (listado):
+  - Hero con title "Notas desde el taller" + meta row + marca `¶` gigante decorativa.
+  - Post destacado en grid 1.2fr/1fr con pill "Destacado · Categoría".
+  - Filtro sticky por categoría con backdrop blur, contador por categoría, "X resultados" en directo (JS vanilla sin recargar).
+  - Grid 3 cols tipo "tabla editorial" con bordes entre cards y padding asimétrico.
+- `/blog/[slug]` (post):
+  - Reading progress bar fija arriba a 3px en brand.
+  - Hero con breadcrumb + pill categoría + title hasta 96px + meta inline con avatar de iniciales.
+  - Hero image gigantesca 16:9 con cover real o mark inicial.
+  - Body grid 3 cols (200 / 720 / 200) en desktop: TOC izq sticky + content + rail derecho sticky.
+  - Drop cap Instrument Serif italic brand en `.post-intro` usando el `excerpt` del frontmatter (ADR-027).
+  - TOC automático desde `headings.depth === 2` de Astro Content. Omitido si <2 h2 (ADR-026).
+  - Numeración auto `/ 01 / 02 ...` antes de cada h2 del body (CSS counter, no requiere tocar el MD).
+  - Blockquote tipo pull-quote con margen negativo, borde brand, comilla `\201C` Instrument Serif gigante.
+  - Rail derecho: tags pill + share (Twitter intent / LinkedIn share / copiar link con clipboard) + CTA mini a contacto.
+  - Author card al final + next post con thumb estable por seed del slug.
+
+**Verificación:** build limpio (`npm run build`) tras cada fase. Screenshots no posibles por incompatibilidad de Chromium con la versión cacheada local; el dueño valida en `npm run dev`.
 
 ---
 
