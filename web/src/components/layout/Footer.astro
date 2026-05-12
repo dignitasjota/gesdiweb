@@ -1,14 +1,12 @@
 ---
-import Marker from '../ui/Marker.astro';
-import Icon from '../ui/Icon.astro';
-
 const year = new Date().getFullYear();
 
 const navColumns = [
   {
     title: 'Servicios',
     links: [
-      { href: '/servicios/posicionamiento-web', label: 'Posicionamiento web' },
+      { href: '/servicios/diseno-web', label: 'Diseño web' },
+      { href: '/servicios/posicionamiento-web', label: 'Posicionamiento SEO' },
       { href: '/servicios/apps-moviles', label: 'Apps móviles' },
       { href: '/servicios/hosting-web', label: 'Hosting web' },
       { href: '/servicios/marketing-online', label: 'Marketing online' },
@@ -18,7 +16,8 @@ const navColumns = [
   {
     title: 'Estudio',
     links: [
-      { href: '/portfolio', label: 'Portfolio' },
+      { href: '/portfolio', label: 'Trabajos' },
+      { href: '/proceso', label: 'Proceso' },
       { href: '/blog', label: 'Blog' },
       { href: '/contacto', label: 'Contacto' },
     ],
@@ -34,72 +33,252 @@ const navColumns = [
 ];
 ---
 
-<footer class="bg-[--color-bg-inverse] text-[--color-fg-inverse] relative">
-  {/* Borde superior brand */}
-  <div class="h-2 bg-[--color-brand]" aria-hidden="true"></div>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="site-footer-eyebrow">
+      <span class="dot" aria-hidden="true"></span>
+      Disponibilidad limitada · Q3 2026
+    </div>
 
-  <div class="container-fluid py-20 md:py-28">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
-      <div class="md:col-span-5 lg:col-span-6">
-        <Marker label="hablemos" prefix="//" variant="inverse" />
-        <h2
-          class="mt-6 font-display font-bold tracking-[-0.025em] leading-[0.95]"
-          style="font-size: var(--text-2xl);"
-        >
-          ¿Listo para que tu web<br />
-          <span class="text-[--color-brand]">posicione</span> de verdad?
-        </h2>
+    <h2 class="site-footer-headline">
+      ¿Tienes una<br />
+      <em>idea?</em> Cuéntala.
+    </h2>
 
-        <div class="mt-10 space-y-3 text-white/85" style="font-size: var(--text-sm);">
-          <a
-            href="mailto:hola@gesdiweb.es"
-            class="inline-flex items-center gap-3 hover:text-[--color-brand] transition-colors"
-          >
-            <Icon name="mail" size={16} class="text-[--color-brand]" />
-            hola@gesdiweb.es
-          </a>
-          <p class="flex items-center gap-3">
-            <Icon name="pin" size={16} class="text-[--color-brand]" />
-            España · Atención remota
-          </p>
-          <p class="flex items-center gap-3">
-            <Icon name="clock" size={16} class="text-[--color-brand]" />
-            Lunes a viernes · 09:00–18:00 (CET)
-          </p>
-        </div>
+    <a href="mailto:hola@gesdiweb.es" class="site-footer-cta" data-magnetic>
+      hola@gesdiweb.es
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M5 17L17 5M17 5H7M17 5V15" stroke="currentColor" stroke-width="1.6"></path>
+      </svg>
+    </a>
+
+    <div class="site-footer-grid">
+      <div>
+        <h3>Estudio</h3>
+        <p>España · Atención remota<br />Lunes a viernes · 09:00–18:00 CET</p>
       </div>
 
-      <div class="md:col-span-7 lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-8">
-        {navColumns.map((col) => (
+      {
+        navColumns.map((col) => (
           <nav aria-label={col.title}>
-            <p class="font-mono text-xs uppercase tracking-widest text-[--color-brand] mb-5">
-              {col.title}
-            </p>
-            <ul class="space-y-3">
+            <h3>{col.title}</h3>
+            <ul>
               {col.links.map((link) => (
                 <li>
-                  <a
-                    href={link.href}
-                    class="text-sm text-[--color-fg-inverse] hover:text-[--color-brand] transition-colors"
-                  >
-                    {link.label}
-                  </a>
+                  <a href={link.href}>{link.label}</a>
                 </li>
               ))}
             </ul>
           </nav>
-        ))}
-      </div>
+        ))
+      }
     </div>
 
-    <hr class="border-white/10 mt-16 mb-8" />
+    <div class="site-footer-bigtype" aria-hidden="true">GESDIWEB®</div>
 
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[--color-muted]">
-      <p>© {year} gesdiweb · Diseño web y posicionamiento SEO</p>
-      <p class="font-mono uppercase tracking-widest inline-flex items-center gap-2">
-        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[--color-brand]" aria-hidden="true"></span>
-        hecho en España
-      </p>
+    <div class="site-footer-bottom">
+      <span>© {year} gesdiweb · Diseño web y posicionamiento SEO</span>
+      <span>// hecho en España con café y disciplina</span>
     </div>
   </div>
 </footer>
+
+<style is:global>
+  .site-footer {
+    background: var(--color-fg);
+    color: var(--color-bg);
+    padding: clamp(5rem, 9vw, 8rem) 32px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-footer-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    position: relative;
+  }
+  .site-footer-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(250, 250, 248, 0.55);
+    margin-bottom: 60px;
+  }
+  .site-footer-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer-eyebrow .dot {
+      animation: none !important;
+    }
+  }
+
+  .site-footer-headline {
+    font-family: var(--font-display);
+    font-size: var(--text-display-hero);
+    font-weight: 500;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+    color: var(--color-bg);
+  }
+  .site-footer-headline em {
+    color: var(--color-brand);
+  }
+
+  .site-footer-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 22px 36px;
+    border-radius: 999px;
+    background: var(--color-brand);
+    color: var(--color-fg);
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: transform 0.5s var(--ease);
+    will-change: transform;
+  }
+  .site-footer-cta:hover {
+    transform: scale(1.03);
+  }
+  .site-footer-cta svg {
+    transition: transform 0.5s var(--ease);
+  }
+  .site-footer-cta:hover svg {
+    transform: rotate(-45deg);
+  }
+
+  .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: clamp(5rem, 9vw, 7rem);
+    padding-top: 32px;
+    border-top: 1px solid rgba(250, 250, 248, 0.12);
+  }
+  @media (min-width: 800px) {
+    .site-footer-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+  }
+  .site-footer-grid h3 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(250, 250, 248, 0.55);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .site-footer-grid ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+  }
+  .site-footer-grid ul a,
+  .site-footer-grid p {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-bg);
+  }
+  .site-footer-grid ul a {
+    transition: color 0.3s var(--ease);
+  }
+  .site-footer-grid ul a:hover {
+    color: var(--color-brand);
+  }
+
+  .site-footer-bigtype {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 22vw, 22rem);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+    margin: clamp(4rem, 8vw, 6rem) -32px -10px;
+    padding: 0 32px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(250, 250, 248, 0.4);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .site-footer-bottom {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(250, 250, 248, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(250, 250, 248, 0.55);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 800px) {
+    .site-footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .site-footer {
+      padding: 5rem 20px 24px;
+    }
+    .site-footer-bigtype {
+      margin-inline: -20px;
+      padding-inline: 20px;
+    }
+  }
+</style>
+
+<script>
+  // Efecto magnético en el CTA principal (sutil; respeta reduced-motion)
+  function setupMagnetic() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const btn = document.querySelector<HTMLAnchorElement>('[data-magnetic]');
+    if (!btn) return;
+    const onMove = (e: MouseEvent) => {
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      btn.style.transform = `translate(${x * 0.2}px, ${y * 0.3}px) scale(1.03)`;
+    };
+    const onLeave = () => {
+      btn.style.transform = '';
+    };
+    btn.addEventListener('mousemove', onMove);
+    btn.addEventListener('mouseleave', onLeave);
+  }
+  setupMagnetic();
+  document.addEventListener('astro:page-load', setupMagnetic);
+</script>

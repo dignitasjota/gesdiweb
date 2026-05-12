@@ -1,0 +1,111 @@
+---
+/**
+ * Marquee infinito con asteriscos como separadores.
+ * Cada item puede ser una string o un objeto { text, em? } donde `em`
+ * añade un sufijo en italic Instrument Serif.
+ *
+ * Props:
+ *  - items: array de strings u objetos
+ *  - variant: 'light' (fondo bg) | 'brand' (fondo accent)
+ *  - speed: segundos de la animación (default 40)
+ */
+type Item = string | { text: string; em?: string };
+interface Props {
+  items: Item[];
+  variant?: 'light' | 'brand';
+  speed?: number;
+}
+const { items, variant = 'light', speed = 40 } = Astro.props;
+
+// Duplicamos los items para que la animación de translateX(-50%) sea perfecta
+const repeated = [...items, ...items];
+---
+
+<div class:list={['marquee', `marquee--${variant}`]} style={`--marquee-speed: ${speed}s`}>
+  <div class="marquee-track">
+    {
+      repeated.map((item) => {
+        const text = typeof item === 'string' ? item : item.text;
+        const em = typeof item === 'string' ? undefined : item.em;
+        return (
+          <>
+            <span class="marquee-item">
+              {text}
+              {em && (
+                <em>
+                  &nbsp;
+                  {em}
+                </em>
+              )}
+            </span>
+            <span class="marquee-star" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z" />
+              </svg>
+            </span>
+          </>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style is:global>
+  .marquee {
+    overflow: hidden;
+    padding: 24px 0;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .marquee--brand {
+    background: var(--color-brand);
+    color: var(--color-fg-inverse);
+    border-color: transparent;
+  }
+  .marquee .marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 60px;
+    align-items: center;
+    animation: marquee-x var(--marquee-speed, 40s) linear infinite;
+  }
+  .marquee .marquee-track:hover {
+    animation-play-state: paused;
+  }
+  .marquee-item {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 5.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .marquee-item em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-brand);
+  }
+  .marquee--brand .marquee-item em {
+    color: var(--color-fg-inverse);
+    opacity: 0.78;
+  }
+  .marquee-star {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(1.25rem, 2.5vw, 2.5rem);
+    height: clamp(1.25rem, 2.5vw, 2.5rem);
+    flex-shrink: 0;
+  }
+  .marquee-star svg {
+    width: 100%;
+    height: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee .marquee-track {
+      animation: none !important;
+    }
+  }
+</style>
