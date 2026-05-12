@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import SmoothScroll from '../components/animations/SmoothScroll.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import CookieBanner from '../components/ui/CookieBanner.astro';
 import { SITE } from '../lib/seo';
 
 interface Props {
@@ -65,11 +66,16 @@ const ogImageUrl = new URL(ogImage ?? SITE.defaultOgImage, SITE.url).toString();
     <meta name="description" content={description} />
 
     {/* Robots */}
-    {noindex ? (
-      <meta name="robots" content="noindex, nofollow" />
-    ) : (
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    )}
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+      )
+    }
 
     {/* Open Graph */}
     <meta property="og:type" content={ogType} />
@@ -83,15 +89,21 @@ const ogImageUrl = new URL(ogImage ?? SITE.defaultOgImage, SITE.url).toString();
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
 
-    {ogType === 'article' && publishedTime && (
-      <meta property="article:published_time" content={publishedTime} />
-    )}
-    {ogType === 'article' && modifiedTime && (
-      <meta property="article:modified_time" content={modifiedTime} />
-    )}
-    {ogType === 'article' && articleAuthor && (
-      <meta property="article:author" content={articleAuthor} />
-    )}
+    {
+      ogType === 'article' && publishedTime && (
+        <meta property="article:published_time" content={publishedTime} />
+      )
+    }
+    {
+      ogType === 'article' && modifiedTime && (
+        <meta property="article:modified_time" content={modifiedTime} />
+      )
+    }
+    {
+      ogType === 'article' && articleAuthor && (
+        <meta property="article:author" content={articleAuthor} />
+      )
+    }
 
     {/* Twitter Card */}
     <meta name="twitter:card" content="summary_large_image" />
@@ -101,12 +113,11 @@ const ogImageUrl = new URL(ogImage ?? SITE.defaultOgImage, SITE.url).toString();
     <meta name="twitter:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
 
     {/* JSON-LD */}
-    {jsonLd.map((schema) => (
-      <script
-        type="application/ld+json"
-        set:html={JSON.stringify(schema)}
-      />
-    ))}
+    {
+      jsonLd.map((schema) => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
 
     <ClientRouter fallback="swap" />
   </head>
@@ -122,5 +133,7 @@ const ogImageUrl = new URL(ogImage ?? SITE.defaultOgImage, SITE.url).toString();
     </main>
 
     {!hideChrome && <Footer />}
+
+    {!hideChrome && <CookieBanner />}
   </body>
 </html>

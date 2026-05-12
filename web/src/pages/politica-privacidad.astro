@@ -1,91 +1,175 @@
 ---
 export const prerender = true;
 import LegalLayout from '../layouts/LegalLayout.astro';
+
+const toc = [
+  { id: 'responsable', label: 'Responsable' },
+  { id: 'finalidad', label: 'Finalidad' },
+  { id: 'legitimacion', label: 'Base legal' },
+  { id: 'destinatarios', label: 'Destinatarios' },
+  { id: 'conservacion', label: 'Conservación' },
+  { id: 'derechos', label: 'Tus derechos' },
+  { id: 'seguridad', label: 'Seguridad' },
+  { id: 'cambios', label: 'Cambios' },
+];
 ---
 
 <LegalLayout
   title="Política de privacidad"
-  description="Cómo tratamos tus datos personales conforme al RGPD y la LOPDGDD."
-  marker="legal · privacidad"
+  emphasis="privacidad"
+  description="Política de privacidad de gesdiweb. Tratamiento de datos personales conforme al RGPD y la LOPDGDD."
+  marker="L/02"
+  toc={toc}
+  version="2.0"
 >
-  <p>
-    En gesdiweb nos tomamos la privacidad en serio. Esta política explica
-    qué datos recogemos, para qué los usamos y cuáles son tus derechos,
-    en cumplimiento del Reglamento (UE) 2016/679 (RGPD) y la
-    Ley Orgánica 3/2018 (LOPDGDD).
-  </p>
+  <section id="responsable">
+    <h2 data-num="01">Responsable del tratamiento</h2>
+    <div class="info-box">
+      <strong>Datos del responsable</strong>
+      <p style="margin: 0;">
+        <strong>Identidad:</strong> [PENDIENTE · razón social] · [PENDIENTE · NIF]<br />
+        <strong>Dirección postal:</strong> [PENDIENTE · dirección fiscal] · España<br />
+        <strong>Email de contacto:</strong>
+        <a href="mailto:hola@gesdiweb.es">hola@gesdiweb.es</a>
+      </p>
+    </div>
+    <p>
+      En cumplimiento del Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de
+      Datos Personales y garantía de los derechos digitales (LOPDGDD), gesdiweb informa de su
+      política de tratamiento de datos personales.
+    </p>
+  </section>
 
-  <h2>1. Responsable del tratamiento</h2>
-  <ul>
-    <li><strong>Titular:</strong> <span class="placeholder">[PLACEHOLDER · razón social]</span></li>
-    <li><strong>NIF:</strong> <span class="placeholder">[PLACEHOLDER · NIF]</span></li>
-    <li><strong>Email:</strong> <a href="mailto:hola@gesdiweb.es">hola@gesdiweb.es</a></li>
-  </ul>
+  <section id="finalidad">
+    <h2 data-num="02">Finalidad del tratamiento</h2>
+    <p>Tratamos los datos personales que nos facilitas para las siguientes finalidades:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Tratamiento</th>
+          <th>Datos recogidos</th>
+          <th>Finalidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Formulario de contacto</td>
+          <td>Nombre, email, teléfono, empresa, mensaje</td>
+          <td>Responder a tu consulta y elaborar propuesta comercial</td>
+        </tr>
+        <tr>
+          <td>Relación contractual</td>
+          <td>Datos identificativos y fiscales</td>
+          <td>Ejecución de servicios contratados, facturación</td>
+        </tr>
+        <tr>
+          <td>Analítica web</td>
+          <td>Datos anonimizados de navegación</td>
+          <td>Medir audiencia y mejorar la experiencia</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-  <h2>2. Datos que recogemos</h2>
-  <p>
-    Solo recogemos los datos que tú nos facilitas voluntariamente al
-    contactar con nosotros mediante el formulario de contacto: nombre,
-    email, teléfono (opcional), empresa (opcional) y el contenido de tu
-    mensaje.
-  </p>
+  <section id="legitimacion">
+    <h2 data-num="03">Base legal del tratamiento</h2>
+    <p>La base legal para cada tratamiento es:</p>
+    <ul>
+      <li>
+        <strong>Consentimiento del interesado</strong> (art. 6.1.a RGPD) para formularios de contacto
+        y cookies no necesarias.
+      </li>
+      <li>
+        <strong>Ejecución de contrato</strong> (art. 6.1.b RGPD) para la relación cliente-proveedor.
+      </li>
+      <li>
+        <strong>Obligación legal</strong> (art. 6.1.c RGPD) para conservación de datos fiscales y contables.
+      </li>
+      <li>
+        <strong>Interés legítimo</strong> (art. 6.1.f RGPD) para analítica web anónima y seguridad del
+        sitio.
+      </li>
+    </ul>
+  </section>
 
-  <h2>3. Finalidades del tratamiento</h2>
-  <ul>
-    <li>Responder a tu consulta y, en su caso, elaborar una propuesta comercial.</li>
-    <li>Mantener un registro mínimo de comunicaciones para poder hacer seguimiento.</li>
-    <li>Cumplir con las obligaciones legales aplicables.</li>
-  </ul>
+  <section id="destinatarios">
+    <h2 data-num="04">Destinatarios de los datos</h2>
+    <p>
+      Tus datos no se ceden a terceros salvo obligación legal. Empleamos los siguientes encargados
+      del tratamiento (con contratos firmados conforme al art. 28 RGPD):
+    </p>
+    <ul>
+      <li>
+        <strong>Hetzner Online GmbH</strong> (Alemania, UE) — alojamiento del servidor donde reside la
+        web.
+      </li>
+      <li>
+        <strong>Resend, Inc.</strong> (EE. UU.) — envío de emails transaccionales del formulario de contacto.
+        Acogido a las cláusulas contractuales tipo aprobadas por la Comisión Europea.
+      </li>
+      <li><strong>GitHub, Inc.</strong> (EE. UU.) — alojamiento del código fuente del proyecto.</li>
+    </ul>
+  </section>
 
-  <h2>4. Base jurídica</h2>
-  <p>
-    El tratamiento se basa en tu consentimiento expreso (artículo 6.1.a
-    RGPD) al enviar el formulario de contacto, y en el interés legítimo
-    del titular (artículo 6.1.f RGPD) para responderte.
-  </p>
+  <section id="conservacion">
+    <h2 data-num="05">Plazos de conservación</h2>
+    <p>
+      Los datos se conservarán durante el tiempo necesario para cumplir con la finalidad para la que
+      se recabaron:
+    </p>
+    <ul>
+      <li><strong>Consultas comerciales:</strong> 24 meses desde el último contacto.</li>
+      <li>
+        <strong>Relación contractual:</strong> durante la prestación del servicio + 5 años (obligaciones
+        legales).
+      </li>
+      <li><strong>Documentación fiscal:</strong> 6 años (Código de Comercio).</li>
+    </ul>
+  </section>
 
-  <h2>5. Plazo de conservación</h2>
-  <p>
-    Conservamos tus datos durante el tiempo necesario para responder a tu
-    consulta y, en su caso, durante la relación comercial que se establezca.
-    Posteriormente se conservarán bloqueados durante los plazos legales
-    aplicables.
-  </p>
+  <section id="derechos">
+    <h2 data-num="06">Tus derechos</h2>
+    <p>Como interesado, tienes derecho a:</p>
+    <ul>
+      <li><strong>Acceso</strong> — saber qué datos tuyos tratamos.</li>
+      <li><strong>Rectificación</strong> — corregir datos inexactos.</li>
+      <li>
+        <strong>Supresión</strong> ("derecho al olvido") — solicitar la eliminación de tus datos.
+      </li>
+      <li><strong>Limitación del tratamiento</strong> — restringir su uso.</li>
+      <li><strong>Portabilidad</strong> — recibir tus datos en formato estructurado.</li>
+      <li><strong>Oposición</strong> — oponerte a tratamientos basados en interés legítimo.</li>
+      <li>
+        <strong>Retirar el consentimiento</strong> — en cualquier momento, sin efectos retroactivos.
+      </li>
+    </ul>
+    <div class="info-box">
+      <strong>Cómo ejercer tus derechos</strong>
+      <p style="margin: 0;">
+        Envía un email a <a href="mailto:hola@gesdiweb.es">hola@gesdiweb.es</a> con copia de tu documento
+        de identidad. Responderemos en un plazo máximo de un mes. Si consideras que no hemos atendido
+        correctamente tu solicitud, puedes reclamar ante la
+        <strong>Agencia Española de Protección de Datos</strong>
+        (<a href="https://www.aepd.es" target="_blank" rel="noopener">aepd.es</a>).
+      </p>
+    </div>
+  </section>
 
-  <h2>6. Destinatarios y encargados de tratamiento</h2>
-  <p>
-    Tus datos no se ceden a terceros salvo obligación legal. Para gestionar
-    el envío de emails utilizamos el servicio de
-    <a href="https://resend.com" rel="noopener nofollow">Resend</a>
-    (proveedor con garantías RGPD adecuadas).
-  </p>
+  <section id="seguridad">
+    <h2 data-num="07">Medidas de seguridad</h2>
+    <p>
+      Aplicamos medidas técnicas y organizativas apropiadas para garantizar un nivel de seguridad
+      adecuado al riesgo: cifrado TLS, almacenamiento cifrado en reposo, control de accesos por rol,
+      backups diarios y procedimientos de notificación de brechas en menos de 72 horas.
+    </p>
+  </section>
 
-  <h2>7. Tus derechos</h2>
-  <p>Puedes ejercitar en cualquier momento los siguientes derechos:</p>
-  <ul>
-    <li>Acceso a tus datos personales.</li>
-    <li>Rectificación de datos inexactos.</li>
-    <li>Supresión cuando ya no sean necesarios.</li>
-    <li>Limitación u oposición al tratamiento.</li>
-    <li>Portabilidad de los datos.</li>
-    <li>Retirar el consentimiento prestado.</li>
-  </ul>
-  <p>
-    Para ello envía un email a <a href="mailto:hola@gesdiweb.es">hola@gesdiweb.es</a>
-    indicando el derecho que deseas ejercer. También puedes presentar una
-    reclamación ante la
-    <a href="https://www.aepd.es" rel="noopener nofollow">Agencia Española
-    de Protección de Datos</a>.
-  </p>
-
-  <h2>8. Seguridad</h2>
-  <p>
-    Aplicamos medidas técnicas y organizativas razonables para proteger
-    tus datos: cifrado en tránsito (HTTPS), acceso restringido al panel y
-    backups periódicos.
-  </p>
-
-  <p class="placeholder">
-    // esta política se revisará con asesoría legal antes del lanzamiento
-  </p>
+  <section id="cambios">
+    <h2 data-num="08">Cambios en la política</h2>
+    <p>
+      gesdiweb se reserva el derecho a modificar esta política para adaptarla a novedades
+      legislativas o jurisprudenciales. Cualquier cambio se publicará en esta página con su
+      correspondiente fecha de actualización.
+    </p>
+  </section>
 </LegalLayout>

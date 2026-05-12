@@ -1,67 +1,131 @@
 ---
 export const prerender = true;
 import LegalLayout from '../layouts/LegalLayout.astro';
+
+const toc = [
+  { id: 'que-son', label: 'Qué son las cookies' },
+  { id: 'tipos', label: 'Tipos que usamos' },
+  { id: 'gestion', label: 'Cómo gestionarlas' },
+  { id: 'duracion', label: 'Duración' },
+  { id: 'cambios', label: 'Cambios' },
+];
 ---
 
 <LegalLayout
   title="Política de cookies"
-  description="Información sobre las cookies que utiliza gesdiweb.es."
-  marker="legal · cookies"
+  emphasis="cookies"
+  description="Política de cookies de gesdiweb. Tipos de cookies utilizadas, finalidades, duración y cómo gestionarlas."
+  marker="L/03"
+  toc={toc}
+  version="2.0"
 >
-  <p>
-    Esta política explica qué son las cookies, qué tipos utilizamos en
-    <a href="https://gesdiweb.es">gesdiweb.es</a> y cómo puedes gestionarlas.
-    Cumple con la
-    <a href="https://www.aepd.es/guias/guia-cookies.pdf" rel="noopener nofollow">
-    Guía sobre el uso de cookies</a> de la AEPD.
-  </p>
+  <section id="que-son">
+    <h2 data-num="01">Qué son las cookies</h2>
+    <p>
+      Una cookie es un pequeño archivo de texto que se descarga en tu navegador al visitar una
+      página web. Las cookies permiten que el sitio recuerde información sobre tu visita
+      —preferencias de idioma, sesión iniciada, configuración aceptada— para que la próxima vez sea
+      más rápida y útil.
+    </p>
+    <p>
+      gesdiweb solo utiliza cookies estrictamente necesarias para el funcionamiento del sitio. Si en
+      el futuro activamos analítica anónima o cualquier otra cookie no esencial, te pediremos
+      consentimiento explícito a través del banner.
+    </p>
+  </section>
 
-  <h2>1. ¿Qué son las cookies?</h2>
-  <p>
-    Las cookies son pequeños archivos de texto que un sitio web instala en
-    tu navegador para almacenar información sobre tu visita.
-  </p>
+  <section id="tipos">
+    <h2 data-num="02">Tipos de cookies que usamos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Categoría</th>
+          <th>Finalidad</th>
+          <th>Estado por defecto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Técnicas (necesarias)</td>
+          <td>Recordar tus preferencias de cookies y mantener la sesión.</td>
+          <td>Activadas (no se pueden desactivar)</td>
+        </tr>
+        <tr>
+          <td>Analítica anónima</td>
+          <td>Medir el uso del sitio sin identificar al usuario.</td>
+          <td>Desactivadas por defecto</td>
+        </tr>
+        <tr>
+          <td>Marketing</td>
+          <td>Medir efectividad de campañas y publicidad.</td>
+          <td>Desactivadas por defecto</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="info-box">
+      <strong>Privacidad por diseño</strong>
+      <p style="margin: 0;">
+        No utilizamos Google Analytics, Facebook Pixel ni servicios similares de terceros. Si
+        activamos analítica en el futuro, será una herramienta autohospedada y respetuosa con la
+        privacidad (como Plausible o Umami) que no requiera consentimiento al no usar cookies de
+        seguimiento.
+      </p>
+    </div>
+  </section>
 
-  <h2>2. Cookies que utilizamos</h2>
-  <p>
-    Esta web está diseñada para funcionar con el mínimo número de cookies
-    posible. Actualmente <strong>no utilizamos cookies de marketing,
-    analítica de terceros ni publicidad comportamental</strong>.
-  </p>
+  <section id="gestion">
+    <h2 data-num="03">Cómo gestionarlas</h2>
+    <p>
+      Al entrar por primera vez en la web aparece un banner para que decidas qué cookies aceptas.
+      Puedes cambiar tu decisión en cualquier momento desde el botón flotante de cookies abajo a la
+      izquierda, o desde la configuración de tu navegador.
+    </p>
+    <h3>Desde tu navegador</h3>
+    <ul>
+      <li>
+        <strong>Chrome:</strong>
+        <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener"
+          >Configuración → Privacidad y seguridad → Cookies</a
+        >
+      </li>
+      <li>
+        <strong>Firefox:</strong>
+        <a href="https://support.mozilla.org/es/kb/Borrar%20cookies" target="_blank" rel="noopener"
+          >Preferencias → Privacidad y seguridad</a
+        >
+      </li>
+      <li>
+        <strong>Safari:</strong>
+        <a
+          href="https://support.apple.com/es-es/guide/safari/sfri11471/mac"
+          target="_blank"
+          rel="noopener">Preferencias → Privacidad</a
+        >
+      </li>
+      <li>
+        <strong>Edge:</strong>
+        <a href="https://support.microsoft.com/es-es/microsoft-edge" target="_blank" rel="noopener"
+          >Configuración → Cookies y permisos del sitio</a
+        >
+      </li>
+    </ul>
+  </section>
 
-  <h3>Cookies técnicas (estrictamente necesarias)</h3>
-  <p>
-    Únicamente se utilizan cookies técnicas necesarias para que la web
-    funcione correctamente. Estas cookies están exentas del deber de
-    consentimiento conforme al artículo 22.2 LSSI.
-  </p>
+  <section id="duracion">
+    <h2 data-num="04">Duración</h2>
+    <p>
+      Las cookies técnicas que guardan tus preferencias permanecen en tu navegador durante 12 meses
+      o hasta que las borres manualmente.
+    </p>
+  </section>
 
-  <h3>Cookies analíticas</h3>
-  <p>
-    <span class="placeholder">[PLACEHOLDER · pendiente de decidir solución de analítica]</span>
-  </p>
-  <p>
-    Si en el futuro se incorpora una herramienta de analítica autohospedada
-    como Plausible o Umami, se anonimizarán las direcciones IP y no se usarán
-    cookies persistentes que requieran consentimiento.
-  </p>
-
-  <h2>3. Cómo gestionar las cookies</h2>
-  <p>
-    Puedes configurar tu navegador para aceptar, rechazar o eliminar las
-    cookies almacenadas. Cada navegador tiene una documentación específica:
-  </p>
-  <ul>
-    <li><a href="https://support.google.com/chrome/answer/95647" rel="noopener nofollow">Google Chrome</a></li>
-    <li><a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias" rel="noopener nofollow">Mozilla Firefox</a></li>
-    <li><a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" rel="noopener nofollow">Safari</a></li>
-    <li><a href="https://support.microsoft.com/es-es/microsoft-edge" rel="noopener nofollow">Microsoft Edge</a></li>
-  </ul>
-
-  <h2>4. Cambios en la política de cookies</h2>
-  <p>
-    Esta política puede actualizarse. Te recomendamos consultarla
-    periódicamente. La fecha de última actualización aparece arriba de
-    esta página.
-  </p>
+  <section id="cambios">
+    <h2 data-num="05">Cambios en la política</h2>
+    <p>
+      gesdiweb puede actualizar esta política para reflejar cambios en la legislación o en los
+      servicios que utilizamos. Cualquier modificación se anunciará en esta misma página con su
+      fecha de actualización. Si los cambios afectan al consentimiento que diste, te pediremos que
+      revises tus preferencias.
+    </p>
+  </section>
 </LegalLayout>

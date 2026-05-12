@@ -1,211 +1,200 @@
 ---
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Marker from '../components/ui/Marker.astro';
-import Button from '../components/ui/Button.astro';
-import Tag from '../components/ui/Tag.astro';
-import Badge from '../components/ui/Badge.astro';
-import StatBlock from '../components/ui/StatBlock.astro';
-
-const colors = [
-  { name: '--color-bg', hex: '#FFFFFF', use: 'Fondo principal' },
-  { name: '--color-bg-soft', hex: '#FAFAFA', use: 'Fondo secundario' },
-  { name: '--color-bg-inverse', hex: '#0A0A0A', use: 'Fondo oscuro / footer' },
-  { name: '--color-fg', hex: '#0A0A0A', use: 'Texto principal' },
-  { name: '--color-fg-soft', hex: '#525252', use: 'Texto secundario' },
-  { name: '--color-fg-inverse', hex: '#FFFFFF', use: 'Texto sobre oscuro' },
-  { name: '--color-border', hex: '#E5E5E5', use: 'Bordes' },
-  { name: '--color-brand', hex: '#77C2DA', use: 'Acento corporativo' },
-  { name: '--color-brand-hover', hex: '#5FB3CF', use: 'Hover acento' },
-  { name: '--color-muted', hex: '#A7A7A7', use: 'Gris secundario logo' },
-];
-
-const fontScale = [
-  { name: '--text-xs', size: 'clamp(0.75rem, 0.7rem + 0.2vw, 0.85rem)' },
-  { name: '--text-sm', size: 'clamp(0.875rem, 0.8rem + 0.3vw, 1rem)' },
-  { name: '--text-base', size: 'clamp(1rem, 0.95rem + 0.3vw, 1.125rem)' },
-  { name: '--text-lg', size: 'clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem)' },
-  { name: '--text-xl', size: 'clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem)' },
-  { name: '--text-2xl', size: 'clamp(2.5rem, 2rem + 2.5vw, 4rem)' },
-  { name: '--text-3xl', size: 'clamp(3.5rem, 2.5rem + 5vw, 6rem)' },
-  { name: '--text-display', size: 'clamp(4rem, 3rem + 8vw, 10rem)' },
-];
 ---
 
 <BaseLayout
   title="Styleguide · gesdiweb"
-  description="Sistema de diseño interno"
+  description="Sistema de diseño interno: tokens, tipografía y patrones."
   noindex={true}
 >
-  <div class="container-fluid section-spacing">
-    <header class="mb-20">
-      <Marker label="00.styleguide" />
-      <h1
-        class="mt-6 font-display font-bold tracking-tight leading-[0.95]"
-        style="font-size: var(--text-3xl);"
-      >
-        Sistema de diseño<span class="text-[--color-brand]">.</span>
+  <article class="sg-page">
+    <section class="sg-section">
+      <p class="sg-eyebrow">// Styleguide · v2</p>
+      <h1 class="sg-title">
+        Sistema de <em>diseño.</em>
       </h1>
-      <p class="mt-6 text-[--color-fg-soft] max-w-2xl text-lg">
-        Página interna no indexada. Documenta tokens, tipografías y componentes UI base.
-        Esta página NO se publica en producción salvo acceso directo a la URL.
-      </p>
-    </header>
-
-    {/* ─────────────── Paleta ─────────────── */}
-    <section class="mb-32">
-      <Marker label="01. paleta" />
-      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
-        Paleta corporativa
-      </h2>
-      <div class="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
-        {colors.map((c) => (
-          <div class="flex flex-col gap-3">
-            <div
-              class="aspect-square w-full rounded-lg border border-[--color-border]"
-              style={`background:${c.hex};`}
-              aria-hidden="true"
-            ></div>
-            <div>
-              <p class="font-mono text-xs text-[--color-fg]">{c.hex}</p>
-              <p class="font-mono text-[10px] text-[--color-muted]">{c.name}</p>
-              <p class="text-xs text-[--color-fg-soft] mt-1">{c.use}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    {/* ─────────────── Tipografías ─────────────── */}
-    <section class="mb-32">
-      <Marker label="02. tipografías" />
-      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
-        Familias
-      </h2>
-      <div class="mt-10 space-y-12">
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted]">Bricolage Grotesque · display</p>
-          <p
-            class="font-display font-bold tracking-tight leading-[0.95] mt-3"
-            style="font-size: var(--text-3xl);"
-          >
-            Diseño que posiciona.
-          </p>
-        </div>
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted]">Inter · sans</p>
-          <p class="mt-3 text-[--color-fg-soft] max-w-3xl" style="font-size: var(--text-lg);">
-            Texto largo. La tipografía Inter Variable se usa para cuerpos, navegación y UI.
-            Equilibra legibilidad con personalidad y soporta toda la escala fluida del sistema.
-          </p>
-        </div>
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted]">JetBrains Mono · mono</p>
-          <p class="mt-3 font-mono uppercase tracking-widest" style="font-size: var(--text-sm);">
-            // 00.01° technical markers
-          </p>
-        </div>
-      </div>
-    </section>
-
-    {/* ─────────────── Escala ─────────────── */}
-    <section class="mb-32">
-      <Marker label="03. escala" />
-      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
-        Escala fluida
-      </h2>
-      <div class="mt-10 space-y-6">
-        {fontScale.map((s) => (
-          <div class="flex items-baseline gap-6 border-t border-[--color-border] pt-4">
-            <span class="font-mono text-xs text-[--color-muted] w-32 shrink-0">{s.name}</span>
-            <span
-              class="font-display tracking-tight leading-none"
-              style={`font-size: var(${s.name});`}
-            >
-              Aa
-            </span>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    {/* ─────────────── Componentes UI ─────────────── */}
-    <section class="mb-32">
-      <Marker label="04. componentes UI" />
-      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
-        Componentes base
-      </h2>
-
-      <div class="mt-10 space-y-16">
-        {/* Marker */}
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted] mb-6">Marker</p>
-          <div class="flex flex-wrap gap-8">
-            <Marker label="00.01°" />
-            <Marker label="services" />
-            <Marker label="2026" prefix="//" />
-          </div>
-        </div>
-
-        {/* Button */}
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted] mb-6">Button</p>
-          <div class="flex flex-wrap items-center gap-4">
-            <Button variant="primary" size="md">Primario</Button>
-            <Button variant="secondary" size="md">Secundario</Button>
-            <Button variant="ghost" size="md">Ghost</Button>
-          </div>
-          <div class="flex flex-wrap items-center gap-4 mt-6">
-            <Button variant="primary" size="sm">Pequeño</Button>
-            <Button variant="primary" size="md">Medio</Button>
-            <Button variant="primary" size="lg">Grande</Button>
-          </div>
-        </div>
-
-        {/* Tag */}
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted] mb-6">Tag</p>
-          <div class="flex flex-wrap items-center gap-3">
-            <Tag label="WordPress" />
-            <Tag label="Astro" variant="brand" />
-            <Tag label="SEO" variant="inverse" />
-          </div>
-        </div>
-
-        {/* Badge */}
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted] mb-6">Badge (numeración de secciones)</p>
-          <div class="flex flex-wrap items-center gap-6">
-            <Badge number={1} />
-            <Badge number={2} />
-            <Badge number={5} />
-            <Badge number={12} />
-          </div>
-        </div>
-
-        {/* StatBlock */}
-        <div class="border-t border-[--color-border] pt-8">
-          <p class="font-mono text-xs text-[--color-muted] mb-6">StatBlock</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <StatBlock value="10" suffix="+" label="años de experiencia" />
-            <StatBlock value="120" label="proyectos entregados" />
-            <StatBlock value="98" suffix="%" label="clientes satisfechos" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    {/* ─────────────── Header & Footer ─────────────── */}
-    <section class="mb-16">
-      <Marker label="05. layout" />
-      <h2 class="mt-4 font-display font-bold tracking-tight" style="font-size: var(--text-xl);">
-        Header y Footer
-      </h2>
-      <p class="mt-4 text-[--color-fg-soft] max-w-2xl">
-        El Header está fijo arriba y el Footer aparece al final de esta página. Ambos
-        forman parte del BaseLayout y se insertan automáticamente salvo
-        <code class="font-mono text-sm">hideChrome=true</code>.
+      <p class="sg-lead">
+        Tokens, tipografía y patrones que componen la web. Página interna no indexable.
       </p>
     </section>
-  </div>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Tipografía</h2>
+      <div class="sg-block">
+        <p class="sg-eyebrow">display-hero · clamp(64px → 224px)</p>
+        <p
+          style="font-size: var(--text-display-hero); font-family: var(--font-display); font-weight: 500; line-height: 0.92; letter-spacing: -0.04em;"
+        >
+          Espacio <em>amplio.</em>
+        </p>
+      </div>
+      <div class="sg-block">
+        <p class="sg-eyebrow">display · clamp(56px → 144px)</p>
+        <p
+          style="font-size: var(--text-display); font-family: var(--font-display); font-weight: 500; line-height: 0.95; letter-spacing: -0.04em;"
+        >
+          Tipografía <em>grande.</em>
+        </p>
+      </div>
+      <div class="sg-block">
+        <p class="sg-eyebrow">3xl · clamp(40px → 72px)</p>
+        <p
+          style="font-size: var(--text-3xl); font-family: var(--font-display); font-weight: 500; line-height: 0.98; letter-spacing: -0.03em;"
+        >
+          Sección <em>título.</em>
+        </p>
+      </div>
+      <div class="sg-block">
+        <p class="sg-eyebrow">2xl · clamp(28px → 44px)</p>
+        <p style="font-size: var(--text-2xl); font-family: var(--font-display); font-weight: 500;">
+          Bloque destacado.
+        </p>
+      </div>
+      <div class="sg-block">
+        <p class="sg-eyebrow">base · 15–17px</p>
+        <p style="font-size: var(--text-base);">
+          Cuerpo de texto en Space Grotesk regular. La altura de línea es 1.55 para asegurar buena
+          legibilidad. Las cursivas usan <em>Instrument Serif</em> automáticamente cuando aparecen dentro
+          de un heading. Fuera de heading, se aplica el helper{' '}
+          <span class="serif-em">.serif-em</span>.
+        </p>
+      </div>
+      <div class="sg-block">
+        <p class="sg-eyebrow">mono · 10–13px</p>
+        <p
+          style="font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px;"
+        >
+          // 003 · MARCADOR MONOSPACE
+        </p>
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Paleta</h2>
+      <div class="sg-colors">
+        <div class="sg-color" style="background: var(--color-bg);">
+          <span>bg · #fafaf8</span>
+        </div>
+        <div class="sg-color" style="background: var(--color-bg-soft);">
+          <span>bg-soft · #f5f5f2</span>
+        </div>
+        <div class="sg-color" style="background: var(--color-fg); color: var(--color-bg);">
+          <span>fg · #0a0a0a</span>
+        </div>
+        <div class="sg-color" style="background: var(--color-brand); color: #fff;">
+          <span>brand · #76c2da</span>
+        </div>
+        <div class="sg-color" style="background: var(--color-brand-soft);">
+          <span>brand-soft</span>
+        </div>
+        <div class="sg-color" style="background: var(--color-muted);">
+          <span>muted · #a7a7a7</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2 class="sg-h2">Patrones</h2>
+
+      <p class="sg-eyebrow">marker-eye · monospace + dot brand</p>
+      <div class="sg-block">
+        <div
+          style="display:inline-flex; align-items:center; gap:12px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--color-muted);"
+        >
+          <span style="width:8px;height:8px;border-radius:999px;background:var(--color-brand);"
+          ></span>
+          Capacidades · 006
+        </div>
+      </div>
+
+      <p class="sg-eyebrow">disco morphing decorativo (.disc-morph)</p>
+      <div class="sg-block">
+        <span class="disc-morph" style="display:inline-block;width:100px;height:100px;"></span>
+      </div>
+
+      <p class="sg-eyebrow">pill-button (mono uppercase)</p>
+      <div class="sg-block sg-buttons">
+        <a
+          href="#"
+          style="display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;border:1px solid var(--color-fg);background:var(--color-fg);color:var(--color-bg);font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:0.1em;"
+          >Primario</a
+        >
+        <a
+          href="#"
+          style="display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;border:1px solid var(--color-border-strong);background:transparent;color:var(--color-fg);font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:0.1em;"
+          >Secundario</a
+        >
+      </div>
+    </section>
+  </article>
 </BaseLayout>
+
+<style>
+  .sg-page {
+    padding: 80px 32px;
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+  .sg-section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .sg-section:last-child {
+    border-bottom: 0;
+  }
+  .sg-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin-bottom: 16px;
+  }
+  .sg-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin: 0 0 24px;
+  }
+  .sg-lead {
+    color: var(--color-muted);
+    font-size: 17px;
+    max-width: 60ch;
+  }
+  .sg-h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: 0 0 32px;
+  }
+  .sg-block {
+    padding: 24px 0;
+    border-top: 1px solid var(--color-border-soft);
+  }
+  .sg-colors {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .sg-color {
+    height: 100px;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: flex-end;
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .sg-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>

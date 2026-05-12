@@ -1,16 +1,26 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Marker from '../components/ui/Marker.astro';
 import { webPageSchema, breadcrumbSchema, SITE } from '../lib/seo';
 
 interface Props {
   title: string;
+  emphasis: string;
   description: string;
   marker: string;
   lastUpdate?: string;
+  version?: string;
+  toc?: { id: string; label: string }[];
 }
 
-const { title, description, marker, lastUpdate = '2026-05-05' } = Astro.props;
+const {
+  title,
+  emphasis,
+  description,
+  marker,
+  lastUpdate = '2026-05-12',
+  version = '1.0',
+  toc = [],
+} = Astro.props;
 const fullUrl = new URL(Astro.url.pathname, SITE.url).toString();
 
 const jsonLd = [
@@ -24,73 +34,274 @@ const jsonLd = [
     { name: title, url: fullUrl },
   ]),
 ];
+
+const lastUpdateLabel = new Intl.DateTimeFormat('es-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date(lastUpdate));
 ---
 
 <BaseLayout title={`${title} · gesdiweb`} description={description} jsonLd={jsonLd}>
-  <article class="container-fluid pt-12 md:pt-20 pb-20 md:pb-32">
-    <Marker label={marker} />
+  <article class="lg-page">
+    <section class="lg-hero">
+      <div class="lg-eyebrow">Documentación legal · {marker}</div>
+      <h1 class="lg-title">
+        {title.replace(emphasis, '').trim()}{' '}
+        <em>{emphasis}</em>
+      </h1>
+      <div class="lg-meta">
+        <span>Última actualización · {lastUpdateLabel}</span>
+        <span>Versión · {version}</span>
+        <span>Idioma · Español</span>
+      </div>
+    </section>
 
-    <h1
-      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[20ch]"
-      style="font-size: var(--text-2xl);"
-    >
-      {title}
-    </h1>
+    <div class="lg-body">
+      {
+        toc.length > 0 && (
+          <aside class="lg-toc">
+            <h4>Contenido</h4>
+            <ol>
+              {toc.map((item) => (
+                <li>
+                  <a href={`#${item.id}`}>{item.label}</a>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        )
+      }
 
-    <p class="mt-6 font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-      última actualización: <time datetime={lastUpdate}>{lastUpdate}</time>
-    </p>
-
-    <div class="mt-12 max-w-3xl space-y-6 text-base md:text-lg leading-relaxed text-[--color-fg]">
-      <slot />
+      <div class="lg-prose">
+        <slot />
+      </div>
     </div>
   </article>
 </BaseLayout>
 
-<style>
-  article :global(h2) {
+<style is:global>
+  .lg-page {
+    padding-top: 0;
+  }
+
+  .lg-hero {
+    padding: 60px 32px 50px;
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .lg-hero {
+      padding: 80px 32px 60px;
+    }
+  }
+  .lg-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .lg-eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+
+  .lg-title {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    font-size: var(--text-lg);
-    margin-top: 3rem;
-    margin-bottom: 1rem;
+    font-size: clamp(2.5rem, 8vw, 9rem);
+    font-weight: 500;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin-bottom: 24px;
   }
-  article :global(h3) {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--text-base);
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
+  .lg-title em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-brand);
+    font-weight: 400;
   }
-  article :global(p) {
-    color: var(--color-fg-soft);
+
+  .lg-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+    margin-top: 30px;
   }
-  article :global(ul),
-  article :global(ol) {
-    padding-left: 1.5rem;
-    color: var(--color-fg-soft);
+
+  .lg-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 60px 32px 100px;
+    max-width: var(--container-max);
+    margin: 0 auto;
   }
-  article :global(li) {
-    margin-bottom: 0.5rem;
+  @media (min-width: 1000px) {
+    .lg-body {
+      grid-template-columns: 280px 1fr;
+      gap: 80px;
+      padding: 80px 32px 120px;
+    }
   }
-  article :global(a) {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
+
+  .lg-toc {
+    align-self: start;
+    font-family: var(--font-mono);
+    font-size: 12px;
   }
-  article :global(a:hover) {
+  @media (min-width: 1000px) {
+    .lg-toc {
+      position: sticky;
+      top: 110px;
+    }
+  }
+  .lg-toc h4 {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    color: var(--color-muted);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .lg-toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: t;
+  }
+  .lg-toc li {
+    counter-increment: t;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .lg-toc li a {
+    display: flex;
+    gap: 14px;
+    color: var(--color-muted);
+    transition: color 0.3s var(--ease);
+  }
+  .lg-toc li a::before {
+    content: counter(t, decimal-leading-zero);
     color: var(--color-brand);
   }
-  article :global(strong) {
+  .lg-toc li a:hover {
     color: var(--color-fg);
+  }
+
+  .lg-prose {
+    max-width: 70ch;
+  }
+  .lg-prose section {
+    padding-top: 60px;
+    scroll-margin-top: 120px;
+  }
+  .lg-prose section:first-of-type {
+    padding-top: 0;
+  }
+  .lg-prose h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .lg-prose h2::before {
+    content: attr(data-num);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-brand);
+    letter-spacing: 0.1em;
+  }
+  .lg-prose h3 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 28px 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .lg-prose p,
+  .lg-prose li {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-fg);
+    margin-bottom: 16px;
+  }
+  .lg-prose ul,
+  .lg-prose ol {
+    padding-left: 22px;
+    margin-bottom: 20px;
+  }
+  .lg-prose strong {
     font-weight: 600;
   }
-  article :global(.placeholder) {
-    color: var(--color-muted);
+  .lg-prose a {
+    color: var(--color-brand-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .lg-prose a:hover {
+    text-decoration-thickness: 2px;
+  }
+  .lg-prose .info-box {
+    padding: 24px;
+    background: color-mix(in oklab, var(--color-brand) 6%, var(--color-bg));
+    border-radius: 4px;
+    margin: 24px 0;
+    font-size: 15px;
+  }
+  .lg-prose .info-box strong {
+    display: block;
+    margin-bottom: 8px;
     font-family: var(--font-mono);
-    font-size: 0.875rem;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    font-weight: 500;
+  }
+  .lg-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .lg-prose th,
+  .lg-prose td {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+  .lg-prose th {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    font-weight: 500;
+    background: color-mix(in oklab, var(--color-brand) 3%, var(--color-bg));
+    border-top: 1px solid var(--color-border);
   }
 </style>
