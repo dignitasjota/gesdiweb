@@ -6,7 +6,26 @@ import { getAllPosts, formatDateLong, isoDate } from '../../lib/collections';
 import { blogSchema, breadcrumbSchema, SITE } from '../../lib/seo';
 
 const allPosts = await getAllPosts();
-const [featuredPost, ...rest] = allPosts;
+
+// El primero (más reciente) es el destacado.
+const featured = allPosts[0];
+const rest = allPosts.slice(1);
+
+// Categorías únicas + "Todos"
+const categoriesSet = new Set<string>();
+for (const post of allPosts) {
+  for (const cat of post.data.categories ?? []) categoriesSet.add(cat);
+}
+const categories = ['Todos', ...Array.from(categoriesSet).sort()];
+
+// Contador por categoría
+const counts: Record<string, number> = { Todos: allPosts.length };
+for (const cat of categories) {
+  if (cat === 'Todos') continue;
+  counts[cat] = allPosts.filter((p) => p.data.categories?.includes(cat)).length;
+}
+
+const lastDate = allPosts[0] ? formatDateLong(allPosts[0].data.publishedAt) : '';
 
 const jsonLd = [
   blogSchema(),
@@ -15,6 +34,13 @@ const jsonLd = [
     { name: 'Blog', url: `${SITE.url}/blog` },
   ]),
 ];
+
+// Paleta cíclica para los cards sin cover
+const palette = ['#76c2da', '#0a0a0a', '#5fb3cf', '#1a1a1a'];
+
+function categoryInitial(cats?: string[]) {
+  return (cats?.[0] ?? 'G')[0]?.toUpperCase() ?? 'G';
+}
 ---
 
 <BaseLayout
@@ -22,114 +48,141 @@ const jsonLd = [
   description="Artículos sobre SEO técnico, diseño web, rendimiento y estrategia digital."
   jsonLd={jsonLd}
 >
-  <section class="list-hero">
-    <div class="list-inner">
-      <div class="list-eyebrow">
-        <span class="dot" aria-hidden="true"></span>
-        Blog · {String(allPosts.length).padStart(3, '0')} artículos
-      </div>
-      <h1 class="list-title">
-        Pensamiento<br />
-        <em>aplicado.</em>
+  <article class="blog-page">
+    <section class="blog-hero">
+      <div class="blog-eyebrow">Diario del estudio · Ideas, casos y experimentos</div>
+      <h1 class="blog-title">
+        Notas<br />
+        desde el <em>taller.</em>
       </h1>
-      <p class="list-tagline">
-        Artículos sobre lo que vamos aprendiendo: SEO técnico, rendimiento, diseño y operación de
-        proyectos digitales.
+      <p class="blog-sub">
+        Escribimos sobre lo que aprendemos diseñando y programando. SEO técnico, rendimiento,
+        accesibilidad y operación de proyectos reales. Sin humo, sin "10 tips que cambiarán tu
+        negocio".
       </p>
-    </div>
-  </section>
+      <div class="blog-meta-row">
+        <span><strong>{allPosts.length}</strong> artículos publicados</span>
+        <span><strong>0</strong> banners pop-up</span>
+        <span>Último post · <strong>{lastDate}</strong></span>
+      </div>
+      <span class="blog-mark-bg" aria-hidden="true">¶</span>
+    </section>
 
-  {
-    featuredPost && (
-      <section class="blog-featured">
-        <a href={`/blog/${featuredPost.id}`} class="blog-featured-link">
-          <div class="blog-featured-media">
-            {featuredPost.data.cover ? (
-              <Image
-                src={featuredPost.data.cover}
-                alt={featuredPost.data.coverAlt ?? featuredPost.data.title}
-                widths={[640, 960, 1280, 1920]}
-                sizes="(min-width: 1280px) 800px, 100vw"
-                class="blog-featured-img"
-                loading="eager"
-              />
-            ) : (
-              <span class="mark">01</span>
-            )}
-          </div>
-          <div class="blog-featured-meta">
-            <div class="bf-tags">
-              {featuredPost.data.categories.map((cat) => (
-                <span class="bf-tag">{cat}</span>
-              ))}
-              <span class="bf-min">· {featuredPost.data.readingMinutes} min lectura</span>
+    {
+      featured && (
+        <section class="blog-featured">
+          <a class="blog-featured-card" href={`/blog/${featured.id}`}>
+            <div class="blog-featured-image" style={`background: ${palette[0]};`}>
+              {featured.data.cover ? (
+                <Image
+                  src={featured.data.cover}
+                  alt={featured.data.coverAlt ?? featured.data.title}
+                  widths={[480, 720, 960, 1280]}
+                  sizes="(min-width: 900px) 50vw, 100vw"
+                  class="blog-featured-img"
+                  loading="eager"
+                />
+              ) : (
+                <span class="mark">{categoryInitial(featured.data.categories)}</span>
+              )}
             </div>
-            <h2 class="bf-title">{featuredPost.data.title}</h2>
-            <p class="bf-excerpt">{featuredPost.data.excerpt}</p>
-            <time class="bf-date" datetime={isoDate(featuredPost.data.publishedAt)}>
-              {formatDateLong(featuredPost.data.publishedAt)}
-            </time>
-          </div>
-        </a>
-      </section>
-    )
-  }
+            <div class="blog-featured-body">
+              <span class="pill">Destacado · {featured.data.categories?.[0] ?? 'Artículo'}</span>
+              <h2>{featured.data.title}</h2>
+              <p class="excerpt">{featured.data.excerpt}</p>
+              <div class="meta">
+                <span>
+                  Por <strong>{featured.data.author}</strong>
+                </span>
+                <span>{formatDateLong(featured.data.publishedAt)}</span>
+                <span>{featured.data.readingMinutes} min de lectura</span>
+              </div>
+            </div>
+          </a>
+        </section>
+      )
+    }
 
-  {
-    rest.length > 0 && (
-      <section class="blog-grid-wrap">
-        <div class="blog-inner">
-          <div class="blog-grid">
-            {rest.map((post, i) => (
-              <a class="blog-card" href={`/blog/${post.id}`}>
-                <div class="blog-card-media">
-                  {post.data.cover ? (
+    <nav class="blog-filter" aria-label="Filtrar por categoría">
+      <span class="blog-filter-label">Categorías</span>
+      {
+        categories.map((c) => (
+          <button data-filter={c} class={c === 'Todos' ? 'active' : ''}>
+            {c} <span class="num">({counts[c] ?? 0})</span>
+          </button>
+        ))
+      }
+      <span class="count" data-result-count>{rest.length} resultados</span>
+    </nav>
+
+    <section class="blog-list">
+      <div class="blog-grid">
+        {
+          rest.map((p, i) => {
+            const color = palette[(i + 1) % palette.length];
+            const cats = p.data.categories ?? [];
+            return (
+              <a class="blog-card" href={`/blog/${p.id}`} data-categories={cats.join('|')}>
+                <div class="blog-card-thumb" style={`background: ${color};`}>
+                  {p.data.cover ? (
                     <Image
-                      src={post.data.cover}
-                      alt={post.data.coverAlt ?? post.data.title}
+                      src={p.data.cover}
+                      alt={p.data.coverAlt ?? p.data.title}
                       widths={[400, 600, 800]}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      sizes="(min-width: 900px) 33vw, 100vw"
                       class="blog-card-img"
                       loading={i < 6 ? 'eager' : 'lazy'}
                     />
                   ) : (
-                    <span class="blog-card-mark">{String(i + 2).padStart(2, '0')}</span>
+                    <span class="mark">{categoryInitial(cats)}</span>
                   )}
                 </div>
-                <div class="blog-card-meta">
-                  <time datetime={isoDate(post.data.publishedAt)}>
-                    {formatDateLong(post.data.publishedAt)}
-                  </time>
-                  {post.data.categories?.[0] && (
-                    <span class="bc-cat">{post.data.categories[0]}</span>
-                  )}
+                {cats[0] && (
+                  <div class="cat">
+                    <span class="dot" aria-hidden="true" />
+                    {cats[0]}
+                  </div>
+                )}
+                <h3>{p.data.title}</h3>
+                <p class="excerpt">{p.data.excerpt}</p>
+                <div class="meta">
+                  <span>
+                    <strong>{p.data.author}</strong> ·{' '}
+                    <time datetime={isoDate(p.data.publishedAt)}>
+                      {formatDateLong(p.data.publishedAt)}
+                    </time>
+                  </span>
+                  <span>{p.data.readingMinutes} min</span>
                 </div>
-                <h3 class="bc-title">{post.data.title}</h3>
-                <p class="bc-excerpt">{post.data.excerpt}</p>
               </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+            );
+          })
+        }
+      </div>
+      <p class="blog-empty" data-empty hidden>No hay artículos en esta categoría todavía.</p>
+    </section>
+  </article>
 </BaseLayout>
 
 <style>
-  .list-hero {
-    padding: 60px 32px 60px;
+  .blog-page {
+    padding-top: 0;
+  }
+
+  .blog-hero {
+    padding: 60px 32px 50px;
     border-bottom: 1px solid var(--color-border);
-  }
-  @media (min-width: 800px) {
-    .list-hero {
-      padding: 80px 32px 80px;
-    }
-  }
-  .list-inner {
+    position: relative;
+    overflow: hidden;
     max-width: var(--container-max);
     margin-inline: auto;
   }
-  .list-eyebrow {
+  @media (min-width: 800px) {
+    .blog-hero {
+      padding: 90px 32px 70px;
+    }
+  }
+  .blog-eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 12px;
@@ -140,66 +193,108 @@ const jsonLd = [
     color: var(--color-muted);
     margin-bottom: 40px;
   }
-  .list-eyebrow .dot {
+  .blog-eyebrow::before {
+    content: '';
     width: 8px;
     height: 8px;
     border-radius: 999px;
     background: var(--color-brand);
   }
-  .list-title {
+  .blog-title {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 10vw, 11rem);
+    font-size: clamp(3.5rem, 12vw, 13rem);
     font-weight: 500;
     line-height: 0.9;
     letter-spacing: -0.04em;
-    margin-bottom: 32px;
+    margin-bottom: 30px;
   }
-  .list-tagline {
+  .blog-sub {
     font-family: var(--font-display);
-    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
     line-height: 1.3;
-    font-weight: 400;
     color: var(--color-muted);
-    max-width: 55ch;
-    padding-top: 28px;
+    max-width: 40ch;
+    margin-bottom: 50px;
+  }
+  .blog-meta-row {
+    padding-top: 30px;
     border-top: 1px solid var(--color-border);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+  }
+  .blog-meta-row strong {
+    color: var(--color-fg);
+  }
+  .blog-mark-bg {
+    position: absolute;
+    right: -2vw;
+    bottom: -8vw;
+    font-family: var(--font-display);
+    font-size: clamp(15rem, 36vw, 35rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    color: var(--color-brand);
+    opacity: 0.08;
+    line-height: 0.85;
+    pointer-events: none;
+    user-select: none;
   }
 
+  /* Featured post */
   .blog-featured {
-    padding: 60px 32px;
+    padding: 60px 32px 40px;
     border-bottom: 1px solid var(--color-border);
     max-width: var(--container-max);
     margin-inline: auto;
-    width: 100%;
   }
-  @media (min-width: 800px) {
+  @media (min-width: 900px) {
     .blog-featured {
-      padding: 80px 32px;
+      padding: 80px 32px 40px;
     }
   }
-  .blog-featured-link {
+  .blog-featured-card {
     display: grid;
     grid-template-columns: 1fr;
     gap: 24px;
+    align-items: center;
     color: var(--color-fg);
   }
-  @media (min-width: 800px) {
-    .blog-featured-link {
-      grid-template-columns: 1.4fr 1fr;
+  @media (min-width: 900px) {
+    .blog-featured-card {
+      grid-template-columns: 1.2fr 1fr;
       gap: 60px;
-      align-items: center;
     }
   }
-  .blog-featured-media {
-    aspect-ratio: 16 / 10;
+  .blog-featured-image {
+    aspect-ratio: 4 / 3;
     border-radius: 4px;
-    background: var(--color-brand);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.5s var(--ease);
   }
-  .blog-featured-link:hover .blog-featured-media {
-    transform: scale(1.01);
+  .blog-featured-card:hover .blog-featured-image {
+    transform: translateY(-4px);
+  }
+  .blog-featured-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.06) 0 2px,
+      transparent 2px 18px
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
   }
   :global(.blog-featured-img) {
     width: 100% !important;
@@ -208,87 +303,137 @@ const jsonLd = [
     position: absolute;
     inset: 0;
   }
-  .blog-featured-media .mark {
+  .blog-featured-image .mark {
     font-family: var(--font-display);
-    font-size: clamp(5rem, 12vw, 10rem);
+    font-size: clamp(7rem, 18vw, 17rem);
     font-weight: 500;
+    letter-spacing: -0.06em;
     color: rgba(255, 255, 255, 0.95);
-    letter-spacing: -0.04em;
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
   }
-  .blog-featured-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .bf-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-  }
-  .bf-tag {
-    padding: 4px 12px;
+  .blog-featured-body .pill {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid var(--color-border-strong);
     border-radius: 999px;
-    background: var(--color-brand-soft);
-    color: var(--color-brand-hover);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .bf-min {
     font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--color-muted);
     letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
   }
-  .bf-title {
+  .blog-featured-body h2 {
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-size: clamp(2rem, 5.5vw, 4.5rem);
     font-weight: 500;
-    line-height: 1.05;
-    letter-spacing: -0.025em;
-    transition: color 0.3s var(--ease);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
   }
-  .blog-featured-link:hover .bf-title {
-    color: var(--color-brand);
-  }
-  .bf-excerpt {
-    color: var(--color-muted);
+  .blog-featured-body .excerpt {
+    font-size: 17px;
     line-height: 1.55;
+    color: var(--color-muted);
     max-width: 50ch;
+    margin-bottom: 28px;
   }
-  .bf-date {
-    margin-top: auto;
+  .blog-featured-body .meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
     font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--color-muted);
   }
-
-  .blog-grid-wrap {
-    padding: 60px 32px 80px;
-    background: var(--color-bg-soft);
-    border-top: 1px solid var(--color-border);
+  .blog-featured-body .meta strong {
+    color: var(--color-fg);
   }
-  .blog-inner {
+
+  /* Sticky filter */
+  .blog-filter {
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-brand) 6%, var(--color-bg));
+    position: sticky;
+    top: 64px;
+    z-index: 40;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  @media (min-width: 800px) {
+    .blog-filter {
+      padding: 22px 32px;
+      top: 80px;
+      gap: 14px;
+    }
+  }
+  .blog-filter-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .blog-filter button {
+    padding: 7px 14px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-fg);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+    white-space: nowrap;
+  }
+  .blog-filter button:hover {
+    border-color: var(--color-fg);
+  }
+  .blog-filter button.active {
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+    border-color: var(--color-fg);
+  }
+  .blog-filter button .num {
+    opacity: 0.55;
+    margin-left: 4px;
+  }
+  .blog-filter .count {
+    margin-left: auto;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Post grid */
+  .blog-list {
+    padding: 50px 32px 100px;
     max-width: var(--container-max);
     margin-inline: auto;
   }
   .blog-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 40px 32px;
+    gap: 0;
+    border-top: 1px solid var(--color-border);
   }
   @media (min-width: 700px) {
     .blog-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
     }
   }
   @media (min-width: 1000px) {
@@ -298,19 +443,76 @@ const jsonLd = [
   }
 
   .blog-card {
-    display: block;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--color-border);
     color: var(--color-fg);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: background 0.4s var(--ease);
   }
-  .blog-card-media {
+  @media (min-width: 700px) {
+    .blog-card {
+      padding: 32px 0;
+      border-right: 1px solid var(--color-border);
+    }
+    .blog-card:nth-child(2n) {
+      border-right: 0;
+      padding-left: 24px;
+    }
+    .blog-card:nth-child(2n + 1) {
+      padding-right: 24px;
+    }
+  }
+  @media (min-width: 1000px) {
+    .blog-card:nth-child(2n) {
+      border-right: 1px solid var(--color-border);
+    }
+    .blog-card:nth-child(2n + 1) {
+      padding-right: 24px;
+      padding-left: 0;
+    }
+    .blog-card:nth-child(3n + 1) {
+      padding-left: 0;
+      padding-right: 24px;
+    }
+    .blog-card:nth-child(3n + 2) {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .blog-card:nth-child(3n) {
+      padding-left: 24px;
+      padding-right: 0;
+      border-right: 0;
+    }
+  }
+  .blog-card:hover {
+    background: color-mix(in oklab, var(--color-brand) 4%, var(--color-bg));
+  }
+  .blog-card[hidden] {
+    display: none;
+  }
+
+  .blog-card-thumb {
     aspect-ratio: 16 / 10;
     border-radius: 4px;
-    background: var(--color-brand);
     position: relative;
     overflow: hidden;
-    transition: transform 0.5s var(--ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .blog-card:hover .blog-card-media {
-    transform: translateY(-4px);
+  .blog-card-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.06) 0 2px,
+      transparent 2px 14px
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
   }
   :global(.blog-card-img) {
     width: 100% !important;
@@ -319,52 +521,110 @@ const jsonLd = [
     position: absolute;
     inset: 0;
   }
-  .blog-card-mark {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .blog-card-thumb .mark {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(4rem, 9vw, 8rem);
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    letter-spacing: -0.04em;
+    letter-spacing: -0.06em;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1;
+    position: relative;
+    z-index: 1;
   }
-  .blog-card-meta {
+  .blog-card .cat {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
     display: flex;
     gap: 12px;
     align-items: center;
-    margin: 14px 0 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-muted);
   }
-  .bc-cat {
-    color: var(--color-brand);
+  .blog-card .cat .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-brand);
   }
-  .bc-title {
+  .blog-card h3 {
     font-family: var(--font-display);
-    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
     font-weight: 500;
-    line-height: 1.15;
     letter-spacing: -0.02em;
-    margin-bottom: 10px;
+    line-height: 1.15;
     transition: color 0.3s var(--ease);
   }
-  .blog-card:hover .bc-title {
+  .blog-card:hover h3 {
     color: var(--color-brand);
   }
-  .bc-excerpt {
+  .blog-card .excerpt {
     font-size: 14px;
     line-height: 1.55;
     color: var(--color-muted);
-    max-width: 40ch;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .blog-card .meta {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .blog-card .meta strong {
+    color: var(--color-fg);
+  }
+
+  .blog-empty {
+    padding: 80px 0;
+    text-align: center;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 </style>
+
+<script>
+  function setupBlogFilter() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>(
+      '.blog-filter button[data-filter]',
+    );
+    const cards = document.querySelectorAll<HTMLAnchorElement>('.blog-card[data-categories]');
+    const counter = document.querySelector<HTMLElement>('[data-result-count]');
+    const empty = document.querySelector<HTMLElement>('[data-empty]');
+    if (!buttons.length || !cards.length) return;
+
+    function applyFilter(category: string) {
+      let visible = 0;
+      cards.forEach((card) => {
+        const cats = (card.dataset.categories ?? '').split('|').filter(Boolean);
+        const show = category === 'Todos' || cats.includes(category);
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      if (counter) counter.textContent = `${visible} resultados`;
+      if (empty) empty.hidden = visible !== 0;
+      buttons.forEach((b) => {
+        b.classList.toggle('active', b.dataset.filter === category);
+      });
+    }
+
+    buttons.forEach((b) => {
+      b.addEventListener('click', () => applyFilter(b.dataset.filter ?? 'Todos'));
+    });
+  }
+
+  setupBlogFilter();
+  document.addEventListener('astro:page-load', setupBlogFilter);
+</script>
