@@ -1,0 +1,117 @@
+---
+import Marker from '../ui/Marker.astro';
+import Icon from '../ui/Icon.astro';
+import Reveal from '../animations/Reveal.astro';
+import type { IconName } from '../ui/icon-names';
+
+interface Step {
+  title: string;
+  description: string;
+  accent: 'soft' | 'brand' | 'dark';
+  icon: IconName;
+}
+
+const steps: Step[] = [
+  {
+    title: 'Descubrimiento',
+    description:
+      'Reunión inicial, análisis de objetivos, competencia y limitaciones reales. Sin esta fase no se diseña una sola línea.',
+    accent: 'soft',
+    icon: 'compass',
+  },
+  {
+    title: 'Estrategia',
+    description:
+      'Plan claro: qué se hace, en qué orden, con qué métricas y con qué presupuesto. Documento firmado por ambas partes.',
+    accent: 'brand',
+    icon: 'map',
+  },
+  {
+    title: 'Diseño y desarrollo',
+    description:
+      'Iteraciones quincenales con builds reales que ya puedes tocar. Diseño UI, desarrollo front y back, y SEO técnico desde el día 1.',
+    accent: 'dark',
+    icon: 'pen',
+  },
+  {
+    title: 'Lanzamiento y crecimiento',
+    description:
+      'Go-live ordenado, monitorización las primeras semanas y plan de mantenimiento + crecimiento que activa el siguiente ciclo.',
+    accent: 'soft',
+    icon: 'rocket',
+  },
+];
+
+const accentStyles: Record<string, string> = {
+  soft: 'bg-[--color-bg] border border-[--color-border]',
+  brand: 'bg-[--color-brand] text-[--color-fg-inverse]',
+  dark: 'bg-[--color-bg-inverse] text-[--color-fg-inverse]',
+};
+
+const iconBgStyles: Record<string, string> = {
+  soft: 'bg-[--color-brand-soft] text-[--color-brand-hover]',
+  brand: 'bg-white/15 text-[--color-fg-inverse] border border-white/20',
+  dark: 'bg-[--color-brand]/15 text-[--color-brand] border border-[--color-brand]/30',
+};
+---
+
+<section class="section-spacing">
+  <div class="container-fluid">
+    <Marker label="00.06° proceso" />
+
+    <h2
+      class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
+      style="font-size: var(--text-2xl);"
+    >
+      Cuatro pasos.<br />
+      <span class="text-[--color-brand]">Cero atajos</span>.
+    </h2>
+
+    <Reveal as="ol" class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6" stagger>
+      {steps.map((step, i) => (
+        <li
+          class={`rounded-2xl p-7 md:p-10 flex flex-col gap-5 ${accentStyles[step.accent]}`}
+        >
+          <div class="flex items-center justify-between">
+            <span
+              class={`inline-flex items-center justify-center w-12 h-12 rounded-full ${iconBgStyles[step.accent]}`}
+              aria-hidden="true"
+            >
+              <Icon name={step.icon} size={22} />
+            </span>
+            <span
+              class={`font-display font-bold leading-none tracking-[-0.04em] ${
+                step.accent === 'soft' ? 'text-[--color-brand]' : ''
+              }`}
+              style="font-size: var(--text-3xl);"
+            >
+              {String(i + 1).padStart(2, '0')}
+            </span>
+          </div>
+
+          <div
+            class={`h-px ${
+              step.accent === 'soft' ? 'bg-[--color-border]' : 'bg-white/15'
+            }`}
+            aria-hidden="true"
+          ></div>
+
+          <h3
+            class="font-display font-bold tracking-[-0.02em] leading-tight"
+            style="font-size: var(--text-xl);"
+          >
+            {step.title}
+          </h3>
+          <p
+            class={`leading-relaxed max-w-[45ch] ${
+              step.accent === 'soft' ? 'text-[--color-fg-soft]' : 'text-white/85'
+            }`}
+            style="font-size: var(--text-base);"
+          >
+            {step.description}
+          </p>
+        </li>
+      ))}
+    </Reveal>
+  </div>
+</section>

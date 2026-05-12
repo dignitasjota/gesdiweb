@@ -1,6 +1,7 @@
 node_modules
 dist
 .astro
+_design-legacy
 .env
 .env.local
 .env.*.local

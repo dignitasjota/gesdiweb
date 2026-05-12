@@ -1,0 +1,25 @@
+---
+interface Props {
+  label: string;
+  variant?: 'default' | 'brand' | 'inverse';
+  class?: string;
+}
+
+const {
+  label,
+  variant = 'default',
+  class: className = '',
+} = Astro.props;
+
+const variants: Record<string, string> = {
+  default: 'bg-[--color-bg-soft] text-[--color-fg-soft] border border-[--color-border]',
+  brand: 'bg-[--color-brand-soft] text-[--color-brand-hover] border border-[--color-brand]/30',
+  inverse: 'bg-[--color-fg] text-[--color-fg-inverse]',
+};
+---
+
+<span
+  class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium tracking-tight ${variants[variant]} ${className}`}
+>
+  {label}
+</span>

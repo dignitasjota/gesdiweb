@@ -1,0 +1,91 @@
+---
+import Marker from '../ui/Marker.astro';
+import Icon from '../ui/Icon.astro';
+import Reveal from '../animations/Reveal.astro';
+import type { IconName } from '../ui/icon-names';
+import { getOrderedServices } from '../../lib/collections';
+
+const services = await getOrderedServices();
+
+const icons: Record<string, IconName> = {
+  'posicionamiento-web': 'seo',
+  'apps-moviles': 'mobile',
+  'hosting-web': 'server',
+  'marketing-online': 'megaphone',
+  'mantenimiento-informatico': 'wrench',
+  'diseno-web': 'browser',
+};
+---
+
+<section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
+  <div class="container-fluid section-spacing">
+    <Reveal class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
+      <div>
+        <Marker label="00.03° servicios" />
+        <h2
+          class="mt-5 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[20ch]"
+          style="font-size: var(--text-2xl);"
+        >
+          Cinco maneras de <span class="text-[--color-brand]">crecer</span>.
+        </h2>
+      </div>
+      <a
+        href="/servicios"
+        class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto inline-flex items-center gap-2"
+      >
+        ver todos los servicios
+        <Icon name="arrow-up-right" size={14} />
+      </a>
+    </Reveal>
+
+    <Reveal class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" stagger>
+      {services.map((service) => (
+        <a
+          href={`/servicios/${service.id}`}
+          class="group bg-[--color-bg] border border-[--color-border] rounded-2xl p-7 md:p-9 flex flex-col gap-5 transition-all hover:-translate-y-1 hover:border-[--color-brand] hover:bg-[--color-brand-soft]"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <span
+              class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[--color-brand-soft] text-[--color-brand-hover] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse] transition-colors"
+              aria-hidden="true"
+            >
+              <Icon name={icons[service.id]} size={22} />
+            </span>
+            <span
+              class="font-mono uppercase tracking-widest text-[--color-muted] group-hover:text-[--color-brand-hover] transition-colors"
+              style="font-size: var(--text-xs);"
+            >
+              /{String(service.data.order).padStart(2, '0')}
+            </span>
+          </div>
+
+          <h3
+            class="font-display font-bold tracking-[-0.02em] leading-tight mt-2 group-hover:text-[--color-brand-hover] transition-colors"
+            style="font-size: var(--text-xl);"
+          >
+            {service.data.title}
+          </h3>
+
+          <p class="text-[--color-fg-soft] leading-relaxed flex-1">
+            {service.data.excerpt}
+          </p>
+
+          <div class="flex items-center justify-between pt-4 border-t border-[--color-border-soft]">
+            <span
+              class="font-mono uppercase tracking-widest text-[--color-fg-soft] group-hover:text-[--color-brand-hover] transition-colors"
+              style="font-size: var(--text-xs);"
+            >
+              ver detalle
+            </span>
+            <span
+              class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[--color-bg-soft] text-[--color-fg] group-hover:bg-[--color-brand] group-hover:text-[--color-fg-inverse] transition-colors"
+              aria-hidden="true"
+            >
+              <Icon name="arrow-up-right" size={14} strokeWidth={2.5} />
+            </span>
+          </div>
+        </a>
+      ))}
+    </Reveal>
+  </div>
+</section>

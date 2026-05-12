@@ -1,0 +1,60 @@
+---
+import Marker from '../ui/Marker.astro';
+import Reveal from '../animations/Reveal.astro';
+
+const verbs = [
+  { word: 'Escuchamos', detail: 'Antes de proponer una sola línea.' },
+  { word: 'Diseñamos', detail: 'Pensando en quién lo va a usar.' },
+  { word: 'Posicionamos', detail: 'SEO técnico desde el día 1.' },
+  { word: 'Acompañamos', detail: 'Durante años, no solo al lanzar.' },
+];
+---
+
+<section class="section-spacing">
+  <div class="container-fluid">
+    <Reveal>
+      <Marker label="00.02° método" />
+
+      <h2
+        class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[20ch]"
+        style="font-size: var(--text-2xl);"
+      >
+        Cuatro verbos.<br />
+        <span class="text-[--color-brand]">Sin medias tintas</span>.
+      </h2>
+    </Reveal>
+
+    <Reveal class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" stagger>
+      {verbs.map((v, i) => (
+        <div
+          class={`rounded-2xl p-7 md:p-9 flex flex-col gap-3 transition-colors ${
+            i % 2 === 0
+              ? 'bg-[--color-brand] text-[--color-fg-inverse]'
+              : 'bg-[--color-bg-soft] border border-[--color-border]'
+          }`}
+        >
+          <span
+            class={`font-mono uppercase tracking-widest ${
+              i % 2 === 0 ? 'text-white/70' : 'text-[--color-muted]'
+            }`}
+            style="font-size: var(--text-xs);"
+          >
+            /{String(i + 1).padStart(2, '0')}
+          </span>
+          <p
+            class="font-display font-bold tracking-[-0.025em] leading-[1]"
+            style="font-size: var(--text-2xl);"
+          >
+            {v.word}.
+          </p>
+          <p
+            class={`mt-1 ${i % 2 === 0 ? 'text-white/85' : 'text-[--color-fg-soft]'}`}
+            style="font-size: var(--text-base);"
+          >
+            {v.detail}
+          </p>
+        </div>
+      ))}
+    </Reveal>
+  </div>
+</section>

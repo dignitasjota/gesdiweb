@@ -1,6 +1,7 @@
 node_modules
 dist
 .astro
+_design-legacy
 public/og
 public/og-default.png
 src/content/blog/imagenes
