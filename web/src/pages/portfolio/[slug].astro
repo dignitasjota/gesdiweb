@@ -3,9 +3,6 @@ export const prerender = true;
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Marker from '../../components/ui/Marker.astro';
-import Tag from '../../components/ui/Tag.astro';
-import Button from '../../components/ui/Button.astro';
 import { getServiceById } from '../../lib/collections';
 
 export async function getStaticPaths() {
@@ -22,19 +19,13 @@ interface Props {
   next: CollectionEntry<'portfolio'>;
 }
 
-import {
-  creativeWorkSchema,
-  breadcrumbSchema,
-  SITE,
-} from '../../lib/seo';
+import { creativeWorkSchema, breadcrumbSchema, SITE } from '../../lib/seo';
 
 const { project, next } = Astro.props;
 const { data } = project;
 const { Content } = await render(project);
 
-const services = await Promise.all(
-  data.servicesUsed.map((id) => getServiceById(id)),
-);
+const services = await Promise.all(data.servicesUsed.map((id) => getServiceById(id)));
 const validServices = services.filter((s): s is NonNullable<typeof s> => Boolean(s));
 
 const jsonLd = [
@@ -47,241 +38,509 @@ const jsonLd = [
   }),
   breadcrumbSchema([
     { name: 'Inicio', url: SITE.url },
-    { name: 'Portfolio', url: `${SITE.url}/portfolio` },
+    { name: 'Trabajos', url: `${SITE.url}/portfolio` },
     { name: data.title, url: `${SITE.url}/portfolio/${project.id}` },
   ]),
 ];
+
+// mark gigante = primera palabra del título (sin acentos para que cuadre el ancho)
+const mark = data.title.split(' ')[0];
 ---
 
 <BaseLayout
-  title={data.seoTitle ?? `${data.title} · Portfolio · gesdiweb`}
+  title={data.seoTitle ?? `${data.title} · Trabajos · gesdiweb`}
   description={data.seoDescription ?? data.excerpt}
   ogImage={`/og/portfolio/${project.id}.png`}
   jsonLd={jsonLd}
 >
-  <article>
-    <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-20">
-      <Marker label={`portfolio · ${data.year}`} />
+  <article class="case-page">
+    <header class="case-hero">
+      <div class="case-breadcrumb">
+        <a href="/portfolio">← Trabajos</a>
+        <span class="sep">/</span>
+        <span>{data.year}</span>
+        <span class="sep">/</span>
+        <span>{data.client}</span>
+      </div>
 
-      <h1
-        class="mt-8 font-display font-bold tracking-[-0.025em] leading-[0.95] max-w-[20ch]"
-        style="font-size: var(--text-3xl);"
-      >
-        {data.title}
-      </h1>
+      <h1 class="case-title">{data.title}</h1>
 
-      <p
-        class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
-        style="font-size: var(--text-lg);"
-      >
-        {data.excerpt}
-      </p>
+      <div class="case-meta">
+        <div>
+          <div class="cm-label">Cliente</div>
+          <div class="cm-value">{data.client}</div>
+        </div>
+        <div>
+          <div class="cm-label">Año</div>
+          <div class="cm-value">{data.year}</div>
+        </div>
+        <div>
+          <div class="cm-label">Servicios</div>
+          <div class="cm-value">
+            {
+              validServices.map((s, i) => (
+                <>
+                  <a href={`/servicios/${s.id}`}>{s.data.title}</a>
+                  {i < validServices.length - 1 ? ', ' : ''}
+                </>
+              ))
+            }
+          </div>
+        </div>
+        {
+          data.url && (
+            <div>
+              <div class="cm-label">Web</div>
+              <div class="cm-value">
+                <a href={data.url} target="_blank" rel="nofollow noopener noreferrer">
+                  {data.url.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗
+                </a>
+              </div>
+            </div>
+          )
+        }
+      </div>
     </header>
 
-    <div class="container-fluid pb-16 md:pb-24">
-      {data.cover ? (
-        <Image
-          src={data.cover}
-          alt={data.coverAlt ?? `${data.title} — captura del proyecto`}
-          widths={[640, 960, 1280, 1920]}
-          sizes="(min-width: 1280px) 1280px, 100vw"
-          class="aspect-[16/9] w-full rounded-2xl object-cover border border-[--color-border]"
-          loading="eager"
-        />
-      ) : (
-        <div
-          class="aspect-[16/9] bg-[--color-brand-soft] rounded-2xl border-2 border-[--color-brand] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest"
-          aria-hidden="true"
-        >
-          [PLACEHOLDER · cover hero]
-        </div>
-      )}
+    <div class="case-hero-media" style="background: var(--color-brand);">
+      {
+        data.cover ? (
+          <Image
+            src={data.cover}
+            alt={data.coverAlt ?? `${data.title} — captura del proyecto`}
+            widths={[640, 960, 1280, 1920]}
+            sizes="(min-width: 1440px) 1440px, 100vw"
+            class="case-hero-img"
+            loading="eager"
+          />
+        ) : (
+          <span class="mark">{mark}</span>
+        )
+      }
     </div>
 
-    <section class="border-y border-[--color-border]">
-      <div class="container-fluid py-12 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div>
-          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">cliente</p>
-          <p class="mt-2 text-base">{data.client}</p>
-        </div>
-        <div>
-          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">año</p>
-          <p class="mt-2 text-base">{data.year}</p>
-        </div>
-        <div class="col-span-2">
-          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">servicios</p>
-          <div class="mt-2 flex flex-wrap gap-2">
-            {validServices.map((s) => (
-              <a href={`/servicios/${s.id}`}>
-                <Tag label={s.data.title} variant="brand" />
-              </a>
-            ))}
+    <div class="case-body">
+      <section class="case-section">
+        <div class="case-text-block">
+          <h3>Caso de estudio</h3>
+          <div class="case-prose">
+            <Content />
           </div>
-        </div>
-        {data.url && (
-          <div class="col-span-2 md:col-span-4 pt-4 border-t border-[--color-border-soft]">
-            <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">visitar web</p>
-            <a
-              href={data.url}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              class="mt-2 inline-flex items-center gap-2 text-base text-[--color-fg] hover:text-[--color-brand-hover] transition-colors group"
-            >
-              <span class="underline decoration-[--color-brand] decoration-2 underline-offset-4">
-                {data.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-              </span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                aria-hidden="true"
-              >
-                <line x1="7" y1="17" x2="17" y2="7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
-            </a>
-          </div>
-        )}
-      </div>
-    </section>
-
-    <section class="container-fluid section-spacing grid grid-cols-1 md:grid-cols-12 gap-12">
-      <div class="md:col-span-4">
-        <Marker label="caso de estudio" />
-        <h2
-          class="mt-6 font-display font-bold tracking-tight leading-tight"
-          style="font-size: var(--text-xl);"
-        >
-          Cómo lo abordamos
-        </h2>
-      </div>
-      <div class="md:col-span-8 prose-mimic max-w-3xl">
-        <Content />
-      </div>
-    </section>
-
-    {data.gallery && data.gallery.length > 0 && (
-      <section class="container-fluid pb-20 md:pb-32">
-        <Marker label="galería" />
-        <h2
-          class="mt-6 font-display font-bold tracking-tight leading-tight"
-          style="font-size: var(--text-xl);"
-        >
-          Más vistas del proyecto
-        </h2>
-        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {data.gallery.map((img, i) => (
-            <Image
-              src={img}
-              alt={`${data.title} — vista ${i + 1}`}
-              widths={[640, 960, 1280, 1600]}
-              sizes="(min-width: 768px) 50vw, 100vw"
-              class="aspect-[16/9] w-full rounded-2xl object-cover border border-[--color-border]"
-              loading="lazy"
-            />
-          ))}
         </div>
       </section>
-    )}
 
-    <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
-      <div class="container-fluid section-spacing">
-        <Marker label="stack técnico" />
-        <h2
-          class="mt-6 font-display font-bold tracking-tight leading-tight"
-          style="font-size: var(--text-xl);"
-        >
-          Tecnologías utilizadas
-        </h2>
-        <div class="mt-10 flex flex-wrap gap-3">
-          {data.techStack.map((tech) => (
-            <Tag label={tech} />
-          ))}
+      {
+        data.gallery && data.gallery.length > 0 && (
+          <section class="case-section">
+            <div class="case-gallery">
+              {data.gallery.map((img, i) => (
+                <div class="gb gb-wide">
+                  <Image
+                    src={img}
+                    alt={`${data.title} — vista ${i + 1}`}
+                    widths={[640, 960, 1280, 1600]}
+                    sizes="(min-width: 1440px) 1440px, 100vw"
+                    class="case-gallery-img"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <section class="case-section">
+        <h3 class="case-tech-label">// Stack técnico</h3>
+        <div class="tech-grid">
+          {
+            data.techStack.map((tech, i) => (
+              <div class="tech-cell">
+                <span class="idx">/{String(i + 1).padStart(2, '0')}</span>
+                <span>{tech}</span>
+              </div>
+            ))
+          }
         </div>
+      </section>
+    </div>
+
+    <nav aria-label="Proyecto siguiente" class="case-next">
+      <div>
+        <div class="cn-label">// siguiente proyecto</div>
+        <a class="case-next-link" href={`/portfolio/${next.id}`}>
+          <span class="cn-name">{next.data.title} →</span>
+        </a>
       </div>
-    </section>
-
-    <section class="container-fluid section-spacing">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
-        <div class="md:col-span-7">
-          <Marker label="¿siguiente paso?" />
-          <h2
-            class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
-            style="font-size: var(--text-2xl);"
-          >
-            ¿Tu proyecto, el próximo?
-          </h2>
-        </div>
-        <div class="md:col-span-5 flex md:justify-end">
-          <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
-        </div>
-      </div>
-    </section>
-
-    <nav aria-label="Proyecto siguiente" class="border-t border-[--color-border]">
-      <a
-        href={`/portfolio/${next.id}`}
-        class="group block container-fluid py-12 md:py-16 transition-colors"
-      >
-        <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-          siguiente proyecto
-        </span>
-        <p
-          class="mt-4 font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
-          style="font-size: var(--text-2xl);"
-        >
-          {next.data.title} →
-        </p>
+      <a class="case-next-thumb" href={`/portfolio/${next.id}`} aria-hidden="true" tabindex="-1">
+        {
+          next.data.cover ? (
+            <Image
+              src={next.data.cover}
+              alt=""
+              widths={[280, 560]}
+              sizes="280px"
+              class="case-next-img"
+            />
+          ) : (
+            <span>{next.data.title.split(' ')[0]}</span>
+          )
+        }
       </a>
     </nav>
   </article>
 </BaseLayout>
 
 <style is:global>
-  .prose-mimic h2 {
+  /* Prose styling para el cuerpo MDX del caso */
+  .case-prose h2 {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: -0.02em;
-    font-size: var(--text-lg);
-    margin-top: 2rem;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    margin-top: 2.5rem;
     margin-bottom: 1rem;
-  }
-  .prose-mimic h3 {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--text-base);
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-  .prose-mimic p {
-    color: var(--color-fg-soft);
-    line-height: 1.7;
-    margin-bottom: 1rem;
-  }
-  .prose-mimic ul,
-  .prose-mimic ol {
-    padding-left: 1.5rem;
-    color: var(--color-fg-soft);
-    margin-bottom: 1rem;
-  }
-  .prose-mimic li {
-    margin-bottom: 0.5rem;
-  }
-  .prose-mimic strong {
     color: var(--color-fg);
   }
-  .prose-mimic a {
+  .case-prose h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    margin-top: 2rem;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .case-prose p {
+    font-size: 17px;
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+    color: var(--color-fg);
+    max-width: 65ch;
+  }
+  .case-prose ul,
+  .case-prose ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.2rem;
+    color: var(--color-fg);
+  }
+  .case-prose li {
+    margin-bottom: 0.5rem;
+    line-height: 1.55;
+  }
+  .case-prose strong {
+    font-weight: 600;
+  }
+  .case-prose a {
+    color: var(--color-brand-hover);
     text-decoration: underline;
     text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
   }
-  .prose-mimic a:hover {
+  .case-prose a:hover {
+    text-decoration-thickness: 2px;
+  }
+</style>
+
+<style>
+  .case-hero {
+    padding: 60px 32px 50px;
+    border-bottom: 1px solid var(--color-border);
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .case-hero {
+      padding: 80px 32px 60px;
+    }
+  }
+  .case-breadcrumb {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .case-breadcrumb a:hover {
     color: var(--color-brand);
+  }
+  .case-breadcrumb .sep {
+    color: var(--color-muted);
+    opacity: 0.4;
+  }
+  .case-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 11vw, 11rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 50px;
+  }
+  .case-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 800px) {
+    .case-meta {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+  }
+  .case-meta .cm-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    margin-bottom: 10px;
+  }
+  .case-meta .cm-value {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .case-meta .cm-value a {
+    color: var(--color-brand-hover);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .case-meta .cm-value a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .case-hero-media {
+    height: 64vh;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.06) 0 2px,
+      transparent 2px 18px
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  :global(.case-hero-img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .case-hero-media .mark {
+    font-family: var(--font-display);
+    font-size: clamp(8rem, 26vw, 26rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.95);
+    position: relative;
+    z-index: 1;
+  }
+
+  .case-body {
+    padding: 100px 32px;
+    max-width: var(--container-max);
+    margin: 0 auto;
+  }
+  @media (max-width: 800px) {
+    .case-body {
+      padding: 60px 20px;
+    }
+  }
+  .case-section {
+    margin-bottom: 100px;
+  }
+  .case-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .case-text-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 900px) {
+    .case-text-block {
+      grid-template-columns: 220px 1fr;
+      gap: 60px;
+      padding-top: 40px;
+    }
+  }
+  .case-text-block h3 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+  }
+
+  .case-tech-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin-bottom: 32px;
+  }
+
+  .case-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .gb {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--color-bg-soft);
+  }
+  .gb-wide {
+    aspect-ratio: 16 / 10;
+  }
+  :global(.case-gallery-img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+  }
+  .tech-cell {
+    padding: 24px 18px;
+    border-bottom: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s var(--ease);
+  }
+  .tech-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-brand);
+    transform: translateY(100%);
+    transition: transform 0.5s var(--ease);
+    z-index: 0;
+  }
+  .tech-cell:hover::before {
+    transform: translateY(0);
+  }
+  .tech-cell:hover {
+    color: var(--color-fg-inverse);
+  }
+  .tech-cell > * {
+    position: relative;
+    z-index: 1;
+  }
+  .tech-cell .idx {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+    letter-spacing: 0.08em;
+  }
+  .tech-cell:hover .idx {
+    color: rgba(250, 250, 248, 0.75);
+  }
+
+  .case-next {
+    padding: 60px 32px;
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 32px;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .case-next {
+      grid-template-columns: 1fr auto;
+      padding: 80px 32px;
+    }
+  }
+  .case-next .cn-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin-bottom: 16px;
+  }
+  .case-next-link {
+    display: block;
+    color: var(--color-fg);
+  }
+  .case-next-link .cn-name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 8vw, 6rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    transition: color 0.3s var(--ease);
+  }
+  .case-next-link:hover .cn-name {
+    color: var(--color-brand);
+  }
+  .case-next-thumb {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
+    background: var(--color-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s var(--ease);
+    color: rgba(255, 255, 255, 0.95);
+  }
+  .case-next-thumb:hover {
+    transform: scale(1.04);
+  }
+  .case-next-thumb span {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+  }
+  :global(.case-next-img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
   }
 </style>

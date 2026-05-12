@@ -1,0 +1,682 @@
+---
+export const prerender = true;
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { webPageSchema, breadcrumbSchema, SITE } from '../lib/seo';
+
+const jsonLd = [
+  webPageSchema({
+    url: `${SITE.url}/proceso`,
+    name: 'Proceso · gesdiweb',
+    description:
+      'Cómo trabajamos: descubrir, definir, diseñar, lanzar. Cuatro fases honestas, sin humo.',
+  }),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Proceso', url: `${SITE.url}/proceso` },
+  ]),
+];
+
+interface Phase {
+  num: string;
+  title: string;
+  em: string;
+  pitch: string;
+  intro: string;
+  outcome: string;
+  activities: string[];
+  deliverables: string[];
+  tools: string[];
+  weeks: string;
+}
+
+const phases: Phase[] = [
+  {
+    num: '01',
+    title: 'Descubrir',
+    em: 'Descubrir',
+    pitch: 'Empezamos escuchando. Sin esta fase no se diseña una sola línea.',
+    intro:
+      'Reunión inicial larga, sin prisas. Mapeamos lo que tienes (web actual, métricas, posicionamiento orgánico) y lo que quieres (objetivos de negocio, plazos, presupuesto). Si tu web rankea, partimos del Search Console antes de tocar nada.',
+    outcome:
+      'Briefing escrito y aprobado por ambas partes con alcance, objetivos medibles, riesgos identificados y mapa preliminar de URLs.',
+    activities: [
+      'Briefing en profundidad (90 minutos)',
+      'Análisis técnico de la web actual',
+      'Auditoría SEO básica y revisión de Search Console',
+      'Estudio de competencia y palabras clave principales',
+      'Inventario de contenido existente',
+    ],
+    deliverables: ['Briefing firmado', 'Auditoría inicial', 'Lista de URLs activas'],
+    tools: ['Search Console', 'Screaming Frog', 'PageSpeed Insights', 'Ahrefs'],
+    weeks: '1 semana',
+  },
+  {
+    num: '02',
+    title: 'Definir',
+    em: 'Definir',
+    pitch: 'Arquitectura, sitemap y presupuesto cerrado antes de diseñar nada.',
+    intro:
+      'Una vez sabemos a dónde vamos, ordenamos el camino. Sitemap revisado contigo, arquitectura de información, wireframes lo-fi de las páginas clave y un presupuesto cerrado con entregables y fechas. Si hay que migrar SEO, el mapa de redirecciones 301 se diseña aquí.',
+    outcome:
+      'Contrato con alcance, fechas y precio cerrados. Wireframes aprobados de home + tipologías de página.',
+    activities: [
+      'Sitemap definitivo',
+      'Wireframes lo-fi de páginas clave',
+      'Arquitectura de información',
+      'Mapa de redirecciones 301 (si aplica)',
+      'Calendario de hitos y presupuesto cerrado',
+    ],
+    deliverables: ['Wireframes', 'Sitemap aprobado', 'Contrato firmado'],
+    tools: ['Figma', 'Markdown', 'Linear'],
+    weeks: '1–2 semanas',
+  },
+  {
+    num: '03',
+    title: 'Diseñar',
+    em: 'Diseñar',
+    pitch: 'Diseño UI, contenido y SEO técnico en paralelo desde el día uno.',
+    intro:
+      'Maquetas en alta fidelidad, copy real (no lorem ipsum), y desarrollo del frontend en builds que puedes tocar cada dos semanas. Performance y accesibilidad AA se validan a medida que avanzamos, no al final. Sin sorpresas en el lanzamiento.',
+    outcome: 'Web completa en staging con todas las páginas, contenido real y métricas validadas.',
+    activities: [
+      'Sistema de diseño (tokens, tipografía, componentes)',
+      'Copy y contenido editorial',
+      'Maquetación responsive con HTML estático',
+      'Optimización de imágenes y Core Web Vitals',
+      'JSON-LD, meta tags, sitemap, robots',
+    ],
+    deliverables: ['Web en staging', 'Auditoría Lighthouse 95+', 'JSON-LD validado'],
+    tools: ['Astro', 'Tailwind', 'Lighthouse', 'axe-core'],
+    weeks: '4–8 semanas',
+  },
+  {
+    num: '04',
+    title: 'Lanzar',
+    em: 'Lanzar',
+    pitch: 'Go-live ordenado, monitorización post-lanzamiento y plan de crecimiento.',
+    intro:
+      'El día del lanzamiento no es el final, es el principio. Activamos redirecciones, monitorizamos errores 404 y rankings durante las primeras semanas, y arrancamos el plan de mantenimiento que activa el siguiente ciclo (crecimiento, nuevas páginas, blog, posicionamiento continuo).',
+    outcome:
+      'Web en producción, posicionamiento mantenido (o mejorado), formación al equipo y plan de mantenimiento activo.',
+    activities: [
+      'Switch DNS y go-live coordinado',
+      'Monitorización de 404 y rankings (2 semanas)',
+      'Resubir sitemap a Search Console y Bing',
+      'Formación al equipo del cliente',
+      'Plan de mantenimiento mensual',
+    ],
+    deliverables: ['Web en producción', 'Informe post-lanzamiento', 'Plan de mantenimiento'],
+    tools: ['Search Console', 'UptimeRobot', 'Plausible'],
+    weeks: '1 semana + seguimiento',
+  },
+];
+
+const principles = [
+  {
+    num: '01',
+    title: 'Honestidad sobre precio',
+    em: 'precio',
+    desc: 'Si tu proyecto no encaja con nosotros, te lo decimos. Si encaja, presupuesto cerrado y sin sorpresas.',
+  },
+  {
+    num: '02',
+    title: 'SEO técnico desde el día uno',
+    em: 'día uno',
+    desc: 'No "lo dejamos para el final". Las decisiones de arquitectura y rendimiento se toman pensando en posicionar.',
+  },
+  {
+    num: '03',
+    title: 'Iteraciones quincenales',
+    em: 'quincenales',
+    desc: 'Cada dos semanas tienes un build que puedes tocar. Nada de "te lo enseño cuando esté".',
+  },
+  {
+    num: '04',
+    title: 'Sin maquillaje',
+    em: 'maquillaje',
+    desc: 'Si la web actual rankea, lo protegemos. Si no, lo decimos. No hacemos rediseños "por estética" que rompen tráfico.',
+  },
+  {
+    num: '05',
+    title: 'Tú eres el dueño',
+    em: 'dueño',
+    desc: 'Repositorio, dominio, hosting, cuentas: todo a tu nombre. Sin dependencias de proveedor ni lock-in.',
+  },
+  {
+    num: '06',
+    title: 'Pequeños y disponibles',
+    em: 'disponibles',
+    desc: 'Equipo reducido. Lo crítico no se subcontrata. Cuando llamas, te respondemos.',
+  },
+];
+---
+
+<BaseLayout
+  title="Proceso · gesdiweb"
+  description="Cómo trabajamos: descubrir, definir, diseñar, lanzar. Cuatro fases honestas, sin humo."
+  jsonLd={jsonLd}
+>
+  <article class="proc-page">
+    <section class="proc-hero">
+      <div class="proc-eyebrow">Cómo trabajamos · 004</div>
+      <h1 class="proc-title">
+        Un proceso<br />
+        <em>honesto.</em>
+      </h1>
+      <p class="proc-tagline">
+        Cuatro fases que ya hemos repetido decenas de veces. Sin humo, sin entregables vacíos.
+      </p>
+
+      <div class="proc-stats">
+        <div class="proc-stat">
+          <div class="v">04</div>
+          <div class="l">Fases</div>
+        </div>
+        <div class="proc-stat">
+          <div class="v">8–12</div>
+          <div class="l">Semanas medias</div>
+        </div>
+        <div class="proc-stat">
+          <div class="v">15+</div>
+          <div class="l">Años de oficio</div>
+        </div>
+        <div class="proc-stat">
+          <div class="v">24h</div>
+          <div class="l">Tiempo de respuesta</div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="proc-toc" aria-label="Índice del proceso">
+      <span class="proc-toc-label">Saltar a</span>
+      {
+        phases.map((p) => (
+          <a href={`#fase-${p.num}`}>
+            {p.num} · {p.title}
+          </a>
+        ))
+      }
+    </nav>
+
+    {
+      phases.map((p, i) => {
+        const palette = ['#76c2da', '#0a0a0a', '#5fb3cf', '#1a1a1a'];
+        const color = palette[i % palette.length];
+        const textColor = color === '#0a0a0a' || color === '#1a1a1a' ? '#fafaf8' : '#ffffff';
+        return (
+          <section class="proc-phase" id={`fase-${p.num}`}>
+            <div class="proc-phase-head">
+              <div>
+                <div class="proc-phase-num">
+                  <span class="dot" aria-hidden="true" />
+                  Fase {p.num} · {p.weeks}
+                </div>
+                <h2 class="proc-phase-title">
+                  <em>{p.em}</em>
+                </h2>
+              </div>
+              <p class="proc-phase-pitch">{p.pitch}</p>
+            </div>
+
+            <div class="proc-phase-body">
+              <div class="proc-phase-copy">
+                <p>{p.intro}</p>
+                <p>
+                  <strong>Resultado:</strong> {p.outcome}
+                </p>
+                <h4>Qué hacemos en esta fase</h4>
+                <ul class="proc-phase-activities">
+                  {p.activities.map((a, j) => (
+                    <li>
+                      <span class="idx">/{String(j + 1).padStart(2, '0')}</span>
+                      <span>{a}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <aside class="proc-phase-side">
+                <div class="proc-phase-viz" style={`background: ${color};`}>
+                  <span class="num" style={`color: ${textColor};`}>
+                    {p.num}
+                  </span>
+                </div>
+                <div class="proc-phase-meta">
+                  <div>
+                    <h5>Entregables</h5>
+                    <ul>
+                      {p.deliverables.map((d) => (
+                        <li>↳ {d}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h5>Herramientas</h5>
+                    <div class="tools-pills">
+                      {p.tools.map((t) => (
+                        <span>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
+        );
+      })
+    }
+
+    <section class="proc-principles">
+      <div class="proc-eyebrow">Principios · 006</div>
+      <h2 class="proc-section-title">
+        Cómo decidimos cuando<br />
+        no <em>está claro</em>.
+      </h2>
+      <div class="proc-principles-grid">
+        {
+          principles.map((p) => (
+            <div class="proc-principle">
+              <div class="pn">{p.num}</div>
+              <h3>
+                {p.title.split(p.em)[0]}
+                <em>{p.em}</em>
+                {p.title.split(p.em)[1]}
+              </h3>
+              <p>{p.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .proc-page {
+    padding-top: 0;
+  }
+
+  .proc-hero {
+    padding: 60px 32px 60px;
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .proc-hero {
+      padding: 90px 32px 70px;
+    }
+  }
+
+  .proc-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .proc-eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+
+  .proc-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 12vw, 13rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 30px;
+  }
+  .proc-tagline {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+    line-height: 1.3;
+    color: var(--color-muted);
+    max-width: 40ch;
+    margin-bottom: 50px;
+  }
+
+  .proc-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 800px) {
+    .proc-stats {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding-top: 40px;
+    }
+  }
+  .proc-stat .v {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--color-brand);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .proc-stat .l {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+  }
+
+  .proc-toc {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-brand) 4%, var(--color-bg));
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    position: sticky;
+    top: 64px;
+    z-index: 40;
+    backdrop-filter: blur(8px);
+  }
+  @media (min-width: 800px) {
+    .proc-toc {
+      top: 80px;
+      gap: 20px;
+    }
+  }
+  .proc-toc-label {
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .proc-toc a {
+    padding: 6px 14px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-fg);
+    transition: all 0.3s var(--ease);
+    white-space: nowrap;
+  }
+  .proc-toc a:hover {
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+    border-color: var(--color-fg);
+  }
+
+  .proc-phase {
+    padding: 80px 32px;
+    border-bottom: 1px solid var(--color-border);
+    scroll-margin-top: 160px;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .proc-phase:nth-of-type(even) {
+    background: color-mix(in oklab, var(--color-brand) 3%, var(--color-bg));
+  }
+  @media (min-width: 1100px) {
+    .proc-phase {
+      padding: 120px 32px;
+    }
+  }
+
+  .proc-phase-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 50px;
+    align-items: end;
+  }
+  @media (min-width: 1100px) {
+    .proc-phase-head {
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 80px;
+    }
+  }
+
+  .proc-phase-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .proc-phase-num .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+
+  .proc-phase-title {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 12vw, 12rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+
+  .proc-phase-pitch {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+    line-height: 1.3;
+    font-weight: 400;
+    max-width: 28ch;
+    padding-bottom: 16px;
+  }
+
+  .proc-phase-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  @media (min-width: 1100px) {
+    .proc-phase-body {
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+    }
+  }
+  .proc-phase-copy p {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 55ch;
+  }
+  .proc-phase-copy h4 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin: 40px 0 16px;
+    font-weight: 500;
+  }
+  .proc-phase-activities {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .proc-phase-activities li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 15px;
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 16px;
+    line-height: 1.5;
+  }
+  .proc-phase-activities li .idx {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-brand);
+    letter-spacing: 0.08em;
+    padding-top: 4px;
+  }
+
+  .proc-phase-side {
+    position: relative;
+  }
+  .proc-phase-viz {
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .proc-phase-viz::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.08) 0 2px,
+      transparent 2px 18px
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  .proc-phase-viz .num {
+    font-family: var(--font-display);
+    font-size: clamp(8rem, 20vw, 18rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+  .proc-phase-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+  }
+  .proc-phase-meta h5 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .proc-phase-meta ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .proc-phase-meta li {
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 4px 0;
+  }
+  .proc-phase-meta .tools-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .proc-phase-meta .tools-pills span {
+    padding: 5px 10px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Principles section */
+  .proc-principles {
+    padding: 80px 32px;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .proc-principles {
+      padding: 120px 32px;
+    }
+  }
+  .proc-section-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    max-width: 22ch;
+    margin: 40px 0 60px;
+  }
+  .proc-principles-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 700px) {
+    .proc-principles-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1000px) {
+    .proc-principles-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+  .proc-principle {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (min-width: 700px) {
+    .proc-principle {
+      padding: 40px 24px;
+      border-right: 1px solid var(--color-border);
+    }
+    .proc-principle:nth-child(2n) {
+      border-right: 0;
+    }
+  }
+  @media (min-width: 1000px) {
+    .proc-principle:nth-child(2n) {
+      border-right: 1px solid var(--color-border);
+    }
+    .proc-principle:nth-child(3n) {
+      border-right: 0;
+    }
+  }
+  .proc-principle .pn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-brand);
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+  }
+  .proc-principle h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2vw, 1.8rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+  .proc-principle p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+</style>

@@ -1,8 +1,6 @@
 ---
 export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Marker from '../components/ui/Marker.astro';
-import Button from '../components/ui/Button.astro';
 import ContactFormClient from '../components/forms/ContactFormClient.astro';
 import { getOrderedServices } from '../lib/collections';
 import { webPageSchema, breadcrumbSchema, SITE } from '../lib/seo';
@@ -14,8 +12,7 @@ const jsonLd = [
     type: 'ContactPage',
     url: `${SITE.url}/contacto`,
     name: 'Contacto · gesdiweb',
-    description:
-      'Cuéntanos tu proyecto y te respondemos en menos de 24 horas laborables.',
+    description: 'Cuéntanos tu proyecto y te respondemos en menos de 24 horas laborables.',
   }),
   breadcrumbSchema([
     { name: 'Inicio', url: SITE.url },
@@ -37,217 +34,610 @@ const budgets = [
   description="Cuéntanos tu proyecto y te respondemos en menos de 24 horas laborables."
   jsonLd={jsonLd}
 >
-  <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
-    <Marker label="04.contacto" />
-    <h1
-      class="mt-8 font-display font-bold tracking-tight leading-[0.95] max-w-[16ch]"
-      style="font-size: var(--text-3xl);"
-    >
-      Cuéntame tu<br />
-      <span class="text-[--color-brand]">proyecto</span>.
-    </h1>
-    <p class="mt-8 max-w-2xl text-lg text-[--color-fg-soft] leading-relaxed">
-      Respondo en menos de 24 horas laborables. Si tu proyecto encaja, agendamos
-      una llamada de 40 minutos sin compromiso.
-    </p>
-  </section>
+  <article class="ct-page">
+    <section class="ct-hero">
+      <div class="ct-eyebrow">Hablemos · 003</div>
 
-  <section class="border-t border-[--color-border]">
-    <div class="container-fluid section-spacing grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-      {/* Información de contacto */}
-      <aside class="lg:col-span-4 space-y-12">
-        <div>
-          <Marker label="contacto directo" />
-          <p class="mt-6">
-            <a
-              href="mailto:hola@gesdiweb.es"
-              class="font-display font-bold tracking-tight hover:text-[--color-brand] transition-colors block"
-              style="font-size: var(--text-lg);"
-            >
-              hola@gesdiweb.es
-            </a>
-          </p>
-          <p class="mt-2 text-sm text-[--color-fg-soft]">
-            Para presupuestos y nuevos proyectos.
-          </p>
+      <h1 class="ct-title">
+        Cuéntanos tu<br />
+        <em>proyecto.</em>
+      </h1>
+
+      <p class="ct-sub">
+        Respondemos en menos de 24 horas laborables. Si encaja, agendamos una llamada de 40 minutos
+        sin compromiso.
+      </p>
+
+      <span class="ct-mark-bg" aria-hidden="true">↗</span>
+    </section>
+
+    <div class="ct-main">
+      <div class="ct-form-side">
+        <form
+          method="POST"
+          action="/contacto"
+          class="ct-form"
+          aria-label="Formulario de contacto"
+          data-contact-form
+        >
+          {/* Honeypot */}
+          <div class="ct-honeypot" aria-hidden="true">
+            <label
+              >No rellenar
+              <input type="text" name="company_url" tabindex="-1" autocomplete="off" />
+            </label>
+          </div>
+
+          <div class="ct-grid-2">
+            <div class="ct-field">
+              <label class="ct-label" for="name">Nombre <span class="req">*</span></label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                autocomplete="name"
+                class="ct-input"
+                placeholder="Tu nombre"
+              />
+            </div>
+            <div class="ct-field">
+              <label class="ct-label" for="email">Email <span class="req">*</span></label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                class="ct-input"
+                placeholder="tu@email.com"
+              />
+            </div>
+          </div>
+
+          <div class="ct-grid-2">
+            <div class="ct-field">
+              <label class="ct-label" for="phone">Teléfono</label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                class="ct-input"
+                placeholder="+34 ..."
+              />
+            </div>
+            <div class="ct-field">
+              <label class="ct-label" for="company">Empresa</label>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                autocomplete="organization"
+                class="ct-input"
+                placeholder="Opcional"
+              />
+            </div>
+          </div>
+
+          <div class="ct-field">
+            <label class="ct-label" for="service">Servicio que te interesa</label>
+            <div class="ct-chips" role="radiogroup" aria-labelledby="service-label">
+              {
+                services.map((s) => (
+                  <label class="ct-chip-wrap">
+                    <input type="radio" name="service" value={s.id} class="ct-chip-input" />
+                    <span class="ct-chip">{s.data.title}</span>
+                  </label>
+                ))
+              }
+              <label class="ct-chip-wrap">
+                <input type="radio" name="service" value="other" class="ct-chip-input" />
+                <span class="ct-chip">No estoy seguro</span>
+              </label>
+            </div>
+          </div>
+
+          <fieldset class="ct-field">
+            <legend class="ct-label">Presupuesto orientativo</legend>
+            <div class="ct-chips">
+              {
+                budgets.map((b) => (
+                  <label class="ct-chip-wrap">
+                    <input type="radio" name="budget" value={b.value} class="ct-chip-input" />
+                    <span class="ct-chip">{b.label}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="ct-field">
+            <label class="ct-label" for="message">Cuéntanos <span class="req">*</span></label>
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              required
+              class="ct-textarea"
+              placeholder="Brevemente: qué necesitas, plazos, lo que sea relevante."></textarea>
+          </div>
+
+          <div class="ct-privacy">
+            <input type="checkbox" id="privacy" name="privacy" required />
+            <label for="privacy">
+              He leído y acepto la
+              <a href="/politica-privacidad">política de privacidad</a>
+              y autorizo el tratamiento de mis datos para responder a esta consulta. <span
+                class="req">*</span
+              >
+            </label>
+          </div>
+
+          <div class="ct-actions">
+            <button type="submit" class="ct-btn">
+              Enviar mensaje
+              <svg width="14" height="14" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                <path d="M5 17L17 5M17 5H7M17 5V15" stroke="currentColor" stroke-width="1.6"></path>
+              </svg>
+            </button>
+            <span class="ct-counter">// respuesta en menos de 24h laborables</span>
+          </div>
+
+          <div data-form-status aria-live="polite" aria-atomic="true" class="ct-status"></div>
+        </form>
+      </div>
+
+      <aside class="ct-info-side">
+        <div class="ct-availability">
+          <span class="pulse" aria-hidden="true"></span>
+          <span>Aceptando proyectos · Q3 2026</span>
         </div>
 
-        <div>
-          <Marker label="ubicación" />
-          <p class="mt-6 text-base text-[--color-fg]">España · Atención remota</p>
-          <p class="mt-2 text-sm text-[--color-fg-soft]">
-            Reuniones presenciales a confirmar según ubicación.
+        <div class="ct-info-block">
+          <h3>Contacto directo</h3>
+          <p class="big">
+            <a href="mailto:hola@gesdiweb.es">hola@gesdiweb.es</a>
           </p>
+          <p>Para presupuestos, dudas técnicas o simplemente hola.</p>
         </div>
 
-        <div>
-          <Marker label="horario" />
-          <p class="mt-6 text-base text-[--color-fg]">Lunes a viernes · 09:00–18:00 (CET)</p>
-          <p class="mt-2 text-sm text-[--color-fg-soft]">
-            Email se responde en menos de 24 h laborables.
+        <div class="ct-info-block">
+          <h3>Ubicación</h3>
+          <p class="big">España · Atención remota</p>
+          <p>Reuniones presenciales a confirmar según ubicación del cliente.</p>
+        </div>
+
+        <div class="ct-info-block">
+          <h3>Horario</h3>
+          <p class="big">Lunes a viernes · 09:00–18:00</p>
+          <p>Zona horaria peninsular (CET / CEST).</p>
+        </div>
+
+        <div class="ct-faq-mini">
+          <h4>¿En cuánto tiempo respondéis?</h4>
+          <p>En menos de 24 horas laborables. Los emails de viernes por la tarde caen en lunes.</p>
+          <h4>¿Hacéis presupuestos gratis?</h4>
+          <p>
+            Sí. Tras una llamada de 40 minutos te enviamos un presupuesto cerrado con alcance,
+            entregables y plazos.
           </p>
         </div>
       </aside>
-
-      {/* Formulario */}
-      <form
-        method="POST"
-        action="/contacto"
-        class="lg:col-span-8 space-y-8"
-        aria-label="Formulario de contacto"
-        data-contact-form
-      >
-        {/* Honeypot anti-spam (oculto a humanos, visible a bots) */}
-        <div class="absolute -left-[9999px] top-auto w-px h-px overflow-hidden" aria-hidden="true">
-          <label>No rellenar
-            <input type="text" name="company_url" tabindex="-1" autocomplete="off" />
-          </label>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label for="name" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
-              Nombre *
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              autocomplete="name"
-              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
-            />
-          </div>
-          <div>
-            <label for="email" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
-              Email *
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              autocomplete="email"
-              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
-            />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label for="phone" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
-              Teléfono
-            </label>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              autocomplete="tel"
-              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
-            />
-          </div>
-          <div>
-            <label for="company" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
-              Empresa
-            </label>
-            <input
-              id="company"
-              name="company"
-              type="text"
-              autocomplete="organization"
-              class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label for="service" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
-            Servicio que te interesa
-          </label>
-          <select
-            id="service"
-            name="service"
-            class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors"
-          >
-            <option value="">Selecciona uno</option>
-            {services.map((s) => (
-              <option value={s.id}>{s.data.title}</option>
-            ))}
-            <option value="other">Otra cosa / no estoy seguro</option>
-          </select>
-        </div>
-
-        <fieldset>
-          <legend class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-3">
-            Presupuesto orientativo
-          </legend>
-          <div class="flex flex-wrap gap-3">
-            {budgets.map((b) => (
-              <label class="cursor-pointer">
-                <input
-                  type="radio"
-                  name="budget"
-                  value={b.value}
-                  class="peer sr-only"
-                />
-                <span
-                  class="inline-flex items-center px-4 py-2 rounded-full text-sm border border-[--color-border] text-[--color-fg-soft] peer-checked:bg-[--color-fg] peer-checked:text-[--color-fg-inverse] peer-checked:border-[--color-fg] hover:border-[--color-fg] transition-colors"
-                >
-                  {b.label}
-                </span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <div>
-          <label for="message" class="block font-mono text-xs uppercase tracking-widest text-[--color-muted] mb-2">
-            Cuéntanos *
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows="6"
-            required
-            class="w-full bg-transparent border-b border-[--color-border] py-3 text-base focus:border-[--color-fg] focus:outline-none transition-colors resize-y"
-            placeholder="Brevemente: qué necesitas, plazos, lo que sea relevante."
-          ></textarea>
-        </div>
-
-        <div class="flex items-start gap-3">
-          <input
-            type="checkbox"
-            id="privacy"
-            name="privacy"
-            required
-            class="mt-1.5 accent-[--color-brand]"
-          />
-          <label for="privacy" class="text-sm text-[--color-fg-soft] leading-relaxed">
-            He leído y acepto la
-            <a href="/politica-privacidad" class="underline hover:text-[--color-fg]">
-              política de privacidad
-            </a>
-            y autorizo el tratamiento de mis datos para responder a esta consulta. *
-          </label>
-        </div>
-
-        <div class="pt-4 flex flex-col sm:flex-row sm:items-center gap-4">
-          <Button type="submit" variant="primary" size="lg">Enviar mensaje</Button>
-          <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-            // respuesta en menos de 24h laborables
-          </p>
-        </div>
-
-        {/* Área de estado del envío (cargando, éxito, error) — accesible vía aria-live */}
-        <div
-          data-form-status
-          aria-live="polite"
-          aria-atomic="true"
-          class="text-sm font-mono uppercase tracking-widest min-h-[1.5em] data-[state=loading]:text-[--color-muted] data-[state=success]:text-[--color-brand-hover] data-[state=error]:text-red-600"
-        ></div>
-      </form>
     </div>
-  </section>
+  </article>
 
   <ContactFormClient />
 </BaseLayout>
+
+<style>
+  .ct-page {
+    padding-top: 0;
+  }
+  .ct-hero {
+    padding: 60px 32px 40px;
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .ct-hero {
+      padding: 80px 32px 50px;
+    }
+  }
+  .ct-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .ct-eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+
+  .ct-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 11vw, 12rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .ct-sub {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+    line-height: 1.3;
+    max-width: 36ch;
+    color: var(--color-muted);
+    position: relative;
+    z-index: 1;
+  }
+  .ct-mark-bg {
+    position: absolute;
+    right: -3vw;
+    bottom: -8vw;
+    font-family: var(--font-display);
+    font-size: clamp(12rem, 28vw, 28rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    color: var(--color-brand);
+    opacity: 0.08;
+    pointer-events: none;
+    user-select: none;
+    line-height: 0.85;
+    z-index: 0;
+  }
+
+  .ct-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-bottom: 1px solid var(--color-border);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    width: 100%;
+  }
+  @media (min-width: 900px) {
+    .ct-main {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+
+  .ct-form-side {
+    padding: 40px 20px;
+  }
+  .ct-info-side {
+    padding: 40px 20px;
+    background: color-mix(in oklab, var(--color-brand) 4%, var(--color-bg));
+  }
+  @media (min-width: 900px) {
+    .ct-form-side {
+      padding: 60px 60px 60px 32px;
+      border-right: 1px solid var(--color-border);
+    }
+    .ct-info-side {
+      padding: 60px 32px 60px 60px;
+    }
+  }
+
+  .ct-honeypot {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .ct-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 640px;
+  }
+  .ct-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 600px) {
+    .ct-grid-2 {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+  }
+  .ct-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .ct-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .ct-label .req {
+    color: var(--color-brand);
+  }
+
+  .ct-input,
+  .ct-textarea {
+    width: 100%;
+    padding: 14px 0 12px;
+    border: 0;
+    border-bottom: 1px solid var(--color-border-strong);
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--color-fg);
+    transition: border-color 0.3s var(--ease);
+    outline: none;
+  }
+  .ct-input::placeholder,
+  .ct-textarea::placeholder {
+    color: color-mix(in oklab, var(--color-muted) 60%, transparent);
+  }
+  .ct-input:focus,
+  .ct-textarea:focus {
+    border-bottom-color: var(--color-brand);
+  }
+  .ct-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.4;
+  }
+
+  .ct-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .ct-chip-wrap {
+    cursor: pointer;
+    user-select: none;
+  }
+  .ct-chip-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  .ct-chip {
+    display: inline-block;
+    padding: 10px 18px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+    background: transparent;
+    color: var(--color-fg);
+  }
+  .ct-chip-wrap:hover .ct-chip {
+    border-color: var(--color-fg);
+  }
+  .ct-chip-input:checked + .ct-chip {
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+    border-color: var(--color-fg);
+  }
+  .ct-chip-input:focus-visible + .ct-chip {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+
+  .ct-privacy {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+  .ct-privacy input {
+    margin-top: 4px;
+    accent-color: var(--color-brand);
+    flex-shrink: 0;
+  }
+  .ct-privacy a {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ct-privacy a:hover {
+    color: var(--color-brand);
+  }
+  .ct-privacy .req {
+    color: var(--color-brand);
+  }
+
+  .ct-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 600px) {
+    .ct-actions {
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+  .ct-btn {
+    padding: 16px 28px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--color-fg);
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+    cursor: pointer;
+    border-radius: 999px;
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease),
+      transform 0.3s var(--ease);
+  }
+  .ct-btn:hover {
+    background: var(--color-brand);
+    color: var(--color-fg);
+    border-color: var(--color-brand);
+    transform: translateX(2px);
+  }
+  .ct-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .ct-counter {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .ct-status {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    min-height: 1.5em;
+  }
+  .ct-status[data-state='loading'] {
+    color: var(--color-muted);
+  }
+  .ct-status[data-state='success'] {
+    color: var(--color-brand-hover);
+  }
+  .ct-status[data-state='error'] {
+    color: #c0392b;
+  }
+
+  /* Info side */
+  .ct-availability {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    margin-bottom: 40px;
+    width: fit-content;
+  }
+  .ct-availability .pulse {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #36b37e;
+    box-shadow: 0 0 0 0 rgba(54, 179, 126, 0.6);
+    animation: pulse-availability 2s infinite;
+  }
+  @keyframes pulse-availability {
+    0% {
+      box-shadow: 0 0 0 0 rgba(54, 179, 126, 0.6);
+    }
+    70% {
+      box-shadow: 0 0 0 12px rgba(54, 179, 126, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(54, 179, 126, 0);
+    }
+  }
+  .ct-availability span:last-child {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ct-availability .pulse {
+      animation: none !important;
+    }
+  }
+
+  .ct-info-block {
+    margin-bottom: 40px;
+  }
+  .ct-info-block h3 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .ct-info-block .big {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .ct-info-block .big a {
+    color: var(--color-fg);
+  }
+  .ct-info-block .big a:hover {
+    color: var(--color-brand);
+  }
+  .ct-info-block p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-muted);
+    max-width: 38ch;
+  }
+
+  .ct-faq-mini {
+    border-top: 1px solid var(--color-border);
+    padding-top: 24px;
+  }
+  .ct-faq-mini h4 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .ct-faq-mini p {
+    font-size: 13px;
+    color: var(--color-muted);
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+</style>

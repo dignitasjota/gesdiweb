@@ -2,24 +2,16 @@
 export const prerender = true;
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Marker from '../../components/ui/Marker.astro';
-import Tag from '../../components/ui/Tag.astro';
 import { getAllProjects } from '../../lib/collections';
-import {
-  itemListSchema,
-  webPageSchema,
-  breadcrumbSchema,
-  SITE,
-} from '../../lib/seo';
+import { itemListSchema, webPageSchema, breadcrumbSchema, SITE } from '../../lib/seo';
 
 const allProjects = await getAllProjects();
 
 const jsonLd = [
   webPageSchema({
     url: `${SITE.url}/portfolio`,
-    name: 'Portfolio · gesdiweb',
-    description:
-      'Proyectos recientes de diseño web, apps móviles y posicionamiento SEO.',
+    name: 'Trabajos · gesdiweb',
+    description: 'Proyectos recientes de diseño web, apps móviles y posicionamiento SEO.',
   }),
   itemListSchema({
     name: 'Portfolio de gesdiweb',
@@ -30,88 +22,262 @@ const jsonLd = [
   }),
   breadcrumbSchema([
     { name: 'Inicio', url: SITE.url },
-    { name: 'Portfolio', url: `${SITE.url}/portfolio` },
+    { name: 'Trabajos', url: `${SITE.url}/portfolio` },
   ]),
 ];
+
+const palette = ['#76c2da', '#0a0a0a', '#5fb3cf', '#1a1a1a', '#76c2da'];
+
+function initials(title: string) {
+  return title
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
+}
 ---
 
 <BaseLayout
-  title="Portfolio · gesdiweb"
+  title="Trabajos · gesdiweb"
   description="Proyectos recientes de diseño web, apps móviles y posicionamiento SEO."
   jsonLd={jsonLd}
 >
-  <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
-    <Marker label="02.portfolio" />
-    <h1
-      class="mt-8 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
-      style="font-size: var(--text-3xl);"
-    >
-      Trabajo reciente.<br />
-      <span class="text-[--color-brand]">Resultados</span> reales.
-    </h1>
-    <p
-      class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
-      style="font-size: var(--text-lg);"
-    >
-      Selección curada de proyectos. Cada caso de estudio incluye los retos
-      reales, las decisiones técnicas y las métricas que los acompañan.
-    </p>
+  <section class="list-hero">
+    <div class="list-inner">
+      <div class="list-eyebrow">
+        <span class="dot" aria-hidden="true"></span>
+        Trabajos seleccionados · {String(allProjects.length).padStart(3, '0')}
+      </div>
+
+      <h1 class="list-title">
+        Trabajo reciente.<br />
+        <em>Resultados reales.</em>
+      </h1>
+
+      <p class="list-tagline">
+        Selección curada de proyectos. Cada caso incluye los retos reales, las decisiones técnicas y
+        las métricas que los acompañan.
+      </p>
+    </div>
   </section>
 
-  <section class="border-t border-[--color-border]">
-    <div class="container-fluid py-16 md:py-24">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16 md:gap-y-24">
-        {allProjects.map((project, i) => (
-          <a
-            href={`/portfolio/${project.id}`}
-            class={`group flex flex-col gap-5 ${
-              i % 3 === 0 ? 'md:col-span-2' : ''
-            }`}
-          >
-            <div
-              class={`relative rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors ${
-                i % 3 === 0 ? 'aspect-[16/8]' : 'aspect-[4/3]'
-              } ${project.data.cover ? '' : 'bg-[--color-brand-soft] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest'}`}
-              aria-hidden={project.data.cover ? undefined : 'true'}
-              style={project.data.cover ? undefined : 'font-size: var(--text-xs);'}
-            >
-              {project.data.cover ? (
-                <Image
-                  src={project.data.cover}
-                  alt={project.data.coverAlt ?? `${project.data.title} — captura`}
-                  widths={[480, 720, 1080, 1440]}
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  class="w-full h-full object-cover"
-                  loading={i < 2 ? 'eager' : 'lazy'}
-                />
-              ) : (
-                <>
-                  <span class="absolute top-6 left-6">/{String(project.data.order).padStart(2, '0')}</span>
-                  <span class="absolute top-6 right-6">{project.data.year}</span>
-                  [PLACEHOLDER · {project.data.title}]
-                </>
-              )}
-            </div>
-            <div class="flex items-baseline justify-between gap-4">
-              <h2
-                class="font-display font-bold tracking-tight group-hover:text-[--color-brand] transition-colors"
-                style="font-size: var(--text-lg);"
-              >
-                {project.data.title}
-              </h2>
-              <span class="font-mono text-xs text-[--color-muted]">{project.data.year}</span>
-            </div>
-            <p class="text-[--color-fg-soft] max-w-[55ch]">
-              {project.data.excerpt}
-            </p>
-            <div class="flex flex-wrap gap-2">
-              {project.data.techStack.slice(0, 4).map((tech) => (
-                <Tag label={tech} />
-              ))}
-            </div>
-          </a>
-        ))}
+  <section class="portfolio-grid-wrap">
+    <div class="portfolio-inner">
+      <div class="portfolio-grid">
+        {
+          allProjects.map((p, i) => {
+            const color = palette[i % palette.length];
+            const cover = p.data.cover;
+            return (
+              <a class="portfolio-card" href={`/portfolio/${p.id}`}>
+                <div class="portfolio-card-media" style={`background: ${color};`}>
+                  {cover ? (
+                    <Image
+                      src={cover}
+                      alt={p.data.coverAlt ?? p.data.title}
+                      widths={[480, 720, 1080]}
+                      sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
+                      class="portfolio-card-img"
+                      loading={i < 2 ? 'eager' : 'lazy'}
+                    />
+                  ) : (
+                    <span
+                      class="portfolio-card-mark"
+                      style={
+                        color === '#0a0a0a' || color === '#1a1a1a'
+                          ? 'color:#fafaf8;'
+                          : 'color:#ffffff;'
+                      }
+                    >
+                      {initials(p.data.title)}
+                    </span>
+                  )}
+                  <span class="portfolio-card-num">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="portfolio-card-cta">Ver caso ↗</span>
+                </div>
+                <div class="portfolio-card-meta">
+                  <div class="pc-name">{p.data.title}</div>
+                  <div class="pc-sub">
+                    {p.data.client} · {p.data.year}
+                  </div>
+                </div>
+              </a>
+            );
+          })
+        }
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .list-hero {
+    padding: 60px 32px 60px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (min-width: 800px) {
+    .list-hero {
+      padding: 80px 32px 80px;
+    }
+  }
+  .list-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .list-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .list-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+  .list-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 10vw, 11rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px;
+  }
+  .list-tagline {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    line-height: 1.3;
+    font-weight: 400;
+    color: var(--color-muted);
+    max-width: 55ch;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .portfolio-grid-wrap {
+    padding: 60px 32px 80px;
+  }
+  .portfolio-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px 24px;
+  }
+  @media (min-width: 700px) {
+    .portfolio-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .portfolio-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .portfolio-card {
+    display: block;
+    color: var(--color-fg);
+  }
+  .portfolio-card-media {
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.6s var(--ease);
+  }
+  .portfolio-card:hover .portfolio-card-media {
+    transform: translateY(-6px);
+  }
+  .portfolio-card-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.06) 0 2px,
+      transparent 2px 16px
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  .portfolio-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .portfolio-card-mark {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 10vw, 10rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+  .portfolio-card-num {
+    position: absolute;
+    top: 16px;
+    left: 18px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.08em;
+    z-index: 2;
+  }
+  .portfolio-card-cta {
+    position: absolute;
+    bottom: 16px;
+    right: 18px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.4s var(--ease),
+      transform 0.4s var(--ease);
+    z-index: 2;
+  }
+  .portfolio-card:hover .portfolio-card-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .portfolio-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 16px;
+    gap: 16px;
+  }
+  .pc-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .pc-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    text-align: right;
+  }
+</style>

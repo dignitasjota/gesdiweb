@@ -2,9 +2,6 @@
 export const prerender = true;
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Marker from '../../components/ui/Marker.astro';
-import Badge from '../../components/ui/Badge.astro';
-import Button from '../../components/ui/Button.astro';
 
 export async function getStaticPaths() {
   const services = await getCollection('services', (e) => e.data.status !== 'draft');
@@ -38,6 +35,14 @@ const jsonLd = [
     { name: data.title, url: `${SITE.url}/servicios/${service.id}` },
   ]),
 ];
+
+// Tomamos la última palabra del headline para hacerla serif italic
+const headlineWords = data.headline.split(' ');
+const headlineLead = headlineWords.slice(0, -1).join(' ');
+const headlineEmph = headlineWords.slice(-1).join(' ').replace(/\.$/, '');
+
+// Para el "mark" gigante decorativo del hero
+const mark = data.title.split(' ')[0];
 ---
 
 <BaseLayout
@@ -46,120 +51,343 @@ const jsonLd = [
   ogImage={`/og/services/${service.id}.png`}
   jsonLd={jsonLd}
 >
-  <article>
-    <header class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
-      <div class="flex items-center gap-4">
-        <Badge number={data.order} />
-        <Marker label={`servicios · ${service.id}`} />
+  <article class="svc-page">
+    <header class="svc-hero">
+      <div class="svc-eyebrow">
+        <span>← <a href="/servicios">Servicios</a></span>
+        <span class="pill">{String(data.order).padStart(2, '0')}</span>
+        <span>{service.id}</span>
       </div>
 
-      <h1
-        class="mt-8 font-display font-bold tracking-[-0.025em] leading-[0.95] max-w-[20ch]"
-        style="font-size: var(--text-3xl);"
-      >
-        {data.headline.split(' ').slice(0, -1).join(' ')}{' '}
-        <span class="text-[--color-brand]">
-          {data.headline.split(' ').slice(-1)}
-        </span>
+      <h1 class="svc-title">
+        {headlineLead}{' '}
+        <em>{headlineEmph}.</em>
       </h1>
 
-      <p
-        class="mt-10 max-w-2xl text-[--color-fg-soft] leading-relaxed"
-        style="font-size: var(--text-lg);"
-      >
-        {data.excerpt}
-      </p>
+      <p class="svc-tagline">{data.excerpt}</p>
+
+      <span class="svc-mark" aria-hidden="true">{mark}</span>
     </header>
 
-    <section class="border-t border-[--color-border]">
-      <div class="container-fluid section-spacing grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div class="md:col-span-5">
-          <Marker label="qué incluye" />
-          <h2
-            class="mt-6 font-display font-bold tracking-tight leading-tight"
-            style="font-size: var(--text-xl);"
-          >
-            Lo que está dentro
-          </h2>
+    <div class="svc-body">
+      <section class="svc-section">
+        <div class="svc-prose">
+          <h3>Lo que incluye</h3>
+          <div class="svc-prose-text">
+            <ul class="svc-deliv-list">
+              {
+                data.features.map((feature, i) => (
+                  <li>
+                    <span class="num">/{String(i + 1).padStart(2, '0')}</span>
+                    <span>{feature}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
         </div>
-        <ul class="md:col-span-7 divide-y divide-[--color-border]">
-          {data.features.map((feature) => (
-            <li class="flex items-start gap-4 py-4">
-              <span
-                class="mt-2 inline-block w-1.5 h-1.5 rounded-full bg-[--color-brand] shrink-0"
-                aria-hidden="true"
-              ></span>
-              <span class="text-base md:text-lg">{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+      </section>
 
-    <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
-      <div class="container-fluid section-spacing grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div class="md:col-span-5">
-          <Marker label="cómo trabajamos" />
-          <h2
-            class="mt-6 font-display font-bold tracking-tight leading-tight"
-            style="font-size: var(--text-xl);"
-          >
-            El método paso a paso
-          </h2>
+      <section class="svc-section">
+        <div class="svc-prose">
+          <h3>Cómo trabajamos</h3>
+          <div class="svc-prose-text">
+            <ol class="svc-method">
+              {
+                data.approach.map((step, i) => (
+                  <li>
+                    <span class="num">{String(i + 1).padStart(2, '0')}</span>
+                    <p>{step}</p>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
         </div>
-        <ol class="md:col-span-7 space-y-8">
-          {data.approach.map((step, i) => (
-            <li class="flex items-start gap-6">
-              <span
-                class="font-mono uppercase tracking-widest text-[--color-muted] mt-1 shrink-0"
-                style="font-size: var(--text-xs);"
-                aria-hidden="true"
-              >
-                /{String(i + 1).padStart(2, '0')}
-              </span>
-              <p class="leading-relaxed">{step}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
+      </section>
 
-    <section class="container-fluid section-spacing">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
-        <div class="md:col-span-7">
-          <Marker label="¿siguiente paso?" />
-          <h2
-            class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch]"
-            style="font-size: var(--text-2xl);"
-          >
+      <section class="svc-section">
+        <div class="svc-cta-box">
+          <div class="svc-cta-eyebrow">
+            <span class="dot" aria-hidden="true"></span>
+            ¿Siguiente paso?
+          </div>
+          <h2 class="svc-cta-title">
             Una llamada de 40 minutos<br />
-            sin compromiso.
+            <em>sin compromiso.</em>
           </h2>
+          <a href="/contacto" class="svc-cta-btn">
+            Hablemos
+            <svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+              <path d="M5 17L17 5M17 5H7M17 5V15" stroke="currentColor" stroke-width="1.6"></path>
+            </svg>
+          </a>
         </div>
-        <div class="md:col-span-5 flex md:justify-end">
-          <Button href="/contacto" variant="primary" size="lg">Hablemos</Button>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
-    <nav
-      aria-label="Servicio siguiente"
-      class="border-t border-[--color-border]"
-    >
-      <a
-        href={`/servicios/${next.id}`}
-        class="group block container-fluid py-12 md:py-16 transition-colors"
-      >
-        <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-          siguiente servicio
-        </span>
-        <p
-          class="mt-4 font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
-          style="font-size: var(--text-2xl);"
-        >
-          {next.data.title} →
-        </p>
+    <nav aria-label="Servicio siguiente" class="svc-next">
+      <a href={`/servicios/${next.id}`}>
+        <span class="cn-label">// siguiente servicio</span>
+        <p class="cn-name">{next.data.title} →</p>
       </a>
     </nav>
   </article>
 </BaseLayout>
+
+<style>
+  .svc-page {
+    padding-top: 0;
+  }
+
+  .svc-hero {
+    padding: 60px 32px 60px;
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .svc-hero {
+      padding: 80px 32px 80px;
+    }
+  }
+  .svc-eyebrow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .svc-eyebrow a:hover {
+    color: var(--color-brand);
+  }
+  .svc-eyebrow .pill {
+    padding: 4px 12px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-fg);
+  }
+
+  .svc-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 11vw, 12rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .svc-tagline {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.4vw, 2rem);
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--color-muted);
+    max-width: 32ch;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .svc-mark {
+    position: absolute;
+    right: -2vw;
+    bottom: -8vw;
+    font-family: var(--font-display);
+    font-size: clamp(15rem, 40vw, 38rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.85;
+    color: var(--color-brand);
+    opacity: 0.08;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    text-transform: lowercase;
+  }
+
+  .svc-body {
+    padding: 80px 32px;
+    max-width: var(--container-max);
+    margin: 0 auto;
+  }
+  @media (max-width: 800px) {
+    .svc-body {
+      padding: 60px 20px;
+    }
+  }
+  .svc-section {
+    margin-bottom: 80px;
+  }
+  .svc-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .svc-prose {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 900px) {
+    .svc-prose {
+      grid-template-columns: 220px 1fr;
+      gap: 60px;
+      padding-top: 40px;
+    }
+  }
+  .svc-prose h3 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    font-weight: 500;
+  }
+
+  .svc-deliv-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .svc-deliv-list li {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--color-border);
+    align-items: baseline;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .svc-deliv-list li .num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-brand);
+    letter-spacing: 0.08em;
+  }
+
+  .svc-method {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .svc-method li {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--color-border);
+    align-items: baseline;
+  }
+  .svc-method li .num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-muted);
+    letter-spacing: 0.1em;
+  }
+  .svc-method li p {
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  /* CTA box */
+  .svc-cta-box {
+    padding: 60px 0 20px;
+    border-top: 1px solid var(--color-border);
+  }
+  .svc-cta-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 32px;
+  }
+  .svc-cta-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+  .svc-cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+  .svc-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 28px;
+    border-radius: 999px;
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: background 0.3s var(--ease);
+  }
+  .svc-cta-btn:hover {
+    background: var(--color-brand);
+    color: var(--color-fg);
+  }
+  .svc-cta-btn svg {
+    transition: transform 0.3s var(--ease);
+  }
+  .svc-cta-btn:hover svg {
+    transform: rotate(-45deg);
+  }
+
+  /* next service */
+  .svc-next {
+    padding: 60px 32px;
+    border-top: 1px solid var(--color-border);
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .svc-next a {
+    display: block;
+    color: var(--color-fg);
+  }
+  .cn-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+  }
+  .cn-name {
+    margin-top: 12px;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    transition: color 0.3s var(--ease);
+  }
+  .svc-next a:hover .cn-name {
+    color: var(--color-brand);
+  }
+</style>

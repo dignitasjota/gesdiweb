@@ -3,17 +3,12 @@ export const prerender = true;
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Marker from '../../components/ui/Marker.astro';
-import Tag from '../../components/ui/Tag.astro';
-import Button from '../../components/ui/Button.astro';
 import { formatDateLong, isoDate } from '../../lib/collections';
 import { blogPostingSchema, breadcrumbSchema, SITE } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', (e) => e.data.status !== 'draft');
-  const ordered = posts.sort(
-    (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
-  );
+  const ordered = posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
   return ordered.map((post) => ({
     params: { slug: post.id },
     props: {
@@ -58,177 +53,443 @@ const jsonLd = [
   articleAuthor={data.author}
   jsonLd={jsonLd}
 >
-  <article>
-    <header class="container-fluid pt-12 md:pt-20 pb-12 md:pb-16">
-      <Marker label={`blog · ${formatDateLong(data.publishedAt)}`} />
+  <article class="post-page">
+    <header class="post-hero">
+      <div class="post-breadcrumb">
+        <a href="/blog">← Blog</a>
+        <span class="sep">/</span>
+        {data.categories[0] && <span>{data.categories[0]}</span>}
+        <span class="sep">/</span>
+        <time datetime={isoDate(data.publishedAt)}>{formatDateLong(data.publishedAt)}</time>
+      </div>
 
-      <h1
-        class="mt-8 font-display font-bold tracking-[-0.025em] leading-[0.95] max-w-[24ch]"
-        style="font-size: var(--text-2xl);"
-      >
-        {data.title}
-      </h1>
+      <h1 class="post-title">{data.title}</h1>
 
-      <p
-        class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
-        style="font-size: var(--text-lg);"
-      >
-        {data.excerpt}
-      </p>
+      <p class="post-excerpt">{data.excerpt}</p>
 
-      <div class="mt-10 flex flex-wrap items-center gap-3">
-        {data.categories.map((cat) => (
-          <Tag label={cat} variant="brand" />
-        ))}
-        <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">
-          · {data.readingMinutes} min lectura · {data.author}
-        </span>
+      <div class="post-meta">
+        <div class="bf-tags">
+          {data.categories.map((cat) => <span class="bf-tag">{cat}</span>)}
+        </div>
+        <div class="post-meta-info">
+          <span>{data.readingMinutes} min lectura</span>
+          <span>·</span>
+          <span>{data.author}</span>
+        </div>
       </div>
     </header>
 
-    <div class="container-fluid pb-12 md:pb-16">
-      {data.cover ? (
-        <Image
-          src={data.cover}
-          alt={data.coverAlt ?? data.title}
-          widths={[640, 960, 1280, 1920]}
-          sizes="(min-width: 1280px) 1280px, 100vw"
-          class="aspect-[16/9] w-full rounded-2xl object-cover border border-[--color-border]"
-          loading="eager"
-        />
-      ) : (
-        <div
-          class="aspect-[16/9] bg-[--color-brand-soft] rounded-2xl border-2 border-[--color-brand] flex items-center justify-center text-[--color-brand-hover] font-mono uppercase tracking-widest"
-          aria-hidden="true"
-        >
-          [PLACEHOLDER · cover]
+    {
+      data.cover && (
+        <div class="post-cover">
+          <Image
+            src={data.cover}
+            alt={data.coverAlt ?? data.title}
+            widths={[640, 960, 1280, 1920]}
+            sizes="(min-width: 1440px) 1440px, 100vw"
+            class="post-cover-img"
+            loading="eager"
+          />
         </div>
-      )}
-    </div>
+      )
+    }
 
-    <div class="container-fluid pb-20 md:pb-32">
-      <div class="post-body max-w-2xl mx-auto">
+    <div class="post-body-wrap">
+      <div class="post-body">
         <Content />
 
-        <div class="mt-16 pt-8 border-t border-[--color-border] flex flex-wrap items-center gap-2">
-          <span class="font-mono text-xs uppercase tracking-widest text-[--color-muted]">tags:</span>
-          {data.tags.map((tag) => (
-            <Tag label={tag} />
-          ))}
-        </div>
+        {
+          data.tags.length > 0 && (
+            <div class="post-tags">
+              <span class="lbl">// tags</span>
+              <div class="post-tags-list">
+                {data.tags.map((tag) => (
+                  <span class="post-tag">{tag}</span>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
 
-    {related.length > 0 && (
-      <section class="bg-[--color-bg-soft] border-y border-[--color-border-soft]">
-        <div class="container-fluid section-spacing">
-          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-            <div>
-              <Marker label="seguir leyendo" />
-              <h2
-                class="mt-4 font-display font-bold tracking-tight leading-tight"
-                style="font-size: var(--text-xl);"
-              >
-                Artículos relacionados
-              </h2>
-            </div>
-            <a
-              href="/blog"
-              class="font-mono text-xs uppercase tracking-widest text-[--color-fg-soft] hover:text-[--color-fg] transition-colors self-start md:self-auto"
-            >
-              ver todos →
-            </a>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {related.map((p) => (
-              <a href={`/blog/${p.id}`} class="group flex flex-col gap-4">
-                <div
-                  class="aspect-[4/3] rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
-                >
-                  {p.data.cover ? (
-                    <Image
-                      src={p.data.cover}
-                      alt={p.data.coverAlt ?? p.data.title}
-                      widths={[400, 600, 800]}
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                      class="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div
-                      class="bg-[--color-brand-soft] w-full h-full flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest"
-                      aria-hidden="true"
-                    >
-                      [PLACEHOLDER · cover]
-                    </div>
-                  )}
+    {
+      related.length > 0 && (
+        <section class="post-related">
+          <div class="post-related-inner">
+            <div class="post-related-head">
+              <div>
+                <div class="post-related-eyebrow">
+                  <span class="dot" aria-hidden="true" />
+                  Seguir leyendo
                 </div>
-                <h3
-                  class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
-                  style="font-size: var(--text-lg);"
-                >
-                  {p.data.title}
-                </h3>
-                <p class="text-[--color-fg-soft] line-clamp-2">{p.data.excerpt}</p>
-                <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mt-2">
-                  <time datetime={isoDate(p.data.publishedAt)}>{formatDateLong(p.data.publishedAt)}</time>
-                </p>
+                <h2 class="post-related-title">
+                  Artículos <em>relacionados</em>.
+                </h2>
+              </div>
+              <a class="post-related-cta" href="/blog">
+                Ver todos →
               </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
+            </div>
 
-    <section class="container-fluid section-spacing text-center">
-      <Marker label="¿necesitas ayuda?" class="justify-center w-full" />
-      <h2
-        class="mt-6 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[18ch] mx-auto"
-        style="font-size: var(--text-2xl);"
-      >
-        Si lo que has leído te suena familiar, hablemos.
-      </h2>
-      <div class="mt-10">
-        <Button href="/contacto" variant="primary" size="lg">Reservar llamada</Button>
-      </div>
-    </section>
+            <div class="post-related-grid">
+              {related.map((p, i) => (
+                <a class="blog-card" href={`/blog/${p.id}`}>
+                  <div class="blog-card-media">
+                    {p.data.cover ? (
+                      <Image
+                        src={p.data.cover}
+                        alt={p.data.coverAlt ?? p.data.title}
+                        widths={[400, 600, 800]}
+                        sizes="(min-width: 768px) 50vw, 100vw"
+                        class="blog-card-img"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span class="blog-card-mark">{String(i + 1).padStart(2, '0')}</span>
+                    )}
+                  </div>
+                  <div class="blog-card-meta">
+                    <time datetime={isoDate(p.data.publishedAt)}>
+                      {formatDateLong(p.data.publishedAt)}
+                    </time>
+                    {p.data.categories?.[0] && <span class="bc-cat">{p.data.categories[0]}</span>}
+                  </div>
+                  <h3 class="bc-title">{p.data.title}</h3>
+                  <p class="bc-excerpt">{p.data.excerpt}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
   </article>
 </BaseLayout>
+
+<style>
+  .post-page {
+    padding-top: 0;
+  }
+  .post-hero {
+    padding: 60px 32px 40px;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    .post-hero {
+      padding: 80px 32px 50px;
+    }
+  }
+  .post-breadcrumb {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .post-breadcrumb a:hover {
+    color: var(--color-brand);
+  }
+  .post-breadcrumb .sep {
+    color: var(--color-muted);
+    opacity: 0.4;
+  }
+  .post-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+  .post-excerpt {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    line-height: 1.4;
+    color: var(--color-muted);
+    max-width: 50ch;
+    margin-bottom: 32px;
+  }
+  .post-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+  }
+  @media (min-width: 600px) {
+    .post-meta {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  .bf-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .bf-tag {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--color-brand-soft);
+    color: var(--color-brand-hover);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .post-meta-info {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    display: flex;
+    gap: 8px;
+  }
+
+  .post-cover {
+    aspect-ratio: 16 / 9;
+    max-width: 1280px;
+    margin: 0 auto 40px;
+    padding: 0 32px;
+    position: relative;
+  }
+  .post-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+  }
+
+  .post-body-wrap {
+    padding: 40px 32px 80px;
+  }
+  @media (min-width: 800px) {
+    .post-body-wrap {
+      padding: 60px 32px 120px;
+    }
+  }
+  .post-body {
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+
+  .post-tags {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+  }
+  .post-tags .lbl {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    display: block;
+    margin-bottom: 12px;
+  }
+  .post-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .post-tag {
+    padding: 6px 14px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+  }
+
+  .post-related {
+    padding: 80px 32px;
+    background: var(--color-bg-soft);
+    border-top: 1px solid var(--color-border);
+  }
+  .post-related-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .post-related-head {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 50px;
+  }
+  @media (min-width: 800px) {
+    .post-related-head {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+  .post-related-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 16px;
+  }
+  .post-related-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+  .post-related-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .post-related-cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-fg);
+    padding: 12px 22px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease);
+    flex-shrink: 0;
+  }
+  .post-related-cta:hover {
+    background: var(--color-fg);
+    color: var(--color-fg-inverse);
+  }
+  .post-related-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  @media (min-width: 700px) {
+    .post-related-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .blog-card {
+    display: block;
+    color: var(--color-fg);
+  }
+  .blog-card-media {
+    aspect-ratio: 16 / 10;
+    border-radius: 4px;
+    background: var(--color-brand);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s var(--ease);
+  }
+  .blog-card:hover .blog-card-media {
+    transform: translateY(-4px);
+  }
+  :global(.blog-card-img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .blog-card-mark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 5rem;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.04em;
+  }
+  .blog-card-meta {
+    display: flex;
+    gap: 12px;
+    margin: 14px 0 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+  }
+  .bc-cat {
+    color: var(--color-brand);
+  }
+  .bc-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    transition: color 0.3s var(--ease);
+  }
+  .blog-card:hover .bc-title {
+    color: var(--color-brand);
+  }
+  .bc-excerpt {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
 
 <style is:global>
   .post-body h2 {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: -0.025em;
-    font-size: var(--text-xl);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
     margin-top: 3rem;
     margin-bottom: 1rem;
-    line-height: 1.2;
+    line-height: 1.15;
   }
   .post-body h3 {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--text-lg);
+    font-weight: 500;
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
     margin-top: 2rem;
     margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
   }
   .post-body p {
     line-height: 1.75;
     margin-bottom: 1.25rem;
-    font-size: var(--text-base);
+    font-size: 17px;
+    color: var(--color-fg);
   }
   .post-body ul,
   .post-body ol {
     padding-left: 1.5rem;
     margin-bottom: 1.25rem;
+    color: var(--color-fg);
   }
   .post-body li {
     margin-bottom: 0.5rem;
     line-height: 1.7;
   }
   .post-body strong {
-    color: var(--color-fg);
     font-weight: 600;
   }
   .post-body a {
@@ -246,5 +507,17 @@ const jsonLd = [
     padding: 0.15rem 0.4rem;
     border-radius: 0.25rem;
     font-size: 0.95em;
+    font-family: var(--font-mono);
+  }
+  .post-body img {
+    border-radius: 4px;
+    margin: 1.5rem 0;
+  }
+  .post-body blockquote {
+    border-left: 3px solid var(--color-brand);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--color-fg-soft);
   }
 </style>

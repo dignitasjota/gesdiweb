@@ -2,8 +2,6 @@
 export const prerender = true;
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Marker from '../../components/ui/Marker.astro';
-import Tag from '../../components/ui/Tag.astro';
 import { getAllPosts, formatDateLong, isoDate } from '../../lib/collections';
 import { blogSchema, breadcrumbSchema, SITE } from '../../lib/seo';
 
@@ -24,132 +22,349 @@ const jsonLd = [
   description="Artículos sobre SEO técnico, diseño web, rendimiento y estrategia digital."
   jsonLd={jsonLd}
 >
-  <section class="container-fluid pt-12 md:pt-20 pb-16 md:pb-24">
-    <Marker label="03.blog" />
-    <h1
-      class="mt-8 font-display font-bold tracking-[-0.025em] leading-[1] max-w-[16ch]"
-      style="font-size: var(--text-3xl);"
-    >
-      Pensamiento<br />
-      <span class="text-[--color-brand]">aplicado</span>.
-    </h1>
-    <p
-      class="mt-8 max-w-2xl text-[--color-fg-soft] leading-relaxed"
-      style="font-size: var(--text-lg);"
-    >
-      Artículos breves sobre lo que vamos aprendiendo: SEO técnico, rendimiento,
-      diseño y operación de proyectos digitales.
-    </p>
+  <section class="list-hero">
+    <div class="list-inner">
+      <div class="list-eyebrow">
+        <span class="dot" aria-hidden="true"></span>
+        Blog · {String(allPosts.length).padStart(3, '0')} artículos
+      </div>
+      <h1 class="list-title">
+        Pensamiento<br />
+        <em>aplicado.</em>
+      </h1>
+      <p class="list-tagline">
+        Artículos sobre lo que vamos aprendiendo: SEO técnico, rendimiento, diseño y operación de
+        proyectos digitales.
+      </p>
+    </div>
   </section>
 
-  {featuredPost && (
-    <section class="border-t border-[--color-border]">
-      <a
-        href={`/blog/${featuredPost.id}`}
-        class="group block container-fluid py-16 md:py-24"
-      >
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
-          <div
-            class="md:col-span-7 aspect-[16/9] rounded-2xl overflow-hidden border-4 border-[--color-brand-hover] group-hover:scale-[1.01] transition-transform"
-          >
+  {
+    featuredPost && (
+      <section class="blog-featured">
+        <a href={`/blog/${featuredPost.id}`} class="blog-featured-link">
+          <div class="blog-featured-media">
             {featuredPost.data.cover ? (
               <Image
                 src={featuredPost.data.cover}
                 alt={featuredPost.data.coverAlt ?? featuredPost.data.title}
                 widths={[640, 960, 1280, 1920]}
                 sizes="(min-width: 1280px) 800px, 100vw"
-                class="w-full h-full object-cover"
+                class="blog-featured-img"
                 loading="eager"
               />
             ) : (
-              <div
-                class="bg-[--color-brand] w-full h-full flex items-center justify-center text-[--color-fg-inverse] font-mono uppercase tracking-widest"
-                aria-hidden="true"
-              >
-                [PLACEHOLDER · cover destacado]
-              </div>
+              <span class="mark">01</span>
             )}
           </div>
-          <div class="md:col-span-5 flex flex-col gap-5">
-            <div class="flex items-center gap-3 flex-wrap">
+          <div class="blog-featured-meta">
+            <div class="bf-tags">
               {featuredPost.data.categories.map((cat) => (
-                <Tag label={cat} variant="brand" />
+                <span class="bf-tag">{cat}</span>
               ))}
-              <span class="font-mono text-xs text-[--color-muted]">
-                · {featuredPost.data.readingMinutes} min lectura
-              </span>
+              <span class="bf-min">· {featuredPost.data.readingMinutes} min lectura</span>
             </div>
-            <h2
-              class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
-              style="font-size: var(--text-2xl);"
-            >
-              {featuredPost.data.title}
-            </h2>
-            <p class="text-[--color-fg-soft] max-w-prose">
-              {featuredPost.data.excerpt}
-            </p>
-            <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mt-auto">
-              <time datetime={isoDate(featuredPost.data.publishedAt)}>
-                {formatDateLong(featuredPost.data.publishedAt)}
-              </time>
-            </p>
+            <h2 class="bf-title">{featuredPost.data.title}</h2>
+            <p class="bf-excerpt">{featuredPost.data.excerpt}</p>
+            <time class="bf-date" datetime={isoDate(featuredPost.data.publishedAt)}>
+              {formatDateLong(featuredPost.data.publishedAt)}
+            </time>
+          </div>
+        </a>
+      </section>
+    )
+  }
+
+  {
+    rest.length > 0 && (
+      <section class="blog-grid-wrap">
+        <div class="blog-inner">
+          <div class="blog-grid">
+            {rest.map((post, i) => (
+              <a class="blog-card" href={`/blog/${post.id}`}>
+                <div class="blog-card-media">
+                  {post.data.cover ? (
+                    <Image
+                      src={post.data.cover}
+                      alt={post.data.coverAlt ?? post.data.title}
+                      widths={[400, 600, 800]}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      class="blog-card-img"
+                      loading={i < 6 ? 'eager' : 'lazy'}
+                    />
+                  ) : (
+                    <span class="blog-card-mark">{String(i + 2).padStart(2, '0')}</span>
+                  )}
+                </div>
+                <div class="blog-card-meta">
+                  <time datetime={isoDate(post.data.publishedAt)}>
+                    {formatDateLong(post.data.publishedAt)}
+                  </time>
+                  {post.data.categories?.[0] && (
+                    <span class="bc-cat">{post.data.categories[0]}</span>
+                  )}
+                </div>
+                <h3 class="bc-title">{post.data.title}</h3>
+                <p class="bc-excerpt">{post.data.excerpt}</p>
+              </a>
+            ))}
           </div>
         </div>
-      </a>
-    </section>
-  )}
-
-  {rest.length > 0 && (
-    <section class="border-t border-[--color-border]">
-      <div class="container-fluid py-16 md:py-24">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {rest.map((post, i) => (
-            <a href={`/blog/${post.id}`} class="group flex flex-col gap-5">
-              <div
-                class="aspect-[4/3] rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-[--color-brand] transition-colors"
-              >
-                {post.data.cover ? (
-                  <Image
-                    src={post.data.cover}
-                    alt={post.data.coverAlt ?? post.data.title}
-                    widths={[400, 600, 800]}
-                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    class="w-full h-full object-cover"
-                    loading={i < 3 ? 'eager' : 'lazy'}
-                  />
-                ) : (
-                  <div
-                    class="bg-[--color-brand-soft] w-full h-full flex items-center justify-center text-[--color-brand-hover] font-mono text-xs uppercase tracking-widest"
-                    aria-hidden="true"
-                  >
-                    [PLACEHOLDER · cover]
-                  </div>
-                )}
-              </div>
-              <div class="flex items-center gap-3 flex-wrap">
-                {post.data.categories.slice(0, 1).map((cat) => (
-                  <Tag label={cat} variant="brand" />
-                ))}
-                <span class="font-mono text-xs text-[--color-muted]">
-                  · {post.data.readingMinutes} min
-                </span>
-              </div>
-              <h2
-                class="font-display font-bold tracking-tight leading-tight group-hover:text-[--color-brand] transition-colors"
-                style="font-size: var(--text-lg);"
-              >
-                {post.data.title}
-              </h2>
-              <p class="text-[--color-fg-soft] line-clamp-3">
-                {post.data.excerpt}
-              </p>
-              <p class="font-mono text-xs uppercase tracking-widest text-[--color-muted] mt-auto">
-                <time datetime={isoDate(post.data.publishedAt)}>{formatDateLong(post.data.publishedAt)}</time>
-              </p>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )
+  }
 </BaseLayout>
+
+<style>
+  .list-hero {
+    padding: 60px 32px 60px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (min-width: 800px) {
+    .list-hero {
+      padding: 80px 32px 80px;
+    }
+  }
+  .list-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .list-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .list-eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+  .list-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 10vw, 11rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px;
+  }
+  .list-tagline {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    line-height: 1.3;
+    font-weight: 400;
+    color: var(--color-muted);
+    max-width: 55ch;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .blog-featured {
+    padding: 60px 32px;
+    border-bottom: 1px solid var(--color-border);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    width: 100%;
+  }
+  @media (min-width: 800px) {
+    .blog-featured {
+      padding: 80px 32px;
+    }
+  }
+  .blog-featured-link {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    color: var(--color-fg);
+  }
+  @media (min-width: 800px) {
+    .blog-featured-link {
+      grid-template-columns: 1.4fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+  }
+  .blog-featured-media {
+    aspect-ratio: 16 / 10;
+    border-radius: 4px;
+    background: var(--color-brand);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s var(--ease);
+  }
+  .blog-featured-link:hover .blog-featured-media {
+    transform: scale(1.01);
+  }
+  :global(.blog-featured-img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .blog-featured-media .mark {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 10rem);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: -0.04em;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .blog-featured-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .bf-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .bf-tag {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--color-brand-soft);
+    color: var(--color-brand-hover);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .bf-min {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+    letter-spacing: 0.08em;
+  }
+  .bf-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    transition: color 0.3s var(--ease);
+  }
+  .blog-featured-link:hover .bf-title {
+    color: var(--color-brand);
+  }
+  .bf-excerpt {
+    color: var(--color-muted);
+    line-height: 1.55;
+    max-width: 50ch;
+  }
+  .bf-date {
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+  }
+
+  .blog-grid-wrap {
+    padding: 60px 32px 80px;
+    background: var(--color-bg-soft);
+    border-top: 1px solid var(--color-border);
+  }
+  .blog-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px 32px;
+  }
+  @media (min-width: 700px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .blog-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .blog-card {
+    display: block;
+    color: var(--color-fg);
+  }
+  .blog-card-media {
+    aspect-ratio: 16 / 10;
+    border-radius: 4px;
+    background: var(--color-brand);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s var(--ease);
+  }
+  .blog-card:hover .blog-card-media {
+    transform: translateY(-4px);
+  }
+  :global(.blog-card-img) {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .blog-card-mark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.04em;
+  }
+  .blog-card-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 14px 0 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+  }
+  .bc-cat {
+    color: var(--color-brand);
+  }
+  .bc-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    transition: color 0.3s var(--ease);
+  }
+  .blog-card:hover .bc-title {
+    color: var(--color-brand);
+  }
+  .bc-excerpt {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-muted);
+    max-width: 40ch;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
