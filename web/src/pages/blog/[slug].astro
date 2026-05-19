@@ -138,7 +138,7 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
       {
         toc.length > 1 && (
           <aside class="post-toc" aria-label="Índice del artículo">
-            <h4>En este post</h4>
+            <h2>En este post</h2>
             <ol>
               {toc.map((h, i) => (
                 <li>
@@ -165,7 +165,7 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
         {
           data.tags.length > 0 && (
             <div>
-              <h4>Tags</h4>
+              <h2>Tags</h2>
               <div class="tags">
                 {data.tags.map((t) => (
                   <span class="tag">{t}</span>
@@ -176,7 +176,7 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
         }
 
         <div>
-          <h4>Compartir</h4>
+          <h2>Compartir</h2>
           <div class="share">
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(data.title)}&url=${encodeURIComponent(`${SITE.url}/blog/${post.id}`)}`}
@@ -193,7 +193,7 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
         </div>
 
         <div>
-          <h4>¿Te ha gustado?</h4>
+          <h2>¿Te ha gustado?</h2>
           <p class="rail-pitch">Si lo que has leído te suena familiar, cuéntanos tu proyecto.</p>
           <a href="/contacto" class="rail-cta">Hablemos →</a>
         </div>
@@ -457,7 +457,7 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
       top: 110px;
     }
   }
-  .post-toc h4 {
+  .post-toc h2 {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--color-muted);
@@ -528,7 +528,7 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
       top: 110px;
     }
   }
-  .post-rail h4 {
+  .post-rail h2 {
     font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;

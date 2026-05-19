@@ -12,7 +12,7 @@
  */
 ---
 
-<div id="cookie-banner" class="cookie-banner" aria-hidden="true">
+<div id="cookie-banner" class="cookie-banner" inert>
   <div class="cookie-collapsed">
     <h4>
       <span class="ic" aria-hidden="true">🍪</span>
@@ -186,7 +186,8 @@
   .cookie-banner button.primary {
     background: var(--color-brand);
     border-color: var(--color-brand);
-    color: #fff;
+    color: var(--color-fg);
+    font-weight: 500;
   }
   .cookie-banner button.primary:hover {
     background: color-mix(in oklab, var(--color-brand) 80%, #fff);
@@ -345,12 +346,12 @@
 
       function show() {
         banner!.classList.add('in');
-        banner!.setAttribute('aria-hidden', 'false');
+        (banner as HTMLElement & { inert: boolean }).inert = false;
         reopen!.classList.remove('in');
       }
       function hide() {
         banner!.classList.remove('in', 'expanded');
-        banner!.setAttribute('aria-hidden', 'true');
+        (banner as HTMLElement & { inert: boolean }).inert = true;
         reopen!.classList.add('in');
       }
 

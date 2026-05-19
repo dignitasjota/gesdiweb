@@ -122,7 +122,7 @@ const mark = data.title.split(' ')[0];
     <div class="case-body">
       <section class="case-section">
         <div class="case-text-block">
-          <h3>Caso de estudio</h3>
+          <h2>Caso de estudio</h2>
           <div class="case-prose">
             <Content />
           </div>
@@ -151,7 +151,7 @@ const mark = data.title.split(' ')[0];
       }
 
       <section class="case-section">
-        <h3 class="case-tech-label">// Stack técnico</h3>
+        <h2 class="case-tech-label">// Stack técnico</h2>
         <div class="tech-grid">
           {
             data.techStack.map((tech, i) => (
@@ -231,7 +231,7 @@ const mark = data.title.split(' ')[0];
     font-weight: 600;
   }
   .case-prose a {
-    color: var(--color-brand-hover);
+    color: var(--color-brand-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
@@ -306,7 +306,7 @@ const mark = data.title.split(' ')[0];
     line-height: 1.4;
   }
   .case-meta .cm-value a {
-    color: var(--color-brand-hover);
+    color: var(--color-brand-ink);
     text-decoration: underline;
     text-underline-offset: 4px;
     text-decoration-thickness: 1px;
@@ -385,7 +385,7 @@ const mark = data.title.split(' ')[0];
       padding-top: 40px;
     }
   }
-  .case-text-block h3 {
+  .case-text-block > h2 {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 500;

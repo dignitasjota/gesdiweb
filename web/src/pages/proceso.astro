@@ -224,7 +224,7 @@ const principles = [
                 <p>
                   <strong>Resultado:</strong> {p.outcome}
                 </p>
-                <h4>Qué hacemos en esta fase</h4>
+                <h3>Qué hacemos en esta fase</h3>
                 <ul class="proc-phase-activities">
                   {p.activities.map((a, j) => (
                     <li>
@@ -243,7 +243,7 @@ const principles = [
                 </div>
                 <div class="proc-phase-meta">
                   <div>
-                    <h5>Entregables</h5>
+                    <h4>Entregables</h4>
                     <ul>
                       {p.deliverables.map((d) => (
                         <li>↳ {d}</li>
@@ -251,7 +251,7 @@ const principles = [
                     </ul>
                   </div>
                   <div>
-                    <h5>Herramientas</h5>
+                    <h4>Herramientas</h4>
                     <div class="tools-pills">
                       {p.tools.map((t) => (
                         <span>{t}</span>
@@ -365,7 +365,7 @@ const principles = [
     font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 500;
     letter-spacing: -0.03em;
-    color: var(--color-brand);
+    color: var(--color-brand-ink);
     line-height: 1;
     margin-bottom: 8px;
   }
@@ -500,7 +500,7 @@ const principles = [
     margin-bottom: 20px;
     max-width: 55ch;
   }
-  .proc-phase-copy h4 {
+  .proc-phase-copy h3 {
     font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
@@ -526,7 +526,7 @@ const principles = [
   .proc-phase-activities li .idx {
     font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--color-brand);
+    color: var(--color-brand-ink);
     letter-spacing: 0.08em;
     padding-top: 4px;
   }
@@ -570,7 +570,7 @@ const principles = [
     padding-top: 24px;
     border-top: 1px solid var(--color-border);
   }
-  .proc-phase-meta h5 {
+  .proc-phase-meta h4 {
     font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
@@ -662,7 +662,7 @@ const principles = [
   .proc-principle .pn {
     font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--color-brand);
+    color: var(--color-brand-ink);
     letter-spacing: 0.1em;
     margin-bottom: 24px;
   }

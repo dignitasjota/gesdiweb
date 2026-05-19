@@ -2,8 +2,8 @@
 
 > **Snapshot dinámico.** Se actualiza al cerrar cada fase o cuando la realidad del repo se separa de los docs. Si entras nuevo al proyecto, este documento te dice **dónde estamos exactamente y qué hacer ahora**.
 
-**Última actualización:** 2026-05-12
-**Última fase cerrada:** Rediseño "Claude Design" — Fases A–E + blog v3 completas
+**Última actualización:** 2026-05-20
+**Última fase cerrada:** Rediseño "Claude Design" — Fases A–E + blog v3 completas (OG images regeneradas 2026-05-19) · **Auditoría a11y/Lighthouse cerrada 2026-05-20**
 **En curso:** Fase 7 — artefactos listos en repo, ejecución pendiente del dueño
 **Pendientes para Fase 8:** parte del trabajo (importación de blog WP, OG images) ya adelantado; queda 301s + switch DNS
 
@@ -105,7 +105,7 @@ Rediseño visual completo siguiendo nueva propuesta del dueño, manteniendo arqu
 ### SEO + OG
 
 - JSON-LD por tipo de página (organización, blog post, servicio, breadcrumb, etc.)
-- 80 OG images PNG pre-generadas con Playwright en `web/public/og/{blog,portfolio,services}/<slug>.png`
+- 80 OG images PNG pre-generadas con Playwright en `web/public/og/{blog,portfolio,services}/<slug>.png` — **regeneradas 2026-05-19** con tipografía nueva (Space Grotesk 500 + Instrument Serif italic en la última palabra del título), fondo `#fafaf8` para blog y escalado adaptativo del title en 5 tramos
 - `og-default.png` global
 
 ### Formulario de contacto
@@ -154,13 +154,37 @@ Pasos según [`docs/despliegue.md`](despliegue.md):
 
 ### Pendiente técnico
 
-- **Auditoría Lighthouse/axe-core** sobre el rediseño nuevo (no he podido tomar screenshots por incompatibilidad de Chromium con la versión cacheada local).
-- **Regenerar OG images** si quieres reflejar la nueva paleta tipográfica (`npm run og:force`). Las actuales siguen funcionando porque la paleta brand es la misma.
+- **Auditoría en producción real** tras Fase 7 — repetir Lighthouse contra `https://gesdiweb.es/` para confirmar que `text-compression` y `render-blocking` resueltos por NPM suben Perf a ≥ 95. Auditoría local pasada el 2026-05-20 con A11y 100 / BP 100 / SEO 100 en las 9 páginas críticas. Detalle en [`docs/auditorias/2026-05-20.md`](auditorias/2026-05-20.md).
 - **Datos legales reales** una vez los tenga el dueño.
 
 ---
 
 ## Notas de sesiones recientes
+
+### 2026-05-20 — Auditoría a11y + Lighthouse cerrada
+
+Primera auditoría completa sobre el rediseño "Claude Design". Lighthouse mobile + axe-core (WCAG 2.0 A + AA) en 9 URLs críticas. Detalle completo en [`docs/auditorias/2026-05-20.md`](auditorias/2026-05-20.md).
+
+**Cambios derivados (sobre globals.css + 7 archivos):**
+- Token `--color-muted: #a7a7a7` → **`#6b6b6b`** (pasa AA 4.5:1 sobre `#fafaf8`).
+- Token nuevo **`--color-brand-ink: #1d6c83`**: variante oscura del brand para uso en texto. `--color-brand: #76c2da` se reserva para superficies decorativas. Los `h1–h4 em` y `.serif-em` ahora resuelven a `--color-brand-ink` automáticamente.
+- CookieBanner: atributo `aria-hidden` sustituido por **`inert`** (gestionado en JS con `el.inert = true/false`). Botón "Aceptar todas" pasa a texto negro sobre brand.
+- Heading-order reordenado en 5 páginas (servicios/[slug], portfolio/[slug], contacto, proceso, blog/[slug]) para eliminar saltos de h1 → h3/h4. Selectores CSS actualizados en paralelo para conservar el estilo visual exacto.
+
+**Resultado final:** A11y 100 · BP 100 · SEO 100 en TODAS las páginas. Perf 82-95 (queda en 82 en /blog por DOM size del listado de 69 posts; en producción NPM con gzip/brotli debería subir todas a ≥ 95).
+
+**Bug colateral resuelto:** `dist/client/_astro/` quedó pisado por carpetas duplicadas (`_astro 2/`) creadas por macOS Finder, lo que provocó 404s de `cover-generated.*.webp`. Fix: `rm -rf dist && npm run build`. El procedimiento de auditoría documenta este paso.
+
+### 2026-05-19 — OG images regeneradas con tipografía Claude Design
+
+Las 80 OG images quedaban con la tipografía antigua (Bricolage Grotesque) mientras el sitio ya usaba Space Grotesk + Instrument Serif. Actualizado el generador (`web/scripts/generate-og-images.mjs`) y regenerado todo con `--force`. Commit `64c8a58`.
+
+Cambios en el template:
+- Fuentes: Bricolage Grotesque → **Space Grotesk 500** (Google Fonts en build time) + **Instrument Serif 400 italic** para la última palabra del título (patrón `.serif-em` del rediseño).
+- Paleta blog: blanco puro `#ffffff` → off-white **`#fafaf8`**. Brand normalizado a `#76c2da` (antes `#77c2da`).
+- Escalado adaptativo del título en 5 tramos (52–104 px / 14–26 ch max-width) para evitar overflow con títulos largos del blog WP importado (hay 4 títulos > 75 chars).
+- Helpers nuevos: `escapeHtml()` y `splitTitle()` (separa `head` + `lastWord`).
+- Asterisco decorativo más sutil (rgba bajo) en lugar de bloque sólido tenue.
 
 ### 2026-05-12 — Rediseño "Claude Design" completo
 
@@ -213,3 +237,5 @@ Ver `docs/fases.md` y el historial git para detalle de cada fase 0–6 y mejoras
 - **2026-05-06** — Mejoras post-Fase 7 + adelanto parcial Fase 8 (blog WP, portfolio real).
 - **2026-05-07** — Logo oficial integrado + fix raíz `@layer base`.
 - **2026-05-12** — **Rediseño "Claude Design"** completo (5 fases + blog v3).
+- **2026-05-19** — OG images regeneradas con tipografía Claude Design.
+- **2026-05-20** — Auditoría a11y + Lighthouse cerrada (A11y 100 · BP 100 · SEO 100 en 9 páginas).

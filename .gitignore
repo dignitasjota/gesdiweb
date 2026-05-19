@@ -37,3 +37,6 @@ Thumbs.db
 
 # Output Docker local
 .docker-data/
+
+# Reportes locales de auditoría (Lighthouse + axe)
+web/audit-results/

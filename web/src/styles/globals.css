@@ -28,7 +28,8 @@
   --color-brand: #76c2da;
   --color-brand-hover: #5fb3cf;
   --color-brand-soft: #e9f4f8;
-  --color-muted: #a7a7a7;
+  --color-brand-ink: #1d6c83;
+  --color-muted: #6b6b6b;
 
   /* ── Familias tipográficas ──────────────────────────── */
   --font-display: 'Space Grotesk Variable', 'Helvetica Neue', system-ui, sans-serif;
@@ -149,7 +150,7 @@ h4 em,
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
-  color: var(--color-brand);
+  color: var(--color-brand-ink);
   letter-spacing: -0.02em;
 }
 
