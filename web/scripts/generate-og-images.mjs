@@ -69,8 +69,37 @@ function parseFrontmatter(content) {
 // ────────────────────────────────────────────────────────────
 // HTML del OG image (template responsive a tipo de colección)
 // ────────────────────────────────────────────────────────────
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Divide el título en `head` + `lastWord` para aplicarle Instrument Serif italic
+// a la última palabra (patrón `.serif-em` del rediseño Claude Design).
+function splitTitle(title) {
+  const clean = title.replace(/[.\s]+$/, '');
+  const parts = clean.split(/\s+/);
+  if (parts.length <= 1) return { head: '', lastWord: clean };
+  const lastWord = parts.pop();
+  return { head: parts.join(' '), lastWord };
+}
+
+function titleSizing(len) {
+  // Tamaño de fuente y max-width escalados por longitud (caracteres) del título.
+  if (len <= 28) return { size: 104, maxCh: 14 };
+  if (len <= 44) return { size: 88, maxCh: 16 };
+  if (len <= 60) return { size: 72, maxCh: 18 };
+  if (len <= 78) return { size: 60, maxCh: 22 };
+  return { size: 52, maxCh: 26 };
+}
+
 function ogHtml({ collection, title, sub }) {
-  const trimTitle = title.length > 90 ? title.slice(0, 87) + '…' : title;
+  const trimTitle = title.length > 110 ? title.slice(0, 107) + '…' : title;
+  const { head, lastWord } = splitTitle(trimTitle);
+  const sizing = titleSizing(trimTitle.length);
   const labels = {
     blog: 'BLOG',
     portfolio: 'PORTFOLIO',
@@ -78,28 +107,31 @@ function ogHtml({ collection, title, sub }) {
   };
   const collectionLabel = labels[collection] || 'GESDIWEB';
 
-  // Colores por colección para diferenciar visualmente
+  // Paleta del rediseño "Claude Design" (off-white #fafaf8 + brand #76c2da)
   const variants = {
     blog: {
-      bg: '#ffffff',
+      bg: '#fafaf8',
       text: '#0a0a0a',
-      accent: '#77c2da',
-      asteriskColor: '#e9f4f8',
-      markerColor: '#525252',
+      accent: '#76c2da',
+      asteriskColor: 'rgba(118,194,218,0.10)',
+      markerColor: '#52525b',
+      footerStrong: '#0a0a0a',
     },
     portfolio: {
       bg: '#0a0a0a',
-      text: '#ffffff',
-      accent: '#77c2da',
-      asteriskColor: 'rgba(119,194,218,0.15)',
-      markerColor: 'rgba(255,255,255,0.7)',
+      text: '#fafaf8',
+      accent: '#76c2da',
+      asteriskColor: 'rgba(118,194,218,0.14)',
+      markerColor: 'rgba(250,250,248,0.65)',
+      footerStrong: '#fafaf8',
     },
     services: {
-      bg: '#77c2da',
-      text: '#ffffff',
-      accent: 'rgba(255,255,255,0.4)',
-      asteriskColor: 'rgba(255,255,255,0.18)',
-      markerColor: 'rgba(255,255,255,0.85)',
+      bg: '#76c2da',
+      text: '#0a0a0a',
+      accent: '#fafaf8',
+      asteriskColor: 'rgba(250,250,248,0.22)',
+      markerColor: 'rgba(10,10,10,0.65)',
+      footerStrong: '#0a0a0a',
     },
   };
   const v = variants[collection] || variants.blog;
@@ -110,21 +142,21 @@ function ogHtml({ collection, title, sub }) {
 <meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
   html,body{width:1200px;height:630px;overflow:hidden}
-  body{background:${v.bg};color:${v.text};font-family:'Bricolage Grotesque',system-ui,sans-serif;position:relative}
-  .border-top{position:absolute;top:0;left:0;right:0;height:10px;background:#77c2da;z-index:3}
-  .grid{position:absolute;inset:0;padding:64px;display:flex;flex-direction:column;justify-content:space-between;z-index:2}
-  .marker{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:18px;text-transform:uppercase;letter-spacing:0.2em;color:${v.markerColor};display:flex;align-items:center;gap:12px}
-  .dot{width:9px;height:9px;border-radius:9999px;background:#77c2da}
-  h1{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;font-size:74px;line-height:1.02;letter-spacing:-0.03em;color:${v.text};max-width:18ch;margin-top:24px}
-  h1 .accent{color:${v.accent}}
-  .sub{margin-top:16px;font-size:24px;color:${v.markerColor};max-width:30ch}
-  .footer{display:flex;justify-content:space-between;align-items:flex-end;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:16px;text-transform:uppercase;letter-spacing:0.18em;color:${v.markerColor}}
-  .url-bold{color:${v.text}}
-  .asterisk{position:absolute;right:-100px;bottom:-180px;color:${v.asteriskColor};font-size:760px;font-weight:700;line-height:1;transform:rotate(15deg);z-index:1;user-select:none}
+  body{background:${v.bg};color:${v.text};font-family:'Space Grotesk','Helvetica Neue',system-ui,sans-serif;position:relative;font-feature-settings:'ss01','ss02'}
+  .border-top{position:absolute;top:0;left:0;right:0;height:8px;background:#76c2da;z-index:3}
+  .grid{position:absolute;inset:0;padding:72px;display:flex;flex-direction:column;justify-content:space-between;z-index:2}
+  .marker{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:18px;text-transform:uppercase;letter-spacing:0.18em;color:${v.markerColor};display:flex;align-items:center;gap:14px;font-weight:500}
+  .dot{width:10px;height:10px;border-radius:9999px;background:#76c2da;box-shadow:0 0 0 4px rgba(118,194,218,0.18)}
+  h1{font-family:'Space Grotesk','Helvetica Neue',system-ui,sans-serif;font-weight:500;font-size:${sizing.size}px;line-height:1.00;letter-spacing:-0.035em;color:${v.text};max-width:${sizing.maxCh}ch;margin-top:8px}
+  h1 em{font-family:'Instrument Serif','Times New Roman',Georgia,serif;font-style:italic;font-weight:400;color:${v.accent};letter-spacing:-0.02em}
+  h1 .accent{color:${v.accent};font-family:'Instrument Serif','Times New Roman',Georgia,serif;font-style:italic;font-weight:400}
+  .footer{display:flex;justify-content:space-between;align-items:flex-end;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:15px;text-transform:uppercase;letter-spacing:0.18em;color:${v.markerColor};font-weight:500}
+  .url-bold{color:${v.footerStrong};font-weight:500}
+  .asterisk{position:absolute;right:-120px;bottom:-220px;color:${v.asteriskColor};font-size:820px;font-weight:400;line-height:1;transform:rotate(12deg);z-index:1;user-select:none;font-family:'Space Grotesk',sans-serif}
 </style>
 </head>
 <body>
@@ -133,9 +165,9 @@ function ogHtml({ collection, title, sub }) {
   <div class="grid">
     <div class="marker">
       <span class="dot"></span>
-      <span>// ${collectionLabel}${sub ? ` · ${sub}` : ''}</span>
+      <span>// ${escapeHtml(collectionLabel)}${sub ? ` · ${escapeHtml(sub)}` : ''}</span>
     </div>
-    <h1>${trimTitle.replace(/\.$/, '')}<span class="accent">.</span></h1>
+    <h1>${head ? `${escapeHtml(head)} ` : ''}<em>${escapeHtml(lastWord)}</em><span class="accent">.</span></h1>
     <div class="footer">
       <span><span class="url-bold">gesdiweb</span>.es</span>
       <span>// diseño web · seo</span>
@@ -191,7 +223,10 @@ if (items.length === 0) {
 }
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+const page = await browser.newPage({
+  viewport: { width: 1200, height: 630 },
+  deviceScaleFactor: 1,
+});
 
 let generated = 0;
 let skipped = 0;
