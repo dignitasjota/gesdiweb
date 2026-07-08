@@ -14,9 +14,36 @@ env:
   IMAGE_NAME: ${{ github.repository_owner }}/gesdiweb-web
 
 jobs:
+  verify:
+    name: Lint & typecheck
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ./web/.nvmrc
+          cache: npm
+          cache-dependency-path: ./web/package-lock.json
+
+      - name: Install deps
+        run: npm ci
+
+      # El formato lo garantiza el hook pre-commit (Husky + lint-staged). No se
+      # bloquea el pipeline con format:check porque hay drift heredado en
+      # contenido; el gate real de CI es el typecheck de correctitud.
+      - name: Astro typecheck
+        run: npm run check
+
   build:
     name: Build & push image
     runs-on: ubuntu-latest
+    needs: verify
     permissions:
       contents: read
       packages: write

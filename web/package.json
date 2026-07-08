@@ -9,11 +9,15 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "astro check",
     "og": "node scripts/generate-og-images.mjs",
     "og:force": "node scripts/generate-og-images.mjs --force",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "cd .. && git config core.hooksPath .husky 2>/dev/null || true"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,astro,mjs,cjs,json,css,yml,yaml}": "prettier --write",
@@ -41,10 +45,12 @@
     "uuid": "^14.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.2",
     "playwright": "^1.59.1",
     "prettier": "^3.8.3",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.9.0"
   }
 }
