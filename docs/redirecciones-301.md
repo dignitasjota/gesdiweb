@@ -14,6 +14,31 @@
 > - Dominio canónico nuevo: elegir `https://gesdiweb.es` **o** `https://www.gesdiweb.es`
 >   (recomendado sin www) y forzar además el redirect www→no-www a nivel de proxy.
 
+## 0. Cómo validar este mapa contra Search Console
+
+Antes del switch DNS, cruza este mapa con las URLs que **realmente rankean**:
+
+1. En Search Console → **Rendimiento** → pestaña **Páginas** → **Exportar** → CSV.
+2. Ejecuta el validador (lee este mismo fichero como fuente del mapa):
+
+   ```bash
+   cd web
+   npm run redirects:check -- ../ruta/al/export-gsc.csv
+   # o sin CSV, para solo comprobar que los destinos existen en el sitio nuevo:
+   npm run redirects:check
+   ```
+
+El script (`web/scripts/validate-redirects.mjs`) reporta, ordenado por tráfico:
+
+- **URLs que rankean y NO tienen redirección ni equivalente** → darían 404 (crítico).
+- **Redirecciones cuyo destino no existe** en el sitio nuevo (301 → 404).
+- URLs ya presentes en el sitio nuevo (no necesitan redirección), adjuntos
+  (wp-content/feeds) y redirecciones del mapa que no aparecen en GSC.
+
+Sale con código `1` si hay algo crítico, así que sirve como _gate_ previo al switch.
+Cada URL crítica que salga hay que resolverla: añadir su 301 abajo o descartarla
+(p. ej. `/tag/`, `/author/`, paginación).
+
 ## 1. Posts del blog — `/<slug>/` → `/blog/<slug>`
 
 | URL antigua (WordPress) | URL nueva |
