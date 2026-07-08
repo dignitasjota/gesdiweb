@@ -10,6 +10,8 @@ interface Props {
   lastUpdate?: string;
   version?: string;
   toc?: { id: string; label: string }[];
+  /** Fuerza noindex: usar mientras la página contenga datos [PENDIENTE]. */
+  noindex?: boolean;
 }
 
 const {
@@ -20,6 +22,7 @@ const {
   lastUpdate = '2026-05-12',
   version = '1.0',
   toc = [],
+  noindex = false,
 } = Astro.props;
 const fullUrl = new URL(Astro.url.pathname, SITE.url).toString();
 
@@ -42,7 +45,12 @@ const lastUpdateLabel = new Intl.DateTimeFormat('es-ES', {
 }).format(new Date(lastUpdate));
 ---
 
-<BaseLayout title={`${title} · gesdiweb`} description={description} jsonLd={jsonLd}>
+<BaseLayout
+  title={`${title} · gesdiweb`}
+  description={description}
+  jsonLd={jsonLd}
+  noindex={noindex}
+>
   <article class="lg-page">
     <section class="lg-hero">
       <div class="lg-eyebrow">Documentación legal · {marker}</div>

@@ -50,7 +50,12 @@ export default defineConfig({
         defaultLocale: 'es',
         locales: { es: 'es-ES' },
       },
-      filter: (page) => !page.includes('/styleguide'),
+      // /styleguide es interna. Aviso legal y privacidad se excluyen MIENTRAS
+      // lleven datos [PENDIENTE] + noindex (quitar de aquí al completarlos).
+      filter: (page) =>
+        !page.includes('/styleguide') &&
+        !page.includes('/aviso-legal') &&
+        !page.includes('/politica-privacidad'),
     }),
   ],
   vite: {
