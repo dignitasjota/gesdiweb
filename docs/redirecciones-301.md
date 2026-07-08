@@ -235,6 +235,42 @@ location = /disseny-web-valencia/                    { return 301 /servicios/dis
 
 ---
 
+## Redirecciones estructurales de WordPress (REVISAR antes de aplicar)
+
+> Patrones típicos de WordPress que **no** salen de los enlaces internos pero que
+> Search Console y el crawler (`npm run crawl:old`) suelen revelar. No son 1:1,
+> así que van como bloque `regex` aparte y **el validador no los cubre** (solo
+> valida el mapa exacto de arriba). **Confirma cada uno** antes de aplicarlo: no
+> redirijas a la home a lo loco (anti-patrón SEO); si algo no tiene equivalente,
+> es preferible un 404/410 limpio.
+
+```nginx
+# ---- Redirecciones estructurales WP (revisar caso por caso) ----
+
+# Sitemaps antiguos -> sitemap nuevo de Astro
+location = /sitemap_index.xml { return 301 /sitemap-index.xml; }
+location = /sitemap.xml       { return 301 /sitemap-index.xml; }
+
+# Archivos de taxonomía y autor -> índice del blog (confirmar que interesa).
+# El bloque de blog exacto de arriba tiene prioridad sobre estos regex.
+location ~ ^/category/ { return 301 /blog; }
+location ~ ^/tag/      { return 301 /blog; }
+location ~ ^/author/   { return 301 /blog; }
+
+# Paginación del blog antiguo: /page/2/ , /blog/page/2/ ...
+location ~ ^/(blog/)?page/\d+/?$ { return 301 /blog; }
+
+# Feeds RSS: no hay feed en el sitio nuevo. Elige UNA:
+#   a) redirigir al blog:      location ~ /feed/?$ { return 301 /blog; }
+#   b) marcar como ido (410):  location ~ /feed/?$ { return 410; }
+
+# ?p=ID y ?page_id=ID (enlaces cortos WP): NO se pueden mapear con regex;
+# necesitan el ID->slug del export WXR. Si aparecen en GSC, resolver a mano.
+# ---- fin estructurales ----
+```
+
+---
+
 ## Pendientes de decisión del dueño (NO redirigidos automáticamente)
 
 ### a) Enlaces a adjuntos `wp-content/uploads/*` (lightbox a imagen a tamaño completo)

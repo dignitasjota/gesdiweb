@@ -13,6 +13,8 @@
     "og": "node scripts/generate-og-images.mjs",
     "og:force": "node scripts/generate-og-images.mjs --force",
     "redirects:check": "node scripts/validate-redirects.mjs",
+    "crawl:old": "node scripts/crawl-old-site.mjs",
+    "verify:migration": "node scripts/verify-migration.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "cd .. && git config core.hooksPath .husky 2>/dev/null || true"

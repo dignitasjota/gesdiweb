@@ -40,3 +40,6 @@ Thumbs.db
 
 # Reportes locales de auditoría (Lighthouse + axe)
 web/audit-results/
+
+# Artefactos de migración SEO generados localmente (crawl, export GSC)
+seo/
