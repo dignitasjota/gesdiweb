@@ -35,6 +35,7 @@ const jsonLd = [
     description: data.excerpt,
     year: data.year,
     client: data.client,
+    image: `${SITE.url}/og/portfolio/${project.id}.png`,
   }),
   breadcrumbSchema([
     { name: 'Inicio', url: SITE.url },

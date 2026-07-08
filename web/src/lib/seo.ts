@@ -92,6 +92,7 @@ export const serviceSchema = (params: {
   name: string;
   description: string;
   features: string[];
+  image?: string;
 }) => ({
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -100,6 +101,7 @@ export const serviceSchema = (params: {
   name: params.name,
   description: params.description,
   url: `${SITE_URL}/servicios/${params.slug}`,
+  image: params.image ?? DEFAULT_OG,
   provider: { '@id': `${SITE_URL}/#organization` },
   areaServed: { '@type': 'Country', name: 'España' },
   hasOfferCatalog: {

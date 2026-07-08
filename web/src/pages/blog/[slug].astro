@@ -38,6 +38,7 @@ const jsonLd = [
     description: data.excerpt,
     publishedAt: data.publishedAt,
     author: data.author,
+    image: `${SITE.url}/og/blog/${post.id}.png`,
     keywords: [...data.categories, ...data.tags],
   }),
   breadcrumbSchema([
