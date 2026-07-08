@@ -2,10 +2,10 @@
 
 > **Snapshot dinámico.** Se actualiza al cerrar cada fase o cuando la realidad del repo se separa de los docs. Si entras nuevo al proyecto, este documento te dice **dónde estamos exactamente y qué hacer ahora**.
 
-**Última actualización:** 2026-05-20
-**Última fase cerrada:** Rediseño "Claude Design" — Fases A–E + blog v3 completas (OG images regeneradas 2026-05-19) · **Auditoría a11y/Lighthouse cerrada 2026-05-20**
+**Última actualización:** 2026-07-08
+**Última fase cerrada:** Rediseño "Claude Design" + **pase de endurecimiento/QA** (2026-07-08): 4 bugs críticos + 6 importantes + menores corregidos y desplegados
 **En curso:** Fase 7 — artefactos listos en repo, ejecución pendiente del dueño
-**Pendientes para Fase 8:** parte del trabajo (importación de blog WP, OG images) ya adelantado; queda 301s + switch DNS
+**Pendientes para Fase 8:** blog WP importado + mapa 301 parcial + **tooling completo** (crawl, validador, verificador); queda el export de GSC, aplicar 301s en NPM y el switch DNS
 
 ---
 
@@ -21,7 +21,7 @@
 ✅ Fase 6  SEO técnico y performance        [completada 2026-05-05, OG per-entry 2026-05-06]
 🔁 REDISEÑO  "Claude Design" v2 (5 fases)   [completado 2026-05-12]
 🟡 Fase 7  Despliegue Hetzner               [artefactos listos · ejecución pendiente del dueño]
-🟡 Fase 8  Migración SEO + switch DNS       [blog WP importado · pendiente switch DNS y 301s]
+🟡 Fase 8  Migración SEO + switch DNS       [blog importado + mapa 301 + tooling listo · pendiente export GSC, 301s en NPM y switch DNS]
 ```
 
 ---
@@ -161,6 +161,28 @@ Pasos según [`docs/despliegue.md`](despliegue.md):
 
 ## Notas de sesiones recientes
 
+### 2026-07-08 — Pase de endurecimiento/QA + tooling de Fase 8
+
+Análisis en profundidad del proyecto y corrección de todo lo detectado, en commits atómicos (`46b90bf`..`6ba8905`, `5936896`). Runtime confirmado: **servidor Node standalone de `@astrojs/node` en `:4321`** (no hay nginx interno; los docs que decían lo contrario se corrigieron).
+
+**Críticos (4):**
+- **Menú móvil roto** por doble inicialización: el patrón `setup(); addEventListener('astro:page-load', setup)` ata los listeners dos veces porque `astro:page-load` también dispara en la carga inicial (con ClientRouter). El burger abría y cerraba en el mismo tap. Verificado con Playwright. Corregido en Header, Footer, CookieBanner, SmoothScroll y los dos scripts del blog. Ver [[gesdiweb - Bugs & Learnings]].
+- **Pérdida silenciosa de leads**: sin `RESEND_API_KEY`, `/api/contact` devolvía `ok:true (devMode)` también en producción (la key es `optional`), mostrando "¡Recibido!" y perdiendo el lead. Ahora el modo simulado se restringe a dev; en producción devuelve 503.
+- **Formulario frágil**: `action="/contacto"` (estático sin handler POST) → ahora `/api/contact`; y `ContactFormClient` era el único script sin reenganche en `astro:page-load`.
+- **Legales con `[PENDIENTE]` indexables** → `noindex` temporal + exclusión del sitemap hasta tener datos reales.
+
+**Importantes (6):** ~116 enlaces internos del blog reparados (apuntaban a permalinks WP antiguos) + mapa 301; middleware con cabeceras de seguridad + `security.checkOrigin` (las cabeceras completas van en NPM, ver `docs/despliegue.md §7.3`, porque el middleware no cubre páginas prerenderizadas); `getClientIp` deja de fiarse del primer `X-Forwarded-For` (spoofable); CI con `astro check` + `format:check` + `.nvmrc` + `_design-legacy` excluido del tsconfig; docs de runtime corregidas; a11y del formulario (fieldset/legend en vez de `aria-labelledby` roto).
+
+**Menores:** JSON-LD con imagen per-entry y autor sin `url` falso; **GSAP eliminado** (dependencia muerta, no había `[data-parallax]`); `rehype-external-links` configurado; **página 404**; contradicción de analítica unificada; contadores del blog cuadrados; logo del Header a `<Image>`; formato del repo cerrado + gate `format:check` en CI.
+
+**Tooling de Fase 8 (nuevo, probado contra la WP en vivo):**
+- `npm run crawl:old -- --insecure` → inventario de URLs 200 del WordPress actual (`seo/urls-old.txt`).
+- `npm run redirects:check -- <export-gsc.csv>` → cruza el mapa de 301 contra Search Console; marca las URLs con tráfico sin redirección.
+- `npm run verify:migration -- <urls.txt> [--base <QA>]` → gate post-switch (exit 1 si algún 404/5xx).
+- Bloque de redirecciones estructurales de WP en `docs/redirecciones-301.md` y `docs/seo-migracion.md` alineado al flujo real.
+
+**Hallazgo:** la **WordPress en vivo tiene el certificado TLS caducado** (`CERT_HAS_EXPIRED`) y canonicaliza a `www`. Por eso el tooling usa `--insecure`. Conviene renovarlo antes del corte.
+
 ### 2026-05-20 — Auditoría a11y + Lighthouse cerrada
 
 Primera auditoría completa sobre el rediseño "Claude Design". Lighthouse mobile + axe-core (WCAG 2.0 A + AA) en 9 URLs críticas. Detalle completo en [`docs/auditorias/2026-05-20.md`](auditorias/2026-05-20.md).
@@ -239,3 +261,4 @@ Ver `docs/fases.md` y el historial git para detalle de cada fase 0–6 y mejoras
 - **2026-05-12** — **Rediseño "Claude Design"** completo (5 fases + blog v3).
 - **2026-05-19** — OG images regeneradas con tipografía Claude Design.
 - **2026-05-20** — Auditoría a11y + Lighthouse cerrada (A11y 100 · BP 100 · SEO 100 en 9 páginas).
+- **2026-07-08** — Pase de endurecimiento/QA (4 críticos + 6 importantes + menores) + tooling de migración de Fase 8 (crawl, validador, verificador).

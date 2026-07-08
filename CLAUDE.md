@@ -140,8 +140,12 @@ gesdiweb/
     │   ├── og/{blog,portfolio,services}/<slug>.png   80 OG images per-entry
     │   └── robots.txt              Apunta a /sitemap-index.xml
     ├── scripts/
-    │   └── generate-og-images.mjs  Generador de OG images (Playwright, idempotente)
+    │   ├── generate-og-images.mjs  Generador de OG images (Playwright, idempotente)
+    │   ├── crawl-old-site.mjs      Crawl del WP actual → seo/urls-old.txt (Fase 8)
+    │   ├── validate-redirects.mjs  Valida el mapa de 301 vs Search Console (Fase 8)
+    │   └── verify-migration.mjs    Verifica 200/301 post-switch, gate del DNS (Fase 8)
     └── src/
+        ├── middleware.ts           Cabeceras de seguridad en rutas dinámicas (/api/*)
         ├── content.config.ts       ← Schemas Zod (blog: solo `*.md`, portfolio/services: `*.mdx`)
         ├── content/                ← Fuente única de contenido
         │   ├── services/           6 servicios (.mdx con solo frontmatter)
@@ -193,7 +197,7 @@ gesdiweb/
 | 5 | Animaciones y pulido | ✅ Completada (2026-05-05) | |
 | 6 | SEO técnico y performance | ✅ Completada (2026-05-05). OG per-entry añadido (2026-05-06) | |
 | 7 | Despliegue en VPS Hetzner | 🟡 Artefactos listos (2026-05-05). Pendiente ejecución por dueño | [`docs/despliegue.md`](docs/despliegue.md) |
-| 8 | Migración SEO y switch DNS | 🟡 Adelantado parcialmente (blog WP importado, OG generado). Pendiente: 301s + switch DNS | |
+| 8 | Migración SEO y switch DNS | 🟡 Blog importado + mapa 301 parcial + tooling listo (`crawl:old`, `redirects:check`, `verify:migration`). Pendiente: export GSC, 301s en NPM, switch DNS | [`docs/seo-migracion.md`](docs/seo-migracion.md) |
 
 > **Nota sobre la numeración.** El briefing original tenía 9 fases incluyendo "Fase 1: Directus". Como Directus se descartó (ADR-001), las fases se renumeraron. La numeración vigente está en `docs/fases.md`. Cuando hables con el dueño, refiérete a las fases por nombre además de número para evitar confusiones.
 
@@ -263,5 +267,5 @@ Si te incorporas al proyecto, en este orden:
 
 ---
 
-**Última actualización de este archivo:** 2026-05-12 (rediseño "Claude Design" completo: 5 fases + blog v3).
+**Última actualización de este archivo:** 2026-07-08 (pase de endurecimiento/QA: 4 críticos + 6 importantes + menores; runtime aclarado a Node standalone; tooling de Fase 8 añadido).
 **Mantenedor:** se actualiza al cerrar cada fase y cuando la realidad del repo se separa de los docs. Si tras tu sesión ha cambiado algo de los puntos 3, 5, 6, 7, 8 o 9, **edítalo** antes de cerrar.
