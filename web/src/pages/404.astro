@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export const prerender = true;
+---
+
+<BaseLayout
+  title="Página no encontrada · gesdiweb"
+  description="La página que buscas no existe o se ha movido."
+  noindex
+>
+  <section class="nf">
+    <div class="nf-eyebrow">Error · 404</div>
+    <h1 class="nf-title">
+      Esta página <em>no existe</em>
+    </h1>
+    <p class="nf-lead">
+      O se ha movido, o el enlace estaba roto. No te preocupes: desde aquí vuelves a lo importante.
+    </p>
+    <nav class="nf-links" aria-label="Enlaces útiles">
+      <a href="/">Volver al inicio</a>
+      <a href="/servicios">Ver servicios</a>
+      <a href="/blog">Ir al blog</a>
+      <a href="/contacto">Contacto</a>
+    </nav>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: 140px 32px 120px;
+  }
+  @media (min-width: 800px) {
+    .nf {
+      padding: 180px 32px 160px;
+    }
+  }
+  .nf-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 40px;
+  }
+  .nf-eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-brand);
+  }
+  .nf-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 12vw, 9rem);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 28px;
+  }
+  .nf-title em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-brand);
+    font-weight: 400;
+  }
+  .nf-lead {
+    max-width: 46ch;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--color-fg-soft);
+    margin-bottom: 48px;
+  }
+  .nf-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .nf-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-fg);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 4px;
+    transition: color 0.3s var(--ease);
+  }
+  .nf-links a::before {
+    content: '→';
+    color: var(--color-brand);
+  }
+  .nf-links a:hover {
+    color: var(--color-brand-hover);
+  }
+</style>
