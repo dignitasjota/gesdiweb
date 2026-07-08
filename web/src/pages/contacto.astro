@@ -55,7 +55,7 @@ const budgets = [
       <div class="ct-form-side">
         <form
           method="POST"
-          action="/contacto"
+          action="/api/contact"
           class="ct-form"
           aria-label="Formulario de contacto"
           data-contact-form
@@ -120,9 +120,9 @@ const budgets = [
             </div>
           </div>
 
-          <div class="ct-field">
-            <label class="ct-label" for="service">Servicio que te interesa</label>
-            <div class="ct-chips" role="radiogroup" aria-labelledby="service-label">
+          <fieldset class="ct-field">
+            <legend class="ct-label">Servicio que te interesa</legend>
+            <div class="ct-chips">
               {
                 services.map((s) => (
                   <label class="ct-chip-wrap">
@@ -136,7 +136,7 @@ const budgets = [
                 <span class="ct-chip">No estoy seguro</span>
               </label>
             </div>
-          </div>
+          </fieldset>
 
           <fieldset class="ct-field">
             <legend class="ct-label">Presupuesto orientativo</legend>
