@@ -1,15 +1,16 @@
 ---
-title: "La Importancia de tener un Blog en tu Estrategia de MarketingOnline"
-excerpt: "Me sorprende que hoy en día, todavía me encuentro hoy en día muchas empresas que pretenden vender y promocionar sus productos o servicios en Internet y no…"
+title: 'La Importancia de tener un Blog en tu Estrategia de MarketingOnline'
+excerpt: 'Me sorprende que hoy en día, todavía me encuentro hoy en día muchas empresas que pretenden vender y promocionar sus productos o servicios en Internet y no…'
 publishedAt: 2018-11-16
 readingMinutes: 4
 categories:
-  - "Desarrollo Páginas web"
+  - 'Desarrollo Páginas web'
 tags: []
 cover: ./imagenes/importancia-blog-marketing-online/marketing-blog-1024x538.jpg
-coverAlt: "importancia-tener-blog"
-author: "Diseño Web Valencia"
+coverAlt: 'importancia-tener-blog'
+author: 'Diseño Web Valencia'
 ---
+
 Me sorprende que hoy en día, todavía me encuentro hoy en día muchas empresas que pretenden vender y promocionar sus productos o servicios en Internet y no templan la posibilidad de tener un blog.  Muchos de estos empresarios, dicen que no les hace falta un blog para poder promocionar su negocio en Internet.
 
 Si eres uno de ellos, hoy te voy a explicar la importancia de tener un blog para llevar a cabo cualquier estrategia de marketing online y qué puede aportar a tu negocio tener un blog.

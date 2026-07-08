@@ -1,16 +1,17 @@
 ---
-title: "Novedades de Facebook que te ayudarán a mejorar tu estrategia online en redes sociales"
-excerpt: "Tu estrategia de redes sociales será mucho más efectiva con estas novedades de Facebook Le preguntes a quien le preguntes, tiene presencia en Internet y más en…"
+title: 'Novedades de Facebook que te ayudarán a mejorar tu estrategia online en redes sociales'
+excerpt: 'Tu estrategia de redes sociales será mucho más efectiva con estas novedades de Facebook Le preguntes a quien le preguntes, tiene presencia en Internet y más en…'
 publishedAt: 2017-03-01
 readingMinutes: 6
 categories:
-  - "Marketing Online"
-  - "Redes Sociales"
+  - 'Marketing Online'
+  - 'Redes Sociales'
 tags: []
 cover: ./imagenes/novedades-facebook/novedades-facebook.jpg
-coverAlt: "novedades-facebook"
-author: "Diseño Web Valencia"
+coverAlt: 'novedades-facebook'
+author: 'Diseño Web Valencia'
 ---
+
 # **Tu estrategia de redes sociales será mucho más efectiva con estas novedades de** **Facebook**
 
 Le preguntes a quien le preguntes, tiene presencia en Internet y más en redes sociales. Son pocas –por no decir poquísimas- las empresas que no están presentes en Redes Sociales, sobre todo en Facebook y Twitter y cada vez más en Instagram. Es cierto que muchas, al estar gestionadas a nivel personal y no profesional, no cuentan con las necesidades básicas cubiertas, como son el perfil bien creado, contenidos llamativos y útiles, etc. Esto puede causar algún que otro problema, pero más bien a nivel de comunicación y de imagen de marca, pero no por eso no se van a beneficiar también de las novedades de Facebook.
@@ -22,6 +23,7 @@ Por supuesto, **las redes sociales van innovando e integrando nuevas utilidades*
 ![novedades-facebook](./imagenes/novedades-facebook/novedades-facebook.jpg)
 
 ## Facebook Stories
+
 Seguramente el tema de las stories os suena más si tenéis también una cuenta de Instagram. Está claro que en Instagram ha triunfado, sobre todo entre los más jóvenes que buscan, constantemente mostrarse de una forma nueva al mundo. Esto, por supuesto, también lo han sabido aprovechar las empresas, ya que Instagram Stories les permitía compartir no solo fotos en tiempo, relativamente real, sino que, podía hacer frente a vídeos en directo, minivídeos diarios, fotos, ubicaciones y menciones… ¡con durabilidad! Sí, como lo lees: **con un tiempo de vida de solo 24h.**
 
 Si no lo sabéis, no hace mucho, Facebook se obsesionó con conseguir Snapchat y, la red social, se negó a unirse al Team Facebook. Desde entonces… ¡todo ha sido intentar parecerse y mejorar esa funcionalidad de Snapchat! Y así lo hizo Facebook: consiguió sacar adelante una versión mejorada de Snapchat que permitía a cualquiera ver todas las Stories, guardadas por 24h exclusivamente y, por supuesto, contactar con la persona que estaba haciendo el vídeo.
@@ -37,6 +39,7 @@ Aunque tienes la opción de [**Your Business Story**](http://www.kupakia.com/yo
 [![business-story-facebook-scalia-gallery-fullwidth](./imagenes/novedades-facebook/your-business-story-facebook-scalia-gallery-fullwidth.jpg)](http://www.kupakia.com/your-business-story-nueva-herramienta-video-en-facebook/)
 
 ## Rol de colaborador de transmisión en Facebook
+
 ¡Cómo no podía ser de otra manera! Aunque las páginas son algo así como el último mono para Facebook, está claro que algo que salvó de “la muerte por aburrimiento” a las páginas. Por eso, hace unos meses, Facebook lanzó su opción de vídeos en directo para que las Fan Page también tuviesen una oportunidad de llamar la atención de sus consumidores y no morir en el intento. Sin embargo, esto no era tan buena idea para las Páginas grandes, con muchos empleados y muchas direcciones estratégicas en cuanto a comunicación diferente. ¿Por qué? Porque para que se pudiese retransmitir desde varios sitios o localizaciones –por ejemplo- el administrador de la página debía de estar físicamente allí o, si no, se debía dar acceso a la página como Administrador, algo que podía comprometer, a veces, la estrategia de la empresa, claro. Esto pasaba, por ejemplo**, muchas veces cuando se intentaban hacer campañas con influencers**, donde la empresa debía cederles derechos para que pudiesen hacer promociones en directo desde su propio canal.
 
 Por eso, una de las novedades de Facebook ha sido lanzar un nuevo rol de página: **el de colaborador de transmisión**. Aunque parezca complejo de entender, no lo es. Lo cierto es que pertencer a este rol es perfecto: puedes acceder a alguna funcionalidades como editor, pero sin tener los mismos permisos y sin alterar el resto de publicaciones. Como con todos los roles de las páginas de Facebook, sigue habiendo un pequeño problema: **tienes que ser amigo de la persona** a la que quieres hacer colaborador Aunque seguramente esto cambie, lo cierto es que puede complicar un poco las cosas en las estrategias online, sin embargo, es algo que –para nuestra tristeza- se escapa a nuestro control.

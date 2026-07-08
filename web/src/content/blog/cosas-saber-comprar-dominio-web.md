@@ -1,16 +1,17 @@
 ---
-title: "Cosas a saber antes de comprar un dominio Web"
-excerpt: "Como Comprar un Dominio WebContenido1 Como Comprar un Dominio Web1.1 1. No te apresures1.2 2. Extensión a escoger1.3 3. El precio del dominio1.4 4. El hosting1."
+title: 'Cosas a saber antes de comprar un dominio Web'
+excerpt: 'Como Comprar un Dominio WebContenido1 Como Comprar un Dominio Web1.1 1. No te apresures1.2 2. Extensión a escoger1.3 3. El precio del dominio1.4 4. El hosting1.'
 publishedAt: 2018-01-17
 readingMinutes: 6
 categories:
-  - "Hosting"
-  - "SEO"
+  - 'Hosting'
+  - 'SEO'
 tags: []
 cover: ./imagenes/cosas-saber-comprar-dominio-web/dominio-web.png
-coverAlt: "comprar-dominio-web"
-author: "Diseño Web Valencia"
+coverAlt: 'comprar-dominio-web'
+author: 'Diseño Web Valencia'
 ---
+
 # Como Comprar un Dominio Web
 
 Comprar un dominio para tu sitio Web es una de las tareas más difíciles de realizar correctamente, normalmente lo primero que hacemos a la hora de crear un sitio Web es comprar el dominio sin ni siquiera haber pensado bien de que vamos a hacer el sitio Web.
@@ -35,9 +36,9 @@ No te preocupes, realmente es muy extraño que nos quiten un nombre de dominio s
 
 En la actualidad existen más de 100 extensiones de dominios, podríamos decir que hay una para cada cosa. Básicamente, de cara al posicionamiento Google las distingue en 3 grupos:
 
--   **Genéricas:** Extensiones que no se orientan a ningún país, posicionan por igual en todos los países. Las más comunes son .com, .net, .info, .org y la mayoría de las nuevas extensiones.
--   **Locales:** Extensiones orientadas a un país en concreto, se dice que posicionan mejor en el país al que apuntan a costa de posicionar algo, pero en otros países a los que no va orientada. Por ejemplo, tenemos .es (España), .cat (Cataluña), .ar (Argentina).
--   **Especiales:** Orientadas a organismos públicos y que no pueden ser registradas por particulares. Por ejemplo, .gob (Gobiernos), .edu (Educación), etc…
+- **Genéricas:** Extensiones que no se orientan a ningún país, posicionan por igual en todos los países. Las más comunes son .com, .net, .info, .org y la mayoría de las nuevas extensiones.
+- **Locales:** Extensiones orientadas a un país en concreto, se dice que posicionan mejor en el país al que apuntan a costa de posicionar algo, pero en otros países a los que no va orientada. Por ejemplo, tenemos .es (España), .cat (Cataluña), .ar (Argentina).
+- **Especiales:** Orientadas a organismos públicos y que no pueden ser registradas por particulares. Por ejemplo, .gob (Gobiernos), .edu (Educación), etc…
 
 Por lo general siempre utilizaremos una extensión genérica salvo que seamos una empresa que únicamente realiza su actividad en un país en concreto. Todas las extensiones genéricas posicionan por igual, pero es mejor siempre que sea posible elegir la .com ya que si el usuario olvida la extensión de tu web la primera que probará será la .com.
 

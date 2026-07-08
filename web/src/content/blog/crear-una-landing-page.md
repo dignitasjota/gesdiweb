@@ -1,16 +1,17 @@
 ---
-title: "7 Herramientas de diseño web para crear una landing page genial"
-excerpt: "Herramientas de diseño web para crear landingsContenido1 Herramientas de diseño web para crear landings1.1 Que son las landings pages1."
+title: '7 Herramientas de diseño web para crear una landing page genial'
+excerpt: 'Herramientas de diseño web para crear landingsContenido1 Herramientas de diseño web para crear landings1.1 Que son las landings pages1.'
 publishedAt: 2016-11-15
 readingMinutes: 3
 categories:
-  - "Desarrollo Páginas web"
-  - "Herramientas de diseño web"
+  - 'Desarrollo Páginas web'
+  - 'Herramientas de diseño web'
 tags: []
 cover: ./imagenes/crear-una-landing-page/cover-generated.jpg
-coverAlt: "7 Herramientas de diseño web para crear una landing page genial — cover de gesdiweb"
-author: "consultor seo valencia"
+coverAlt: '7 Herramientas de diseño web para crear una landing page genial — cover de gesdiweb'
+author: 'consultor seo valencia'
 ---
+
 # Herramientas de diseño web para crear landings
 
 ## Que son las landings pages
@@ -26,6 +27,7 @@ Son una muy buena forma de optimizar los resultados así como de medirlos. Otro 
 Si estáis pensando en **diseñar landing page**, ya sea en única o como test para elegir la que nos de mayor conversión, estas
 
 ## 7 herramientas de diseño web para vuestras landings pages
+
  **[![herramientas-crear-landing](./imagenes/crear-una-landing-page/crear-landing-page.jpg)](./imagenes/crear-una-landing-page/crear-landing-page.jpg)**
 
 ### [Thivethemes Landing Pages](https://thrivethemes.com/landingpages/)
@@ -41,16 +43,21 @@ La **plataforma Wishpond** ofrece un editor “drag & drop” de landing pages m
 **Para marketers más avanzados**, la plataforma ofrece una herramienta de **marketing automation** que permite crear flujos de trabajo para nutrir contactos segmentándolos en distintas listas conectadas a distintas campañas de email.
 
 ### [Visual Composer](http://codecanyon.net/)
+
 Una herramienta de pago aunque su precio no es desorbitado. Es una de las mejores herramientas para crear una landing page para todos los usuarios de WordPress. Es rápido y efectivo ya que su sistema de copia y pega permite personalizarlo todo en un instante.
 
 ### [LanderApp](http://landerapp.com/)
+
 Es una de las herramientas para crear landing pages más conocida. Con ella podrás romper mano en el campo de las landing pages ya que te da **30 días de prueba para que puedas probar** todas las funcionalidades de las que dispone.
 
 ### [Unbounce](http://use.unbounce.com/free-trial-unbounce/?gclid=Cj0KEQjw6vquBRCow62uo-_J_YYBEiQAMO6HilF2XqSGzBD81rxCmbXDqOu2iqIx_4OP7mBxC9wk5FYaAp5z8P8HAQ)
+
 **Conocida por crear landing pages muy potentes**, esta herramienta tiene muchísimas funcionalidades –que pueden incluso llegar a agobiar-. Para los más manitas y exigentes, esta es la mejor herramienta para crear una landing page con textos interactivos, con plugins muy variados y potentes. Lo mejor es que siempre te están dando cursos gratuitos para demostrarte las nuevas funcionalidades y sus posibilidades.
 
 ### [Instapage](https://instapage.com/)
+
 Otra buena herramienta para crear una landing page genial si eres usuario de **WordPress**. Lo mejor de esta herramienta es que es gratis –aunque solo en algunos aspectos-, lo que te permite conocerla mucho y a fondo antes de decidir si es la que más te conviene. Esta es la mejor herramienta para hacer test A/B, integraciones con distintas herramientas o plantillas simplemente llamativas.
 
 ### [LeadPages](https://www.leadpages.net/)
+
 Esta herramienta para crear una landing page es la más utilizada por los marketinianos y emprendedores que no tienen ni idea de programación y/o diseño**. LeadPages te permite utilizar plantillas efectivas y fáciles de completar**. Se puede sincronizar con WordPress y es genial si lo que se busca es ofrecer contenido descargable. ¿La única pega? Que es de pago.

@@ -1,15 +1,16 @@
 ---
-title: "Si eres programador Java, necesitarás un hosting especializado"
-excerpt: "El alojamiento de aplicaciones poco tiene que ver con el alojamiento web, y debido al alto nivel de especialización que requiere, podemos elegir entre una gran…"
+title: 'Si eres programador Java, necesitarás un hosting especializado'
+excerpt: 'El alojamiento de aplicaciones poco tiene que ver con el alojamiento web, y debido al alto nivel de especialización que requiere, podemos elegir entre una gran…'
 publishedAt: 2021-11-05
 readingMinutes: 3
 categories:
-  - "Hosting"
+  - 'Hosting'
 tags: []
 cover: ./imagenes/hosting-java/cover-datacenter-computer-data-firewall-network-rack.jpg
-coverAlt: "datacenter-computer-data-firewall-network-rack"
-author: "Diseño Web Valencia"
+coverAlt: 'datacenter-computer-data-firewall-network-rack'
+author: 'Diseño Web Valencia'
 ---
+
 El alojamiento de aplicaciones poco tiene que ver con el alojamiento web, y debido al alto nivel de especialización que requiere, podemos elegir entre una gran variedad de opciones y proveedores a la hora de buscar alojamiento de aplicaciones.
 
 Estas opciones se reducen drásticamente a la hora de buscar alojamiento de aplicaciones, y las principales soluciones que encontraremos son: un servidor dedicado (con los costes que suponen), o un VPS (una máquina en Cloud).  
@@ -39,6 +40,7 @@ Un corte de energía, ya sea en VPS o en soluciones en la nube, provocará invar
 Todo lo contrario que los planes de ANW para el alojamiento Java.
 
 ## Lo que ofrece una empresa como ANW
+
 ANW cuenta con personal técnico especializado en JAVA, lo que significa que el cliente siempre tendrá el apoyo de un programador JAVA, que puede ayudar tanto en el despliegue de la aplicación como en la personalización de su propio servidor de aplicaciones para satisfacer las necesidades de la aplicación.
 
 ![Server 90389 1280](./imagenes/hosting-java/server-90389_1280-300x200.jpg)Es una empresa de hosting con más de 20 años de experiencia en el sector. Desde 2001 especializada en el alojamiento de aplicaciones JAVA, y  el único proveedor que ofrece [hosting JAVA](https://www.anw.es/alojamiento-web/alojamiento-hosting-java.html) que incluye una máquina virtual totalmente dedicada. Donde el cliente puede incluso instalar el servidor de aplicaciones que desee con la versión de JDK que quiera. Esto implica que el cliente puede personalizar todo el entorno del servicio. Como si tuviera un servidor dedicado, pero con el coste de un hosting compartido.

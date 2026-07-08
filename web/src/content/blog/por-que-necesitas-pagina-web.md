@@ -1,15 +1,16 @@
 ---
-title: "Descubre por qué necesitas una página web"
-excerpt: "¿Tienes una empresa y deseas fortalecerla? Continúa con nosotros y descubrirás claves, consejos y razones que te permitirán abrirte camino en esta era digital…"
+title: 'Descubre por qué necesitas una página web'
+excerpt: '¿Tienes una empresa y deseas fortalecerla? Continúa con nosotros y descubrirás claves, consejos y razones que te permitirán abrirte camino en esta era digital…'
 publishedAt: 2018-04-25
 readingMinutes: 4
 categories:
-  - "Desarrollo Páginas web"
+  - 'Desarrollo Páginas web'
 tags: []
 cover: ./imagenes/por-que-necesitas-pagina-web/marketing-online.jpg
-coverAlt: "marketing-online"
-author: "Diseño Web Valencia"
+coverAlt: 'marketing-online'
+author: 'Diseño Web Valencia'
 ---
+
 ¿Tienes una empresa y deseas fortalecerla? Continúa con nosotros y descubrirás claves, consejos y razones que te permitirán abrirte camino en esta era digital sin fracasar en el intento.
 
 Lo principal al momento de sumarte a las iniciativas virtuales es contar con una buena página web. Si eres de los individuos ortodoxos que considera que eso es innecesario, permite que tumbemos tus prejuicios con una serie de ventajas y beneficios que traen las páginas web a las empresas en nuestros tiempos. Quizá no sólo descubras que esto pudo ser lo que te hizo falta todo este tiempo, sino que además consigas a los profesionales que hagan de todas tus expectativas una realidad.

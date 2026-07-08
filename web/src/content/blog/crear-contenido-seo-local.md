@@ -1,15 +1,16 @@
 ---
-title: "Cómo crear contenido para SEO Local"
-excerpt: "Uno de los segmentos más competidos en la búsqueda orgánica es el SEO Local. Es uno de los más competitivos porque también engloba una gran oportunidad de…"
+title: 'Cómo crear contenido para SEO Local'
+excerpt: 'Uno de los segmentos más competidos en la búsqueda orgánica es el SEO Local. Es uno de los más competitivos porque también engloba una gran oportunidad de…'
 publishedAt: 2018-02-27
 readingMinutes: 6
 categories:
-  - "SEO"
+  - 'SEO'
 tags: []
 cover: ./imagenes/crear-contenido-seo-local/posicionamiento-seo-local-1024x683.jpg
-coverAlt: "posicionamiento-seo-local"
-author: "Diseño Web Valencia"
+coverAlt: 'posicionamiento-seo-local'
+author: 'Diseño Web Valencia'
 ---
+
 Uno de los segmentos más competidos en la búsqueda orgánica es el SEO Local. Es uno de los más competitivos porque también engloba una gran oportunidad de ganar clientes. El [Posicionamiento SEO Local](https://www.codigonexo.com/blog/captacion-de-trafico/seo/posicionamiento-seo-local/) es indispensable para captar clientes potenciales que realicen búsquedas en una zona geográfica determinada. En este artículo te ofrecemos algunos consejos que puedes seguir para conseguir ser de los primeros en los resultados de búsquedas locales.
 
 Lo ideal para esta situación es contar con un negocio físico localizado en una zona geográfica, y una web que sirva de información y/o venta. De esta forma, las personas que busquen el producto o servicio que se tiene disponible en la página web, sabrán que el establecimiento se encuentra cerca de donde están ellos. Y para que este público pueda visualizar el espacio online, es necesario realizar un posicionamiento web efectivo.
@@ -30,10 +31,10 @@ La optimización de los contenidos no solo debe estar enfocada al SEO Local, sin
 
 Competir por una posición elevada es difícil, pero no imposible. Antes de dedicar tiempo al contenido de la web, es necesario seguir las siguientes recomendaciones. Estas son fundamentales para que los esfuerzos sobre el contenido tengan su fruto:
 
--   Asegúrate de que los nombres, direcciones y números de teléfono de los directorios locales son los correctos. Si no apareces en los resultados de búsqueda, tus posibles clientes no podrán encontrarte fácilmente.
--   Crea tu perfil en Google My Business y Bing Places For Business. Utiliza para ello palabras clave relacionadas con el servicio o producto que vendas. Deberás exponer toda la información relevante sobre tu empresa, lo más completa posible. Esto es tanto para el usuario como para Google.
--   Mejora las calificaciones sobre tu negocio para completar de la mejor forma posible el perfil en Google My Business.
--   Producir contenido local, el cual explicamos en el siguiente apartado.
+- Asegúrate de que los nombres, direcciones y números de teléfono de los directorios locales son los correctos. Si no apareces en los resultados de búsqueda, tus posibles clientes no podrán encontrarte fácilmente.
+- Crea tu perfil en Google My Business y Bing Places For Business. Utiliza para ello palabras clave relacionadas con el servicio o producto que vendas. Deberás exponer toda la información relevante sobre tu empresa, lo más completa posible. Esto es tanto para el usuario como para Google.
+- Mejora las calificaciones sobre tu negocio para completar de la mejor forma posible el perfil en Google My Business.
+- Producir contenido local, el cual explicamos en el siguiente apartado.
 
 ## Contenido SEO Local
 
@@ -64,11 +65,11 @@ Posicionarse en los buscadores utilizando contenido es importante, pero no es lo
 
 Más allá de crear contenido optimizado, es necesario centrarse en estrategias orientadas a lo local. Por ejemplo, alguna temáticas que pueden servir para esto son:
 
--   Alojamiento de eventos locales
--   Patrocinar eventos de la localidad
--   Publicar como invitados en blogs ajenos locales
--   Asistir a eventos cercanos y relacionados con el negocio
--   Realizar o visitar conferencias de diferentes organismos relevantes
+- Alojamiento de eventos locales
+- Patrocinar eventos de la localidad
+- Publicar como invitados en blogs ajenos locales
+- Asistir a eventos cercanos y relacionados con el negocio
+- Realizar o visitar conferencias de diferentes organismos relevantes
 
 Son aspectos que pueden adaptarse a cualquier tipo de negocio. Infórmate sobre la industria a la que pertenece tu empresa en la localidad donde se encuentr. Puedes encontrar muchas oportunidades que harán que más personas sepan de tu existencia.
 

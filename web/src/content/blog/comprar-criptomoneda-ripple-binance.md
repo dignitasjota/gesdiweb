@@ -1,15 +1,16 @@
 ---
-title: "Donde Comprar Ripple . La Criptomoneda de Moda"
-excerpt: "Comprar Ripple y otras Criptomonedas en BinanceContenido1 Comprar Ripple y otras Criptomonedas en Binance1.1 ¿Qué es Ripple?1.2 Dónde Comprar Ripple1.2."
+title: 'Donde Comprar Ripple . La Criptomoneda de Moda'
+excerpt: 'Comprar Ripple y otras Criptomonedas en BinanceContenido1 Comprar Ripple y otras Criptomonedas en Binance1.1 ¿Qué es Ripple?1.2 Dónde Comprar Ripple1.2.'
 publishedAt: 2018-01-04
 readingMinutes: 2
 categories:
-  - "Criptomonedas"
+  - 'Criptomonedas'
 tags: []
 cover: ./imagenes/comprar-criptomoneda-ripple-binance/donde-comprar-ripple.jpg
-coverAlt: "donde-comprar-ripple"
-author: "Diseño Web Valencia"
+coverAlt: 'donde-comprar-ripple'
+author: 'Diseño Web Valencia'
 ---
+
 # Comprar Ripple y otras Criptomonedas en Binance
 
 Aquí te dejo un video explicando como aprender a _**comprar en Binance tanto Ripple como cualquier Criptomoneda** enviando etherum desde coinbase_
@@ -47,6 +48,7 @@ Una vez validada has de comprar por ejemplo 100 euros o dolares en ETH ( etherum
 Si no tienes [**cuenta en Binance (pulsa aquí)**](https://www.binance.com/?ref=15701502) Lo más rápido para negociar en Binance es validar únicamente el mail y tu teléfono ( con este paso podrás mover BTC al día) y ahora ya transfieras a tu wallet ETH desde Coinbase o cualquier otra Wallet
 
 ### 3- Comprar Ripple desde Binance
+
 Una vez tengas en tu wallet el saldo en ETH podrás comprar rápidamente, os dejo un pequeño video por si no os aclaráis pero las dos plataformas son bastante intuitivas
 
 Espero que os sirva de utilidad si tenéis alguna duda no dudéis en realizar un comentario

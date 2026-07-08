@@ -1,16 +1,18 @@
 ---
-title: "Los Bancos de Imágenes Gratuitos"
-excerpt: "Descubre los mejores Bancos de Imágenes GratuitosContenido1 Descubre los mejores Bancos de Imágenes Gratuitos1.1 ¿Qué beneficios tienen los bancos de imágenes?"
+title: 'Los Bancos de Imágenes Gratuitos'
+excerpt: 'Descubre los mejores Bancos de Imágenes GratuitosContenido1 Descubre los mejores Bancos de Imágenes Gratuitos1.1 ¿Qué beneficios tienen los bancos de imágenes?'
 publishedAt: 2016-05-11
 readingMinutes: 4
 categories:
-  - "Gestión de contenido"
+  - 'Gestión de contenido'
 tags: []
 cover: ./imagenes/bancos-de-imagenes/cover-generated.jpg
-coverAlt: "Los Bancos de Imágenes Gratuitos — cover de gesdiweb"
-author: "Amparo Arnau"
+coverAlt: 'Los Bancos de Imágenes Gratuitos — cover de gesdiweb'
+author: 'Amparo Arnau'
 ---
+
 # Descubre los mejores Bancos de Imágenes Gratuitos
+
 Aunque no lo parezca, **redactar el contenido es la parte más sencilla** a la hora de crear contenido único y exclusivo en vuestro blog ya que las complicaciones llegan cuando estamos buscando imágenes y/o recursos gráficos para incluirlos con nuestros textos.
 
 Teniendo en cuenta que vivimos en una era completamente visual, es muy lógico que el usuario se fije antes en las imágenes que en los textos y más si estas están a la derecha. Los recursos gráficos que uses hablarán de tu profesionalidad y de exclusividad por eso es tan importante cuidarlas al máximo, siempre dentro de nuestras posibilidades.
@@ -18,6 +20,7 @@ Teniendo en cuenta que vivimos en una era completamente visual, es muy lógico q
 Es muy normal que recurramos con mucha más frecuencia de la que queremos, a los buscadores de imágenes como Google, Yahoo y Bing, por ejemplo. Sin embargo muchos no saben los riesgos que esto supone y cómo puede verse esto para el usuario. Por eso, lo mejor que podemos hacer es **usar imágenes de los bancos de imágenes.**
 
 ## ¿Qué beneficios tienen los bancos de imágenes?
+
 Desde hace unos años**, el blogging se ha puesto muy de moda** entre las empresas y los particulares. Esto se debe a que es lo que más contenido genera y por lo tanto es la mejor solución para empezar a trabajar el marketing de contenidos y mejorar así el SEO con las palabras clave. Por supuesto, **nuestros artículos, descripciones y productos tienen que ir siempre acompañados de una imagen**. Esto, en general se debe a que de un plumazo, con las imágenes los usuarios se pueden hacer una idea esencial y básica de lo que se va a trabajar en el artículo en cuestión.
 
 [![bancos-imagenes-gratuitos](./imagenes/bancos-de-imagenes/bancos-imagenes-gratuitos.jpg)](./imagenes/bancos-de-imagenes/bancos-imagenes-gratuitos.jpg)
@@ -35,6 +38,7 @@ El único inconveniente de esto es que, en general, **los bancos de imágenes so
 Para que todos podáis utilizar los bancos de imágenes, os dejamos a continuación **los bancos de imágenes gratuitos más conocidos.**
 
 ## Los 6 bancos de imágenes gratuitos más conocicos
+
 ### [**Unsplash**](http://https://unsplash.com/)
 
 En unsplash podemos encontrar miles de imágenes para usarlas, como bien dice su eslogan, para lo que queramos. Sin embargo, **unsplash tiene un gran defecto: no tiene buscador**. Aún así sigue siendo uno de los mejores **bancos de imágenes gratuitos**, sin duda alguna.
@@ -57,7 +61,7 @@ Otro de los **bancos de imágenes más valorados** ya que cuenta con una amplia 
 
 ### ¿Te ha sabido a poco es te post tal vez te interesen estos?
 
-### [**25 Bancos de Imágenes Gratuitas de Alta Resolución y Calidad. Actualizado 2016**](http://www.marketingandweb.es/marketing/bancos-de-imagenes-gratis "banco de imágenes gratis") 
+### [**25 Bancos de Imágenes Gratuitas de Alta Resolución y Calidad. Actualizado 2016**](http://www.marketingandweb.es/marketing/bancos-de-imagenes-gratis 'banco de imágenes gratis') 
 
 [![bancos-imagenes-gratis](./imagenes/bancos-de-imagenes/mejores-bancos-de-imagenes-gratis-alta-resolucion.png)](./imagenes/bancos-de-imagenes/mejores-bancos-de-imagenes-gratis-alta-resolucion.png)
 

@@ -1,16 +1,17 @@
 ---
-title: "El mantenimiento del sistema operativo Windows"
-excerpt: "Mejora el mantenimiento de tu sistema operativo Windows Hay una máxima en ingeniería informática que afirma que el software no se desgasta, pero se deteriora."
+title: 'El mantenimiento del sistema operativo Windows'
+excerpt: 'Mejora el mantenimiento de tu sistema operativo Windows Hay una máxima en ingeniería informática que afirma que el software no se desgasta, pero se deteriora.'
 publishedAt: 2015-06-17
 readingMinutes: 2
 categories:
-  - "Mantenimiento informático"
-  - "Windows"
+  - 'Mantenimiento informático'
+  - 'Windows'
 tags: []
 cover: ./imagenes/sistema-operativo-windows/cover-generated.jpg
-coverAlt: "El mantenimiento del sistema operativo Windows — cover de gesdiweb"
-author: "Amparo Arnau"
+coverAlt: 'El mantenimiento del sistema operativo Windows — cover de gesdiweb'
+author: 'Amparo Arnau'
 ---
+
 ## Mejora el mantenimiento de tu sistema operativo Windows
 
 Hay una máxima en ingeniería informática que afirma que el software no se desgasta, pero se deteriora. Cuando se acaba de instalar el **sistema operativo Windows el ordenador funciona a pleno rendimiento**; luego, se van instalando y actualizando programas a los que el usuario, ya sea consciente o inconscientemente, da permiso para modificar y configurar el **sistema operativo Windows**. El mantenimiento del PC es necesario porque estas configuraciones son las que, poco a poco, van deteriorando el sistema operativo, volviéndolo más lento e inestable.

@@ -4,8 +4,7 @@ export type ServiceEntry = CollectionEntry<'services'>;
 export type ProjectEntry = CollectionEntry<'portfolio'>;
 export type PostEntry = CollectionEntry<'blog'>;
 
-const isPublished = (e: { data: { status?: string } }) =>
-  e.data.status !== 'draft';
+const isPublished = (e: { data: { status?: string } }) => e.data.status !== 'draft';
 
 // ─── Services ────────────────────────────────────────────
 
@@ -14,9 +13,7 @@ export async function getOrderedServices(): Promise<ServiceEntry[]> {
   return all.sort((a, b) => a.data.order - b.data.order);
 }
 
-export async function getServiceById(
-  id: string,
-): Promise<ServiceEntry | undefined> {
+export async function getServiceById(id: string): Promise<ServiceEntry | undefined> {
   const all = await getCollection('services');
   return all.find((s) => s.id === id);
 }
@@ -33,9 +30,7 @@ export async function getFeaturedProjects(): Promise<ProjectEntry[]> {
   return all.filter((p) => p.data.featured);
 }
 
-export async function getProjectById(
-  id: string,
-): Promise<ProjectEntry | undefined> {
+export async function getProjectById(id: string): Promise<ProjectEntry | undefined> {
   const all = await getCollection('portfolio');
   return all.find((p) => p.id === id);
 }
@@ -44,10 +39,7 @@ export async function getProjectById(
 
 export async function getAllPosts(): Promise<PostEntry[]> {
   const all = await getCollection('blog', isPublished);
-  return all.sort(
-    (a, b) =>
-      b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
-  );
+  return all.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 }
 
 export async function getRecentPosts(limit = 3): Promise<PostEntry[]> {
@@ -55,9 +47,7 @@ export async function getRecentPosts(limit = 3): Promise<PostEntry[]> {
   return all.slice(0, limit);
 }
 
-export async function getPostById(
-  id: string,
-): Promise<PostEntry | undefined> {
+export async function getPostById(id: string): Promise<PostEntry | undefined> {
   const all = await getCollection('blog');
   return all.find((p) => p.id === id);
 }
