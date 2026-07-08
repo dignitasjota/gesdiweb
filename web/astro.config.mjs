@@ -13,6 +13,10 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   trailingSlash: 'never',
+  // Rechaza POST/PUT/... form-encoded cuya cabecera Origin no coincida con el
+  // host. Protege el endpoint de contacto (/api/contact) contra CSRF/spam
+  // cross-site. Solo afecta a rutas renderizadas bajo demanda.
+  security: { checkOrigin: true },
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',

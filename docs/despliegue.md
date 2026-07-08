@@ -284,11 +284,49 @@ Pestaña **SSL**:
 - **I Agree to the Let's Encrypt Terms of Service:** ✅
 - Save
 
-### 7.3 — Verificar
+### 7.3 — Cabeceras de seguridad y cache de assets (Advanced)
+
+> **Por qué aquí y no en la app.** Al retirar el nginx interno, las cabeceras de
+> seguridad que antes ponía ese nginx se perdieron. La app repone las 4 vía
+> middleware (`web/src/middleware.ts`), pero el middleware **solo se ejecuta en
+> las rutas dinámicas** (`/api/*`): las páginas llevan `prerender = true` y se
+> sirven como HTML estático sin pasar por él. Por eso las cabeceras del sitio
+> completo se ponen en NPM, que está delante de todas las respuestas.
+
+NPM → el proxy host → pestaña **Advanced** → **Custom Nginx Configuration**.
+NPM usa OpenResty (incluye `headers-more`), así que `more_set_headers` fija la
+cabecera sin duplicar la que ya emite la app en `/api/*`:
+
+```nginx
+# ── Cabeceras de seguridad (todo el sitio) ──
+more_set_headers "X-Content-Type-Options: nosniff";
+more_set_headers "X-Frame-Options: SAMEORIGIN";
+more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+more_set_headers "Permissions-Policy: geolocation=(), camera=(), microphone=()";
+
+# ── Cache largo para assets con hash en el nombre (inmutables) ──
+location /_astro/ {
+    proxy_pass http://gesdiweb_web:4321;
+    more_set_headers "Cache-Control: public, max-age=31536000, immutable";
+}
+
+# ── Fuentes self-hosted ──
+location ~* \.(woff|woff2|ttf|otf|eot)$ {
+    proxy_pass http://gesdiweb_web:4321;
+    more_set_headers "Cache-Control: public, max-age=31536000, immutable";
+}
+```
+
+> Ajustar `gesdiweb_web` si cambiaste el `container_name`. El `proxy_pass` en los
+> bloques `location` es necesario porque al declarar un `location` propio se
+> anula el `proxy_pass` global que NPM genera para `/`.
+
+### 7.4 — Verificar
 
 ```bash
 curl -I https://new.gesdiweb.es
-# debe responder 200 con header HSTS
+# debe responder 200 con header HSTS y las 4 cabeceras de seguridad
+curl -sI https://new.gesdiweb.es | grep -iE "x-frame|x-content-type|referrer|permissions"
 ```
 
 Abrir `https://new.gesdiweb.es` en el navegador → debería cargar la web con SSL válido.
