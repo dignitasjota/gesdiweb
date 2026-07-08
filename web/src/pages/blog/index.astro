@@ -11,18 +11,20 @@ const allPosts = await getAllPosts();
 const featured = allPosts[0];
 const rest = allPosts.slice(1);
 
-// Categorías únicas + "Todos"
+// Categorías y contadores se calculan sobre `rest` (los posts realmente
+// filtrables en la rejilla); el destacado se muestra aparte y no entra en el
+// filtro, así que incluirlo descuadraría los números.
 const categoriesSet = new Set<string>();
-for (const post of allPosts) {
+for (const post of rest) {
   for (const cat of post.data.categories ?? []) categoriesSet.add(cat);
 }
 const categories = ['Todos', ...Array.from(categoriesSet).sort()];
 
 // Contador por categoría
-const counts: Record<string, number> = { Todos: allPosts.length };
+const counts: Record<string, number> = { Todos: rest.length };
 for (const cat of categories) {
   if (cat === 'Todos') continue;
-  counts[cat] = allPosts.filter((p) => p.data.categories?.includes(cat)).length;
+  counts[cat] = rest.filter((p) => p.data.categories?.includes(cat)).length;
 }
 
 const lastDate = allPosts[0] ? formatDateLong(allPosts[0].data.publishedAt) : '';

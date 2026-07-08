@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import logoMark from '../../assets/logo-mark.png';
+
 const navLinks = [
   { href: '/servicios', label: 'Servicios' },
   { href: '/portfolio', label: 'Trabajos' },
@@ -14,12 +17,13 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 <header class="site-header">
   <div class="site-header-inner">
     <a href="/" class="site-header-logo" aria-label="gesdiweb · ir a la home">
-      <img
-        src="/logo-mark.png"
+      <Image
+        src={logoMark}
         alt="gesdiweb"
-        width="397"
-        height="92"
+        width={397}
+        height={92}
         class="site-header-logo-img"
+        loading="eager"
         decoding="sync"
         fetchpriority="high"
       />
