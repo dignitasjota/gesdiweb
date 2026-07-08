@@ -37,15 +37,15 @@ Astro arrancará en `http://localhost:4321` con hot reload.
 
 ## Construir la imagen Docker (producción)
 
-```bash
-docker compose build
-```
+La app corre como **servidor Node standalone** (Astro `output: 'server'`) en el
+puerto **4321** dentro del contenedor. No hay nginx interno sirviendo estáticos.
 
-Para probar la imagen de producción en local:
+Para construir y probar la imagen de producción en local:
 
 ```bash
-docker run --rm -p 8080:80 gesdiweb-web
-# y abrir http://localhost:8080
+docker compose -f docker-compose.yml -f docker-compose.dev.yml build
+RESEND_API_KEY=re_xxx docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# y abrir http://localhost:8090  (mapeado a :4321 del contenedor)
 ```
 
 ## Documentación

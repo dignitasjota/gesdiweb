@@ -110,14 +110,14 @@ Internet
               │  Red Docker     │
               │                 │
               │ ┌─────────────┐ │
-              │ │   web       │ │  ← Astro estático
-              │ │ (nginx)     │ │     servido por nginx
-              │ └─────────────┘ │     puerto interno 80
+              │ │   web       │ │  ← Astro server
+              │ │ (node 22)   │ │     standalone
+              │ └─────────────┘ │     puerto interno 4321
               │                 │
               └─────────────────┘
 ```
 
-NPM redirige `gesdiweb.es:443` → `web:80` dentro de la red Docker. SSL lo gestiona NPM. El contenedor `web` solo sirve archivos estáticos generados por Astro en build time.
+NPM redirige `gesdiweb.es:443` → `web:4321` dentro de la red Docker. SSL lo gestiona NPM. El contenedor `web` corre un servidor Node standalone (`@astrojs/node`) que sirve el HTML+assets prerenderizados y además atiende el endpoint dinámico `/api/contact`.
 
 **Lo bueno:** no necesitamos Caddy ni configurar SSL a mano. NPM ya hace ese trabajo y tú lo gestionas desde su panel.
 
@@ -192,9 +192,9 @@ Definiremos cuál en Fase 8.
 
 ## 6. Por qué este enfoque es bueno para SEO y rendimiento
 
-- El contenedor `web` sirve **HTML estático generado en build time** por Astro. No hay PHP, no hay BD viva, no hay procesos lentos en cada request.
+- El contenedor `web` sirve **HTML prerenderizado en build time** por Astro (todas las páginas llevan `prerender = true`). No hay PHP, no hay BD viva; solo `/api/contact` se renderiza bajo demanda.
 - Tiempo de respuesta típico: **< 50ms** desde el servidor.
-- nginx interno cachea agresivamente, sirve gzip/brotli, define headers de cache largos para assets con hash.
+- El cache largo de assets con hash y la compresión gzip/brotli se configuran en **Nginx Proxy Manager** (el reverse proxy que sustituyó al nginx interno). Las cabeceras de seguridad también se ponen ahí (ver `docs/despliegue.md`).
 - Cada despliegue genera una imagen nueva con todo el sitio dentro. Rollback = volver a la imagen anterior. No hay BD que migrar.
 
 ---

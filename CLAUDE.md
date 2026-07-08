@@ -49,7 +49,7 @@
 | DX (formato + hooks) | Prettier 3.8 + plugin-astro + Husky + lint-staged | — | Hook `pre-commit` filtra `web/` y delega a lint-staged. `core.hooksPath = .husky` a nivel repo |
 | Updates de deps | Renovate | — | Lunes antes de las 6am · agrupa patch+minor · majors críticos a revisión manual |
 | Reverse proxy + SSL | **Nginx Proxy Manager** existente en el VPS | — | Ya desplegado en Hetzner. SSL Let's Encrypt automático |
-| Runtime contenedor | **nginx 1.27 alpine** | — | Sirve los archivos estáticos generados por Astro |
+| Runtime contenedor | **node 22 alpine** (Astro server standalone) | — | `@astrojs/node` en modo standalone sirve HTML+assets+API en el puerto `4321`. No hay nginx interno; las cabeceras de seguridad y el cache de assets se ponen en Nginx Proxy Manager (ver `docs/despliegue.md`) |
 | Base de imagen build | **node 22 alpine** | — | Multi-stage Dockerfile |
 | Orquestación | Docker Compose | — | |
 | VPS producción | Hetzner `157.180.44.59` (8GB / 80GB → migrará a 64GB) | — | Ya alquilado |
@@ -83,9 +83,10 @@ Detalle completo en [`docs/decisiones.md`](docs/decisiones.md).
                        ▼  (red docker `npm_default`)
             ┌──────────────────────┐
             │ Contenedor `web`     │
-            │ - nginx 1.27 alpine  │
-            │ - sirve /dist        │
-            │   (HTML estático)    │
+            │ - node 22 alpine     │
+            │ - Astro server       │
+            │   standalone :4321   │
+            │   (HTML+assets+API)  │
             └──────────────────────┘
 ```
 
