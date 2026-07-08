@@ -183,10 +183,11 @@ export const blogPostingSchema = (params: {
   datePublished: params.publishedAt.toISOString(),
   dateModified: (params.updatedAt ?? params.publishedAt).toISOString(),
   inLanguage: 'es-ES',
+  // Byline del post. Sin `url`: los autores son roles del estudio, no personas
+  // con página propia, así que apuntar a la home sería una afirmación falsa.
   author: {
     '@type': 'Person',
     name: params.author,
-    url: SITE_URL,
   },
   publisher: { '@id': `${SITE_URL}/#organization` },
   mainEntityOfPage: {
