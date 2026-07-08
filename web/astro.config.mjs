@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import node from '@astrojs/node';
 import tailwindcss from '@tailwindcss/vite';
+import rehypeExternalLinks from 'rehype-external-links';
 
 export default defineConfig({
   site: 'https://gesdiweb.es',
@@ -17,6 +18,11 @@ export default defineConfig({
   // host. Protege el endpoint de contacto (/api/contact) contra CSRF/spam
   // cross-site. Solo afecta a rutas renderizadas bajo demanda.
   security: { checkOrigin: true },
+  // Los enlaces externos del contenido (blog) se abren en pestaña nueva con
+  // rel de seguridad. MDX hereda esta config de markdown por defecto.
+  markdown: {
+    rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }]],
+  },
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',
