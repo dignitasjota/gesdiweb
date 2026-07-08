@@ -625,6 +625,7 @@ function categoryInitial(cats?: string[]) {
     });
   }
 
-  setupBlogFilter();
+  // Solo astro:page-load (también dispara en la carga inicial); la llamada
+  // directa duplicaría los listeners de los botones de filtro.
   document.addEventListener('astro:page-load', setupBlogFilter);
 </script>

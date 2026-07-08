@@ -279,6 +279,7 @@ const navColumns = [
     btn.addEventListener('mousemove', onMove);
     btn.addEventListener('mouseleave', onLeave);
   }
-  setupMagnetic();
+  // Solo astro:page-load (también dispara en la carga inicial); llamarlo además
+  // de forma directa duplicaría los listeners sobre el botón.
   document.addEventListener('astro:page-load', setupMagnetic);
 </script>

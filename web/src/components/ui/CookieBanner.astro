@@ -403,11 +403,9 @@
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    // Solo astro:page-load: también dispara en la carga inicial, así que
+    // inicializar además con readyState/DOMContentLoaded duplicaría el listener
+    // de click sobre el banner (los toggles se invertirían dos veces).
     document.addEventListener('astro:page-load', init);
   })();
 </script>

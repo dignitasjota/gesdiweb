@@ -909,20 +909,23 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
 </style>
 
 <script>
-  function setupPostExtras() {
-    // Reading progress bar
+  // Reading progress: el listener va sobre window (persiste entre navegaciones),
+  // así que se registra UNA sola vez y re-consulta la barra de la página actual
+  // en cada scroll (registrarlo por página lo acumularía).
+  function updateProgress() {
     const bar = document.querySelector<HTMLElement>('[data-post-progress]');
-    if (bar) {
-      const onScroll = () => {
-        const h = document.documentElement;
-        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-        bar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    }
+    if (!bar) return;
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    bar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
 
-    // Copiar link
+  function setupPostExtras() {
+    // Recalcula la barra al entrar en cada post.
+    updateProgress();
+
+    // Copiar link (listener sobre elemento fresco de cada navegación).
     const copyBtn = document.querySelector<HTMLAnchorElement>('[data-copy-link]');
     if (copyBtn) {
       copyBtn.addEventListener('click', async (e) => {
@@ -941,6 +944,6 @@ const onDark = color === '#0a0a0a' || color === '#1a1a1a';
     }
   }
 
-  setupPostExtras();
+  // Solo astro:page-load (también dispara en la carga inicial).
   document.addEventListener('astro:page-load', setupPostExtras);
 </script>

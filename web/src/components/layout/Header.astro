@@ -318,6 +318,21 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 </style>
 
 <script>
+  // Cierra el menú móvil consultando el DOM actual (los nodos se reemplazan en
+  // cada navegación con ClientRouter, así que no cacheamos referencias aquí).
+  function closeMobileMenu() {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-mobile-menu-toggle]');
+    const menu = document.getElementById('mobile-menu');
+    if (!toggle || !menu) return;
+    menu.dataset.open = 'false';
+    menu.setAttribute('aria-hidden', 'true');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Abrir menú');
+    document.body.dataset.mobileMenuOpen = '';
+    toggle.querySelector<SVGElement>('[data-icon-open]')?.classList.remove('hidden');
+    toggle.querySelector<SVGElement>('[data-icon-close]')?.classList.add('hidden');
+  }
+
   function setupMobileMenu() {
     const toggle = document.querySelector<HTMLButtonElement>('[data-mobile-menu-toggle]');
     const menu = document.getElementById('mobile-menu');
@@ -342,14 +357,20 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
     menu
       .querySelectorAll('a')
       .forEach((link) => link.addEventListener('click', () => setOpen(false)));
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menu.dataset.open === 'true') setOpen(false);
-    });
-
-    document.addEventListener('astro:before-swap', () => setOpen(false));
   }
 
-  setupMobileMenu();
+  // Listeners a nivel de document: se registran UNA sola vez porque `document`
+  // persiste entre navegaciones con ClientRouter (registrarlos en cada
+  // astro:page-load los acumularía).
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.getElementById('mobile-menu')?.dataset.open === 'true') {
+      closeMobileMenu();
+    }
+  });
+  document.addEventListener('astro:before-swap', closeMobileMenu);
+
+  // La inicialización por página va SOLO en astro:page-load (que también se
+  // dispara en la carga inicial). Los nodos toggle/menu son nuevos en cada
+  // navegación, así que sus listeners se reenganchan sin fugas.
   document.addEventListener('astro:page-load', setupMobileMenu);
 </script>
