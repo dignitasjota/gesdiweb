@@ -1,24 +1,25 @@
 ---
-title: "El algoritmo Google Pigeon, SEO para búsquedas locales"
-excerpt: "Mejora el SEO local con Search Console y Google trendsContenido1 Mejora el SEO local con Search Console y Google trends1.1 ¿Que es Google pigeon?1."
+title: 'El algoritmo Google Pigeon, SEO para búsquedas locales'
+excerpt: 'Mejora el SEO local con Search Console y Google trendsContenido1 Mejora el SEO local con Search Console y Google trends1.1 ¿Que es Google pigeon?1.'
 publishedAt: 2016-09-12
 readingMinutes: 3
 categories:
-  - "SEO"
+  - 'SEO'
 tags: []
 cover: ./imagenes/google-pigeon/google-pigeon.jpg
-coverAlt: "Algoritmo de Google Pigeo"
-author: "consultor seo valencia"
+coverAlt: 'Algoritmo de Google Pigeo'
+author: 'consultor seo valencia'
 ---
+
 # Mejora el SEO local con Search Console y Google trends
 
-**Los nuevos cambios que realizó el algoritmo de google repercutieron en las búsquedas a nivel local**, la actualización es de finales de 2014, o sea que google añadió otro animalito más, dentro de lo que ya se denomina \\”el zoo\\” de la compañía, puesto que cada uno de los algoritmos de los que se vale para optimizar las búsquedas lleva el nombre de un animal. En este caso, los más beneficiados fueron directorios que muestran búsquedas de índole local como [**Yelp**](http://www.yelp.es/ "directorio seo local"), **del cual se dice que es el principal responsable de que se haya producido el cambio al algoritmo Google Pigeon**.
+**Los nuevos cambios que realizó el algoritmo de google repercutieron en las búsquedas a nivel local**, la actualización es de finales de 2014, o sea que google añadió otro animalito más, dentro de lo que ya se denomina \\”el zoo\\” de la compañía, puesto que cada uno de los algoritmos de los que se vale para optimizar las búsquedas lleva el nombre de un animal. En este caso, los más beneficiados fueron directorios que muestran búsquedas de índole local como [**Yelp**](http://www.yelp.es/ 'directorio seo local'), **del cual se dice que es el principal responsable de que se haya producido el cambio al algoritmo Google Pigeon**.
 
 [![Algoritmo de Google Pigeo](./imagenes/google-pigeon/google-pigeon.jpg)](./imagenes/google-pigeon/google-pigeon.jpg)
 
 ## ¿Que es Google pigeon?
 
-Los cambios del algoritmo de **Google Pigeon poseen como objetivo que los negocios locales**, que serán los que se vean afectados de manera negativa, **[desarrollen más su SEO](https://www.gesdiweb.es/posicionamiento-web-valencia/)** si no quieren ver cómo irremediablemente se hunden en las últimas posiciones de los resultados de búsqueda. De este modo se tendrán que seguir las condiciones que **impone el algoritmo Google Pigeon para optimizar una página**. Tal vez se tenga que recurrir igualmente a alguna campaña de pago para recuperar algunas posiciones, al menos al principio. Algunos se han atrevido a indicar que se trata de una vuelta de tuerca más del gigante de Internet para **conseguir aumentar el número de campañas locales de Adwords**.
+Los cambios del algoritmo de **Google Pigeon poseen como objetivo que los negocios locales**, que serán los que se vean afectados de manera negativa, **[desarrollen más su SEO](/servicios/posicionamiento-web)** si no quieren ver cómo irremediablemente se hunden en las últimas posiciones de los resultados de búsqueda. De este modo se tendrán que seguir las condiciones que **impone el algoritmo Google Pigeon para optimizar una página**. Tal vez se tenga que recurrir igualmente a alguna campaña de pago para recuperar algunas posiciones, al menos al principio. Algunos se han atrevido a indicar que se trata de una vuelta de tuerca más del gigante de Internet para **conseguir aumentar el número de campañas locales de Adwords**.
 
 Sea como sea, **la realidad es que el algoritmo de Google Pigeon vino para quedarse** e **incrementar así la calidad de los resultados seo locales**, algo que desde hace tiempo los de Mountain View atienden con gran interés.
 

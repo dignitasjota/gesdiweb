@@ -1,21 +1,22 @@
 ---
-title: "Herramientas de curación de contenidos para el blog"
-excerpt: "5 Herramientas de curación de contenidos para el blogContenido1 5 Herramientas de curación de contenidos para el blog1.1 BuzzSumo1.2 Google Alerts1.3 Emaze1."
+title: 'Herramientas de curación de contenidos para el blog'
+excerpt: '5 Herramientas de curación de contenidos para el blogContenido1 5 Herramientas de curación de contenidos para el blog1.1 BuzzSumo1.2 Google Alerts1.3 Emaze1.'
 publishedAt: 2017-01-04
 readingMinutes: 5
 categories:
-  - "Gestión de contenido"
-  - "Marketing Online"
+  - 'Gestión de contenido'
+  - 'Marketing Online'
 tags: []
 cover: ./imagenes/curacion-contenidos-blog/aumentar-seguidores-redes-sociales.jpg
-coverAlt: "marketing-online-depuracion-redes"
-author: "Amparo Arnau"
+coverAlt: 'marketing-online-depuracion-redes'
+author: 'Amparo Arnau'
 ---
+
 # 5 Herramientas de curación de contenidos para el blog
 
-Muchas veces, sobre todo las empresas pequeñas, deciden **abrir un blog porque es lo que se dice que Google más valora**. No están desencaminados ya que si ademas quieres monetizar con **adsense** (publicidad de google) hay plugins de wordpress como **[adsensei](https://www.gesdiweb.es/adsensei-monetizar-adsense/)** que te ayudarán a monetizar.
+Muchas veces, sobre todo las empresas pequeñas, deciden **abrir un blog porque es lo que se dice que Google más valora**. No están desencaminados ya que si ademas quieres monetizar con **adsense** (publicidad de google) hay plugins de wordpress como **[adsensei](/blog/adsensei-monetizar-adsense)** que te ayudarán a monetizar.
 
-Es cierto que **los blogs son un recurso perfecto** para estar generando en **webs un movimiento constante de contenido**, algo que sin ellos no podríamos tener. El problema es que muchos **abren blogs creyendo que realmente van a poder generar contenido** de forma regular y luego se percatan de que esto no es así y se encuentran con el problema de no saber [como aumentar el tráfico del blog](https://www.gesdiweb.es/aumentar-visitas-blog/). Se suele emperar con mucha energía, muchas ideas sobre las que escribir y muchas cosas que decir hasta que nos damos cuenta de que el tiempo que tenemos es limitado y que, al final, es mejor invertirlo en otro tipo de tareas para que nuestra tienda online funcione mejor.
+Es cierto que **los blogs son un recurso perfecto** para estar generando en **webs un movimiento constante de contenido**, algo que sin ellos no podríamos tener. El problema es que muchos **abren blogs creyendo que realmente van a poder generar contenido** de forma regular y luego se percatan de que esto no es así y se encuentran con el problema de no saber [como aumentar el tráfico del blog](/blog/aumentar-visitas-blog). Se suele emperar con mucha energía, muchas ideas sobre las que escribir y muchas cosas que decir hasta que nos damos cuenta de que el tiempo que tenemos es limitado y que, al final, es mejor invertirlo en otro tipo de tareas para que nuestra tienda online funcione mejor.
 
 **Para redactar algo desde cero hay que tener además de mucha paciencia, ingenio.** No es fácil crear una historia sobre un tema ya existente y que nos salga perfecto. La redacción y la invención de textos no es algo que a todo el mundo se le dé bien, por eso existe la curación de contenido. El content curator, es aquella persona que se dedica a la mejora y reescritura de contenidos ya existentes, haciéndolos únicos pero siempre con una base principal.
 

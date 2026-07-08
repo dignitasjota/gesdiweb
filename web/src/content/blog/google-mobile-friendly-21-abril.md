@@ -1,19 +1,21 @@
 ---
-title: "Cómo ha afectado el cambio de Google del día 21 de abril a las búsquedas móviles"
-excerpt: "Algoritmo de google mobile friendly Caso Real de como ha afectado el cambio de google Todos los que nos dedicamos al mundo del marketing online y en concreto…"
+title: 'Cómo ha afectado el cambio de Google del día 21 de abril a las búsquedas móviles'
+excerpt: 'Algoritmo de google mobile friendly Caso Real de como ha afectado el cambio de google Todos los que nos dedicamos al mundo del marketing online y en concreto…'
 publishedAt: 2015-04-21
 readingMinutes: 4
 categories:
-  - "SEO"
+  - 'SEO'
 tags: []
 cover: ./imagenes/google-mobile-friendly-21-abril/diseno-web-valencia.jpg
-coverAlt: "paginas-web-valencia"
-author: "consultor seo valencia"
+coverAlt: 'paginas-web-valencia'
+author: 'consultor seo valencia'
 ---
+
 # Algoritmo de google mobile friendly
 
 ## Caso Real de como ha afectado el cambio de google
-Todos los que nos dedicamos al mundo del marketing online y en concreto al SEO, hemos andado algo de cabeza estos últimos meses adaptando algunas webs de nuestros clientes para intentar llegar a la fecha del hoy **21 de abril, donde google en teoría aplicaría su algoritmo para dispositivos móviles**, señores _**s****_olo_ para dispositivos móviles,** no tabletas ni pcs_, además también hay gente que se ha armado un poco de lío con la **usabilidad web**,  el [mobile-friendly y el responsive](https://www.gesdiweb.es/mobile-friendly/ "Mobile Friendly, ¿sí o no?") .
+
+Todos los que nos dedicamos al mundo del marketing online y en concreto al SEO, hemos andado algo de cabeza estos últimos meses adaptando algunas webs de nuestros clientes para intentar llegar a la fecha del hoy **21 de abril, donde google en teoría aplicaría su algoritmo para dispositivos móviles**, señores _**s\*\***\_olo_ para dispositivos móviles,** no tabletas ni pcs\_, además también hay gente que se ha armado un poco de lío con la **usabilidad web\*\*,  el [mobile-friendly y el responsive](/blog/usabilidad-web-mobile-friendly 'Mobile Friendly, ¿sí o no?') .
 
 [![paginas-web-valencia](./imagenes/google-mobile-friendly-21-abril/diseno-web-valencia.jpg)](./imagenes/google-mobile-friendly-21-abril/diseno-web-valencia.jpg)
 
@@ -27,7 +29,7 @@ Otra de las páginas que estoy monitorizando tiene un tráfico de 500 visitas di
 
 **Seguimiento día 23 de abril**
 
-Bueno hoy las posiciones en la página que estoy trackeando (de la que podéis ver la tabla y comprobar que página es semrush) siguen sin moverse, por tanto claramente no se esta aplicando y la perdida de tráfico de la otra página es por la pérdida de la primera posición, por tanto voy a cambiar de ejemplo, he cogido una página más importante **amantis.net**, con 22000 visitas de media, 92% en España y al que también se le hace addwords con 1300 visitas diarias, aquí podéis [consultar que efectivamente no se adapta a móviles](https://www.google.com/webmasters/tools/mobile-friendly/ "comprobar mobile friendly") y si miráis [**semrush**](http://es.semrush.com "semrush") podéis ver que no ha perdido posiciones ni tráfico y que tiene un tráfico estimado de 15000 dólares, me parece un ejemplo interesante y mañana pasaré las estadísticas del track de móvil y pc, por el momento no se ha visto afectada, se lo toman con tranquilidad, mañana seguimos.
+Bueno hoy las posiciones en la página que estoy trackeando (de la que podéis ver la tabla y comprobar que página es semrush) siguen sin moverse, por tanto claramente no se esta aplicando y la perdida de tráfico de la otra página es por la pérdida de la primera posición, por tanto voy a cambiar de ejemplo, he cogido una página más importante **amantis.net**, con 22000 visitas de media, 92% en España y al que también se le hace addwords con 1300 visitas diarias, aquí podéis [consultar que efectivamente no se adapta a móviles](https://www.google.com/webmasters/tools/mobile-friendly/ 'comprobar mobile friendly') y si miráis [**semrush**](http://es.semrush.com 'semrush') podéis ver que no ha perdido posiciones ni tráfico y que tiene un tráfico estimado de 15000 dólares, me parece un ejemplo interesante y mañana pasaré las estadísticas del track de móvil y pc, por el momento no se ha visto afectada, se lo toman con tranquilidad, mañana seguimos.
 
 **Seguimiento día 24 al 27 de abril**
 
@@ -40,6 +42,7 @@ Aquí estoy en directo un día de fiesta, las posiciones no se mueven, incluso a
 **Seguiré día a día actualizando el post**
 
 ## Tracking de palabras clave desde PC, tablet y móvil
+
 Keyword
 
 Posición 21 abril móvil

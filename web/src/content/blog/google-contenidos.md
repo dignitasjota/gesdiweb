@@ -1,18 +1,20 @@
 ---
-title: "Haz que Google se enamore de tus contenidos y potencia el SEO"
-excerpt: "8 parámetros para que a Google le gusten tus contenidosContenido1 8 parámetros para que a Google le gusten tus contenidos1."
+title: 'Haz que Google se enamore de tus contenidos y potencia el SEO'
+excerpt: '8 parámetros para que a Google le gusten tus contenidosContenido1 8 parámetros para que a Google le gusten tus contenidos1.'
 publishedAt: 2017-06-15
 readingMinutes: 4
 categories:
-  - "Gestión de contenido"
-  - "Marketing Online"
-  - "SEO"
+  - 'Gestión de contenido'
+  - 'Marketing Online'
+  - 'SEO'
 tags: []
 cover: ./imagenes/google-contenidos/cover-generated.jpg
-coverAlt: "Haz que Google se enamore de tus contenidos y potencia el SEO — cover de gesdiweb"
-author: "consultor seo valencia"
+coverAlt: 'Haz que Google se enamore de tus contenidos y potencia el SEO — cover de gesdiweb'
+author: 'consultor seo valencia'
 ---
+
 # 8 parámetros para que a Google le gusten tus contenidos
+
 ¿Recordáis aquellos tiempos en los que el textos web eran totalmente prescindibles y que el SEO era algo de lo que apenas se hablaba? Sí, hace tiempo que eso ya pasó e incluso cosas como comprar links, la nula personalización de los textos, las keywords absurdas, ya son total y absolutamente inviables.
 
 La verdad es que Google se ha vuelto en un tirano que no hace más que poner reglas acerca de lo que puede o no tener una web si esta quiere mantener su posición en su buscador. Por eso, **trata de premiar a todas aquellas webs que se esfuerzan con los primeros puestos** –sin pagar, claro-.
@@ -22,17 +24,21 @@ La verdad es que Google se ha vuelto en un tirano que no hace más que poner reg
 Si vosotros también de esos que compiten para conseguir el tan ansiado oro cuando se “googlea”, os dejamos los **ocho parámetros esenciales para que a** **Google le gusten tus contenidos** –según [Searchmetrics](http://www.searchmetrics.com/knowledge-base/ranking-factors/)\-.
 
 ## Contenido relevante y fácil de leer
+
 Para conseguir que a Google le gusten tus contenidos sigue siendo esencial que se redacten textos largos, aunque no basta con un texto largo si no que también tiene que permitir la digestión. Que sea legible es un requisito esencial para que **Google califique el contenido como de calidad.**
 
 Para ello es esencial escribir de forma natural, sin que la redacción sea forzada a causa de la repetición de las keywords, si no que tiene que asemejarse a una conversación o un relato corriente. Además, es preferible el uso de **sinónimos** de las keywords, ya sea porque son del mismo **campo semántico** o porque son del **mismo tema**.
 
 ## Potencia las keywords long tail
-Eso de que las **keywords** tengan que estar todo el rato presentes empieza a ser prescindible.Pero las **[keywords longtails](http://miposicionamientoweb.es/long-tail-seo/)** son una forma de **[intentar posicionarte en Google](https://www.gesdiweb.es/posicionamiento-web-valencia/)** con diversas palabras clave menos importantes en vez de rankear con pocas palabras clave muy importantes . Está claro que es esencial trabajar con una serie de palabras clave –sobre todo para explicar qué vendemos- pero ya no es necesario que estén tan presentes. Según el informe, **las mejores webs contienen una densidad baja de keywords** –del 3% al 5% del 100% del texto-.
+
+Eso de que las **keywords** tengan que estar todo el rato presentes empieza a ser prescindible.Pero las **[keywords longtails](http://miposicionamientoweb.es/long-tail-seo/)** son una forma de **[intentar posicionarte en Google](/servicios/posicionamiento-web)** con diversas palabras clave menos importantes en vez de rankear con pocas palabras clave muy importantes . Está claro que es esencial trabajar con una serie de palabras clave –sobre todo para explicar qué vendemos- pero ya no es necesario que estén tan presentes. Según el informe, **las mejores webs contienen una densidad baja de keywords** –del 3% al 5% del 100% del texto-.
 
 ## Metadatos
+
 Que las **keywords** ya no sean tan esenciales en el texto o en las URL, no implica que no sean datos esenciales para que a Google le gusten tus contenidos. Hay que **trabajar de forma correcta los metadatos** de cada una de las páginas para que Google sepa de qué estamos hablando concretamente. Esto es su guía para poder valorar el posicionamiento de las webs, al menos en cuestión de contenido-.
 
 ## La usabilidad
+
 Por mucho que los algoritmos de Google vayan cambiando casi constantemente, no quiere decir que todo cambie. La **usabilidad** sigue siendo un **must** para que a **Google le gusten tus contenidos**. El tiempo de carga en la página, el porcentaje de rebote, los clics y las búsquedas lo que le dan una estimación a Google de cómo está tu página.
 
 Si tienes todos estos parámetros claros y sabes ponerlos en práctica, ¡**a Google se enamorará de tus contenido muy pronto**! Recuerda que para que esto sea posible no todo vale ni cuenta, por lo que es esencial que te leas los algoritmos que publica Google acerca su normativa.

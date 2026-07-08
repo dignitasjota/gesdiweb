@@ -1,20 +1,21 @@
 ---
-title: "Como elegir el mejor VPS para tu web"
-excerpt: "Normalmente, cuando empezamos un pequeño proyecto como puede ser una página web o una tienda online optamos por el plan de alojamiento más básico y barato ya…"
+title: 'Como elegir el mejor VPS para tu web'
+excerpt: 'Normalmente, cuando empezamos un pequeño proyecto como puede ser una página web o una tienda online optamos por el plan de alojamiento más básico y barato ya…'
 publishedAt: 2016-09-28
 readingMinutes: 4
 categories:
-  - "Hosting"
+  - 'Hosting'
 tags: []
 cover: ./imagenes/elegir-mejor-vps-web/cover-generated.jpg
-coverAlt: "Como elegir el mejor VPS para tu web — cover de gesdiweb"
-author: "Diseño Web Valencia"
+coverAlt: 'Como elegir el mejor VPS para tu web — cover de gesdiweb'
+author: 'Diseño Web Valencia'
 ---
+
 Normalmente, cuando empezamos un pequeño proyecto como puede ser una página web o una tienda online optamos por el plan de alojamiento más básico y barato ya que solemos empezar con un presupuesto ajustado. ¿Pero qué ocurre cuando empezamos a tener mucho éxito? Carga lenta, constantes caídas, tus mails entran siempre como SPAM y una larga lista de problemas que pueden tirar por la borda todo esos meses o años de duro trabajo en tu negocio online.
 
-Al llamar a tu **[proveedor de hosting](https://www.gesdiweb.es/hosting-web-valencia/)** te dice que tu web es demasiado grande para estar en tu hosting de toda la vida y que **necesitas pasar a un VPS**. ¿Eso qué es? ¿Por qué antes no y ahora si? ¿No será una maniobra de mi proveedor de hosting para sacarme más dinero?
+Al llamar a tu **[proveedor de hosting](/servicios/hosting-web)** te dice que tu web es demasiado grande para estar en tu hosting de toda la vida y que **necesitas pasar a un VPS**. ¿Eso qué es? ¿Por qué antes no y ahora si? ¿No será una maniobra de mi proveedor de hosting para sacarme más dinero?
 
-[![como-elegir-host-vps](./imagenes/elegir-mejor-vps-web/ELEGIR-VPS-MEJOR-PARA-TU-WEB.jpg)](https://www.gesdiweb.es/elegir-mejor-vps-web/)
+[![como-elegir-host-vps](./imagenes/elegir-mejor-vps-web/ELEGIR-VPS-MEJOR-PARA-TU-WEB.jpg)](/blog/elegir-mejor-vps-web)
 
 _**En esta entrada trataremos de resolver estas y otras cuestiones sobre los Servidores Privados Virtuales (VPS)**_
 
@@ -63,4 +64,4 @@ Y para los lectores de nuestro blog hemos conseguido un 20% de descuento(sin enl
 
 [![RAIOLA NETworks](./imagenes/elegir-mejor-vps-web/descuento-vps-servidor-cupon-barato.fw_.png)](http://www.desafiohosting.com/vps-cpanel-ssd/)
 
-[![Hosting SSD](https://serv1.raiolanetworks.es/banners/768X90_Hosting_SSD.jpg)](https://gestiondecuenta.eu/aff.php?aff=507&especial=hosting "Hosting SSD")
+[![Hosting SSD](https://serv1.raiolanetworks.es/banners/768X90_Hosting_SSD.jpg)](https://gestiondecuenta.eu/aff.php?aff=507&especial=hosting 'Hosting SSD')
