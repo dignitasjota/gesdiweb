@@ -34,9 +34,9 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      # El formato lo garantiza el hook pre-commit (Husky + lint-staged). No se
-      # bloquea el pipeline con format:check porque hay drift heredado en
-      # contenido; el gate real de CI es el typecheck de correctitud.
+      - name: Prettier check
+        run: npm run format:check
+
       - name: Astro typecheck
         run: npm run check
 
