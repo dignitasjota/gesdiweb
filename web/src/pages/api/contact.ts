@@ -1,9 +1,5 @@
 import type { APIRoute } from 'astro';
-import {
-  RESEND_API_KEY,
-  RESEND_FROM_EMAIL,
-  LEAD_NOTIFICATION_EMAIL,
-} from 'astro:env/server';
+import { RESEND_API_KEY, RESEND_FROM_EMAIL, LEAD_NOTIFICATION_EMAIL } from 'astro:env/server';
 import { Resend } from 'resend';
 import { contactSchema } from '../../lib/contact-schema';
 import { checkRateLimit } from '../../lib/rate-limit';
@@ -22,10 +18,21 @@ const json = (status: number, body: unknown): Response =>
   });
 
 const getClientIp = (request: Request): string => {
-  // Detrás de Nginx Proxy Manager. Confiar en X-Forwarded-For first hop.
+  // Detrás de Nginx Proxy Manager. NPM sobrescribe X-Real-IP con el $remote_addr
+  // real (no falsificable por el cliente), así que es la fuente preferida.
+  const realIp = request.headers.get('x-real-ip');
+  if (realIp) return realIp.trim();
+  // Fallback: en X-Forwarded-For el cliente solo puede falsear los valores de la
+  // izquierda; el ÚLTIMO es el hop que añadió el proxy de confianza.
   const xff = request.headers.get('x-forwarded-for');
-  if (xff) return xff.split(',')[0].trim();
-  return request.headers.get('x-real-ip') || 'unknown';
+  if (xff) {
+    const parts = xff
+      .split(',')
+      .map((p) => p.trim())
+      .filter(Boolean);
+    if (parts.length) return parts[parts.length - 1];
+  }
+  return 'unknown';
 };
 
 export const POST: APIRoute = async ({ request }) => {
@@ -98,11 +105,17 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   if (!RESEND_API_KEY) {
-    // En dev sin .env, no rompemos: logueamos y devolvemos OK.
-    // En producción, RESEND_API_KEY debe estar definida (validar al desplegar).
-    console.warn('[contact] RESEND_API_KEY no configurada — solo log local');
-    console.info('[contact] payload:', payload);
-    return json(200, { ok: true, accepted: true, devMode: true });
+    if (import.meta.env.DEV) {
+      // En desarrollo sin .env no rompemos el flujo: logueamos y simulamos OK.
+      console.warn('[contact] RESEND_API_KEY no configurada — modo dev, solo log local');
+      console.info('[contact] payload:', payload);
+      return json(200, { ok: true, accepted: true, devMode: true });
+    }
+    // En producción la ausencia de la key es un fallo de configuración. NO
+    // fingimos éxito: perderíamos el lead en silencio mostrando "¡Recibido!" al
+    // visitante. Devolvemos 503 para que el cliente muestre error real.
+    console.error('[contact] RESEND_API_KEY ausente en producción — lead NO enviado');
+    return json(503, { ok: false, error: 'email_not_configured' });
   }
 
   try {
@@ -140,5 +153,4 @@ export const POST: APIRoute = async ({ request }) => {
 };
 
 // Bloquear el resto de métodos
-export const ALL: APIRoute = () =>
-  json(405, { ok: false, error: 'method_not_allowed' });
+export const ALL: APIRoute = () => json(405, { ok: false, error: 'method_not_allowed' });
